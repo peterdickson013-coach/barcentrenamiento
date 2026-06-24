@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BARC · Entrenamiento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --navy: #0B1C2D;
+    --water: #1A3A5C;
+    --blue-mid: #1E5F8E;
+    --accent: #00C2FF;
+    --gold: #F0B429;
+    --white: #F4F8FB;
+    --muted: #8AAFC8;
+    --card: #132436;
+    --border: #1E3A52;
+    --success: #22C55E;
+    --danger: #EF4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--navy);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .nav-logo span { color: var(--muted); font-weight: 400; }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    padding: 4px;
+    border-radius: 10px;
+  }
+
+  .nav-tab {
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .nav-tab.active {
+    background: var(--blue-mid);
+    color: var(--white);
+  }
+
+  .nav-role {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .role-badge {
+    background: var(--water);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* VIEWS */
+  .view { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 20px;
+  }
+
+  .section-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* REMERO SELECTOR */
+  .remero-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .remero-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .remero-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,194,255,0.08);
+  }
+
+  /* FOCOS TÉCNICOS */
+  .foco-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .foco-item:last-child { border-bottom: none; }
+
+  .foco-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 20px;
+    padding-top: 2px;
+  }
+
+  .foco-text {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .foco-edit {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.2s;
+  }
+
+  .foco-edit:hover { color: var(--accent); }
+
+  /* REGISTRO DIARIO */
+  .registro-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .escala-container {
+    margin-bottom: 18px;
+  }
+
+  .escala-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .escala-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .escala-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--navy);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .escala-dot:hover { border-color: var(--accent); color: var(--accent); }
+
+  .escala-dot.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--navy);
+  }
+
+  .escala-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+
+  .escala-label-text {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+
+  /* BOTONES */
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { opacity: 0.88; }
+
+  .btn-secondary {
+    padding: 8px 14px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { background: rgba(0,194,255,0.08); }
+
+  /* GOLD STANDARD */
+  .zona-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .zona-tab {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .zona-tab.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(240,180,41,0.08);
+  }
+
+  .bote-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .bote-tab {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .bote-tab.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,194,255,0.08);
+  }
+
+  .gold-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .gold-cell {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .gold-cell-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .gold-cell-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .gold-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0 4px;
+    border-top: 1px solid var(--border);
+    margin-top: 14px;
+  }
+
+  .gold-meta-item {
+    text-align: center;
+  }
+
+  .gold-meta-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .gold-meta-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-top: 2px;
+  }
+
+  /* VIDEOS */
+  .video-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .video-card {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    text-decoration: none;
+  }
+
+  .video-card:hover { border-color: var(--accent); }
+
+  .video-thumb {
+    width: 56px;
+    height: 40px;
+    background: var(--water);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .video-info { flex: 1; }
+
+  .video-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+
+  .video-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* HISTORIAL */
+  .historial-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .historial-item:last-child { border-bottom: none; }
+
+  .historial-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 80px;
+    padding-top: 2px;
+  }
+
+  .historial-scores {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .score-chip {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .score-high { background: rgba(34,197,94,0.15); color: var(--success); }
+  .score-mid { background: rgba(240,180,41,0.15); color: var(--gold); }
+  .score-low { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+  .historial-nota {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--success);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+    z-index: 999;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* PANEL ENTRENADOR */
+  .remero-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .remero-row:last-child { border-bottom: none; }
+
+  .remero-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    min-width: 90px;
+  }
+
+  .mini-scores {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+  }
+
+  .mini-score {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ADD FOCO MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    border-radius: 18px 18px 0 0;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 12px;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--muted); }
+
+  .modal-actions { display: flex; gap: 10px; }
+
+  .water-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 20px 0;
+    opacity: 0.3;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+
+  .empty-icon { font-size: 32px; margin-bottom: 10px; }
+  .empty-text { font-size: 13px; line-height: 1.5; }
+
+  @media (max-width: 480px) {
+    .gold-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-tab { padding: 7px 10px; font-size: 12px; }
+    .gold-cell-value { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">BARC <span>/ Entrenamiento</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showView('remeros')">Remeros</button>
+    <button class="nav-tab" onclick="showView('gold')">Gold</button>
+    <button class="nav-tab" onclick="showView('panel')">Panel</button>
+  </div>
+  <div class="nav-role">
+    <div class="role-badge" id="roleLabel">ENTRENADOR</div>
+  </div>
+</nav>
+
+<!-- VIEW: REMEROS -->
+<div class="view active" id="view-remeros">
+  <div class="section-header" style="margin-top:16px">
+    <div class="section-eyebrow">Plantilla</div>
+    <div class="section-title">Mis remeros</div>
+    <div class="section-sub">Seleccioná un remero para ver su perfil</div>
+  </div>
+
+  <div class="remero-selector" id="remeroSelector" style="display:none"></div>
+  <div id="loadingState" style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px">
+    Cargando remeros...
+  </div>
+  <div id="errorCarga" style="display:none;text-align:center;padding:20px;color:var(--danger);font-size:13px">
+    ⚠️ No se pudo cargar la planilla. Verificá que esté compartida como pública.
+  </div>
+
+  <!-- PERFIL REMERO -->
+  <div id="perfilRemero" style="display:none">
+    <!-- Focos técnicos -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-label">Objetivos técnicos</div>
+          <div class="card-title" id="perfilNombre">—</div>
+        </div>
+
+      </div>
+      <div id="listaFocos"></div>
+    </div>
+
+    <!-- Videos -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Referencias y análisis</div>
+      </div>
+      <div id="listaVideos" class="video-grid"></div>
+    </div>
+
+    <div class="water-line"></div>
+
+    <!-- Registro diario -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Registro del día</div>
+        <div class="card-title" id="fechaHoy"></div>
+      </div>
+
+      <div class="escala-container" style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+        <div class="escala-title">¿Cómo llegás hoy? <span style="color:var(--muted);font-weight:400;font-size:12px">Nivel de cansancio</span></div>
+        <div class="escala-dots" id="escala-cansancio">
+          <button class="escala-dot" onclick="setScore('cansancio',1)">1</button>
+          <button class="escala-dot" onclick="setScore('cansancio',2)">2</button>
+          <button class="escala-dot" onclick="setScore('cansancio',3)">3</button>
+          <button class="escala-dot" onclick="setScore('cansancio',4)">4</button>
+          <button class="escala-dot" onclick="setScore('cansancio',5)">5</button>
+        </div>
+        <div class="escala-labels">
+          <span class="escala-label-text">Fresco</span>
+          <span class="escala-label-text">Agotado</span>
+        </div>
+      </div>
+
+      <div id="escalasRegistro"></div>
+
+      <div class="escala-container">
+        <div class="escala-title">¿Cómo estuvo el bote hoy?</div>
+        <div class="escala-dots" id="escala-bote">
+          <button class="escala-dot" onclick="setScore('bote',1)">1</button>
+          <button class="escala-dot" onclick="setScore('bote',2)">2</button>
+          <button class="escala-dot" onclick="setScore('bote',3)">3</button>
+          <button class="escala-dot" onclick="setScore('bote',4)">4</button>
+          <button class="escala-dot" onclick="setScore('bote',5)">5</button>
+        </div>
+        <div class="escala-labels">
+          <span class="escala-label-text">Difícil</span>
+          <span class="escala-label-text">Excelente</span>
+        </div>
+      </div>
+
+      <textarea id="notaRegistro" rows="3" placeholder="Anotá algo sobre el entrenamiento... (opcional)"></textarea>
+      <button class="btn-primary" onclick="guardarRegistro()">Guardar registro</button>
+    </div>
+
+    <!-- Historial -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Historial</div>
+      </div>
+      <div id="historialRegistros"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: GOLD STANDARD -->
+<div class="view" id="view-gold">
+  <div class="section-header" style="margin-top:16px">
+    <div class="section-eyebrow">Referencia</div>
+    <div class="section-title">Gold Standard</div>
+    <div class="section-sub">Velocidades objetivo por bote y zona</div>
+  </div>
+
+  <div class="bote-tabs" id="boteTabs"></div>
+  <div class="zona-tabs" id="zonaTabs"></div>
+
+  <div class="card" id="goldCard">
+    <div class="card-header">
+      <div>
+        <div class="card-label" id="goldBoteLabel">—</div>
+        <div class="card-title" id="goldZonaLabel">—</div>
+      </div>
+    </div>
+    <div class="gold-grid" id="goldGrid"></div>
+    <div class="gold-meta" id="goldMeta"></div>
+  </div>
+</div>
+
+<!-- VIEW: PANEL ENTRENADOR -->
+<div class="view" id="view-panel">
+  <div class="section-header" style="margin-top:16px">
+    <div class="section-eyebrow">Vista entrenador</div>
+    <div class="section-title">Panel general</div>
+    <div class="section-sub">Registros de hoy de todos los remeros</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-label">Hoy · <span id="panelFecha"></span></div>
+    </div>
+    <div id="panelRemeros"></div>
+  </div>
+</div>
+
+<!-- MODAL: FOCO -->
+<div class="modal-overlay" id="modalFoco">
+  <div class="modal">
+    <div class="modal-title">Nuevo foco técnico</div>
+    <input type="text" id="inputFoco" placeholder="Ej: Mantener el pecho arriba en la toma..." />
+    <div class="modal-actions">
+      <button class="btn-primary" style="flex:1" onclick="guardarFoco()">Agregar</button>
+      <button class="btn-secondary" onclick="cerrarModal('modalFoco')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VIDEO -->
+<div class="modal-overlay" id="modalVideo">
+  <div class="modal">
+    <div class="modal-title">Agregar video / referencia</div>
+    <input type="text" id="inputVideoTitulo" placeholder="Título del video..." />
+    <input type="text" id="inputVideoUrl" placeholder="URL (YouTube, Drive...)" />
+    <input type="text" id="inputVideoTipo" placeholder="Tipo: Elite / Análisis propio / Técnica" />
+    <div class="modal-actions">
+      <button class="btn-primary" style="flex:1" onclick="guardarVideo()">Agregar</button>
+      <button class="btn-secondary" onclick="cerrarModal('modalVideo')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Registro guardado</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────
+const SHEET_ID = '1e0BoNh1fnsfL_f80S6XFRI3iN-45Epz8Ku7ZtdSUR4o';
+const SHEET_URL = (sheet) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
+
+// ─── DATA ────────────────────────────────────────────────
+let REMEROS = [];
+const GOLD = {};
+
+// Registros en localStorage por remero y fecha
+let registros = JSON.parse(localStorage.getItem('barc_registros') || '{}');
+let remeroActivo = null;
+let boteActivo = null;
+let zonaActiva = null;
+let scores = {};
+
+// ─── CSV PARSER ──────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+  return lines.slice(1).map(line => {
+    // Handle quoted fields with commas
+    const vals = [];
+    let cur = '', inQ = false;
+    for (let c of line) {
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    vals.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').replace(/^"|"$/g, '').trim());
+    return obj;
+  }).filter(r => Object.values(r).some(v => v));
+}
+
+// ─── LOAD FROM SHEETS ────────────────────────────────────
+async function cargarDatos() {
+  mostrarCargando(true);
+  try {
+    const [rRes, fRes, vRes, gRes] = await Promise.all([
+      fetch(SHEET_URL('Remeros')),
+      fetch(SHEET_URL('Focos')),
+      fetch(SHEET_URL('Videos')),
+      fetch(SHEET_URL('Gold')),
+    ]);
+    const [rText, fText, vText, gText] = await Promise.all([rRes.text(), fRes.text(), vRes.text(), gRes.text()]);
+
+    const remeroRows = parseCSV(rText);
+    const focoRows = parseCSV(fText);
+    const videoRows = parseCSV(vText);
+    const goldRows = parseCSV(gText);
+
+    REMEROS = remeroRows.map(r => ({
+      id: r.id,
+      nombre: r.nombre,
+      categoria: r.categoria,
+      bote: r.bote,
+      focos: focoRows.filter(f => f.remero_id === r.id).sort((a,b) => a.orden - b.orden).map(f => f.foco),
+      videos: videoRows.filter(v => v.remero_id === r.id).map(v => ({ titulo: v.titulo, url: v.url, tipo: v.tipo })),
+    }));
+
+    // Build GOLD object from sheet rows
+    goldRows.forEach(row => {
+      if (!row.bote || !row.zona) return;
+      if (!GOLD[row.bote]) GOLD[row.bote] = { zonas: {} };
+      GOLD[row.bote].zonas[row.zona] = {
+        pct: parseInt(row.pct),
+        t500: row.t500,
+        t1000: row.t1000,
+        t1500: row.t1500,
+        t2000: row.t2000,
+      };
+    });
+
+    if (REMEROS.length > 0) {
+      boteActivo = REMEROS[0].bote;
+    }
+
+    renderRemeroSelector();
+    renderBoteTabs();
+    mostrarCargando(false);
+    renderPanel();
+  } catch(e) {
+    mostrarCargando(false);
+    document.getElementById('errorCarga').style.display = 'block';
+    console.error('Error cargando datos:', e);
+  }
+}
+
+function mostrarCargando(show) {
+  document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+  document.getElementById('remeroSelector').style.display = show ? 'none' : 'flex';
+}
+
+// ─── INIT ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const fecha = new Date().toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('fechaHoy').textContent = fecha;
+  document.getElementById('panelFecha').textContent = fecha;
+  cargarDatos();
+});
+
+// ─── VISTAS ──────────────────────────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'gold') renderGold();
+  if (id === 'panel') renderPanel();
+}
+
+// ─── REMEROS ─────────────────────────────────────────────
+function renderRemeroSelector() {
+  const cont = document.getElementById('remeroSelector');
+  cont.innerHTML = REMEROS.map(r => `
+    <button class="remero-btn" onclick="selectRemero('${r.id}')">${r.nombre}</button>
+  `).join('');
+}
+
+function selectRemero(id) {
+  remeroActivo = REMEROS.find(r => r.id === id);
+  scores = {};
+
+  document.querySelectorAll('.remero-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  document.getElementById('perfilRemero').style.display = 'block';
+  document.getElementById('perfilNombre').textContent = remeroActivo.nombre + ' · ' + remeroActivo.categoria;
+
+  renderFocos();
+  renderVideos();
+  renderEscalas();
+  renderHistorial();
+
+  document.getElementById('notaRegistro').value = '';
+}
+
+function renderFocos() {
+  const cont = document.getElementById('listaFocos');
+  if (!remeroActivo.focos.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Sin focos asignados aún</div></div>';
+    return;
+  }
+  cont.innerHTML = remeroActivo.focos.map((f, i) => `
+    <div class="foco-item">
+      <div class="foco-num">0${i+1}</div>
+      <div class="foco-text">${f}</div>
+    </div>
+  `).join('');
+}
+
+function renderVideos() {
+  const cont = document.getElementById('listaVideos');
+  if (!remeroActivo.videos.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🎬</div><div class="empty-text">Sin videos cargados aún</div></div>';
+    return;
+  }
+  cont.innerHTML = remeroActivo.videos.map(v => `
+    <a class="video-card" href="${v.url}" target="_blank">
+      <div class="video-thumb">▶️</div>
+      <div class="video-info">
+        <div class="video-title">${v.titulo}</div>
+        <div class="video-sub">${v.tipo}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function renderEscalas() {
+  const cont = document.getElementById('escalasRegistro');
+  if (!remeroActivo.focos.length) {
+    cont.innerHTML = '';
+    return;
+  }
+  cont.innerHTML = remeroActivo.focos.map((f, i) => `
+    <div class="escala-container">
+      <div class="escala-title">Foco ${i+1}: <span style="color:var(--muted);font-weight:400">${f.substring(0,55)}${f.length>55?'...':''}</span></div>
+      <div class="escala-dots" id="escala-foco-${i}">
+        ${[1,2,3,4,5].map(n => `<button class="escala-dot" onclick="setScore('foco${i}',${n})">${n}</button>`).join('')}
+      </div>
+      <div class="escala-labels">
+        <span class="escala-label-text">No lo logré</span>
+        <span class="escala-label-text">Lo dominé</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderHistorial() {
+  const cont = document.getElementById('historialRegistros');
+  const key = remeroActivo.id;
+  const hist = registros[key] || [];
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros aún</div></div>';
+    return;
+  }
+  cont.innerHTML = [...hist].reverse().map(r => `
+    <div class="historial-item">
+      <div class="historial-date">${r.fecha}</div>
+      <div>
+        <div class="historial-scores">
+          ${r.cansancio ? `<span class="score-chip ${cansancioClass(r.cansancio)}" title="Cansancio">⚡ ${r.cansancio}</span>` : ''}
+          ${r.focos.map((s,i) => `<span class="score-chip ${scoreClass(s)}">F${i+1}: ${s}</span>`).join('')}
+          ${r.bote ? `<span class="score-chip ${scoreClass(r.bote)}">Bote: ${r.bote}</span>` : ''}
+        </div>
+        ${r.nota ? `<div class="historial-nota">"${r.nota}"</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function scoreClass(s) {
+  if (s >= 4) return 'score-high';
+  if (s >= 3) return 'score-mid';
+  return 'score-low';
+}
+
+function cansancioClass(s) {
+  // For cansancio: low number = fresh (good), high = exhausted (warning)
+  if (s <= 2) return 'score-high';
+  if (s === 3) return 'score-mid';
+  return 'score-low';
+}
+
+// ─── SCORES ──────────────────────────────────────────────
+function setScore(key, val) {
+  scores[key] = val;
+  const cont = document.getElementById('escala-' + key);
+  if (!cont) return;
+  cont.querySelectorAll('.escala-dot').forEach((d, i) => {
+    d.classList.toggle('selected', i + 1 === val);
+  });
+}
+
+// ─── GUARDAR REGISTRO ────────────────────────────────────
+function guardarRegistro() {
+  const focos = remeroActivo.focos.map((_, i) => scores[`foco${i}`] || 0);
+  const bote = scores['bote'] || 0;
+  const cansancio = scores['cansancio'] || 0;
+  const nota = document.getElementById('notaRegistro').value.trim();
+  const fecha = new Date().toLocaleDateString('es-AR', { day:'numeric', month:'short' });
+
+  if (!registros[remeroActivo.id]) registros[remeroActivo.id] = [];
+  registros[remeroActivo.id].push({ fecha, focos, bote, cansancio, nota });
+  localStorage.setItem('barc_registros', JSON.stringify(registros));
+
+  scores = {};
+  document.getElementById('notaRegistro').value = '';
+  document.querySelectorAll('.escala-dot').forEach(d => d.classList.remove('selected'));
+
+  renderHistorial();
+  renderPanel();
+  showToast('✓ Registro guardado');
+}
+
+// ─── FOCOS ───────────────────────────────────────────────
+function abrirModalFoco() { document.getElementById('modalFoco').classList.add('open'); document.getElementById('inputFoco').focus(); }
+function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function guardarFoco() {
+  const val = document.getElementById('inputFoco').value.trim();
+  if (!val) return;
+  remeroActivo.focos.push(val);
+  document.getElementById('inputFoco').value = '';
+  cerrarModal('modalFoco');
+  renderFocos();
+  renderEscalas();
+}
+
+function eliminarFoco(i) {
+  remeroActivo.focos.splice(i, 1);
+  renderFocos();
+  renderEscalas();
+}
+
+// ─── VIDEOS ──────────────────────────────────────────────
+function abrirModalVideo() { document.getElementById('modalVideo').classList.add('open'); }
+
+function guardarVideo() {
+  const titulo = document.getElementById('inputVideoTitulo').value.trim();
+  const url = document.getElementById('inputVideoUrl').value.trim();
+  const tipo = document.getElementById('inputVideoTipo').value.trim() || 'Referencia';
+  if (!titulo || !url) return;
+  remeroActivo.videos.push({ titulo, url, tipo });
+  document.getElementById('inputVideoTitulo').value = '';
+  document.getElementById('inputVideoUrl').value = '';
+  document.getElementById('inputVideoTipo').value = '';
+  cerrarModal('modalVideo');
+  renderVideos();
+}
+
+// ─── GOLD STANDARD ───────────────────────────────────────
+function renderBoteTabs() {
+  const botes = [...new Set(REMEROS.map(r => r.bote))];
+  if (!boteActivo && botes.length) boteActivo = botes[0];
+  const cont = document.getElementById('boteTabs');
+  cont.innerHTML = botes.map(b => `
+    <button class="bote-tab ${b===boteActivo?'active':''}" onclick="selectBote('${b}',this)">${b}</button>
+  `).join('');
+}
+
+function selectBote(bote, el) {
+  boteActivo = bote;
+  document.querySelectorAll('.bote-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  zonaActiva = Object.keys(GOLD[bote].zonas)[0];
+  renderGold();
+}
+
+function renderGold() {
+  if (!boteActivo || !GOLD[boteActivo]) {
+    document.getElementById('goldGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Gold Standard no configurado aún para este bote.</div>';
+    document.getElementById('zonaTabs').innerHTML = '';
+    document.getElementById('goldMeta').innerHTML = '';
+    return;
+  }
+  const data = GOLD[boteActivo];
+  const zonas = Object.keys(data.zonas);
+  if (!zonaActiva || !data.zonas[zonaActiva]) zonaActiva = zonas[0];
+
+  // Zona tabs
+  document.getElementById('zonaTabs').innerHTML = zonas.map(z => `
+    <button class="zona-tab ${z===zonaActiva?'active':''}" onclick="selectZona('${z}',this)">${z}</button>
+  `).join('');
+
+  const zona = data.zonas[zonaActiva];
+  document.getElementById('goldBoteLabel').textContent = boteActivo;
+  document.getElementById('goldZonaLabel').textContent = zonaActiva + ' · ' + zona.pct + '% del tiempo base';
+
+  document.getElementById('goldGrid').innerHTML = `
+    <div class="gold-cell">
+      <div class="gold-cell-label">500m</div>
+      <div class="gold-cell-value">${zona.t500}</div>
+    </div>
+    <div class="gold-cell">
+      <div class="gold-cell-label">1000m</div>
+      <div class="gold-cell-value">${zona.t1000}</div>
+    </div>
+    <div class="gold-cell">
+      <div class="gold-cell-label">1500m</div>
+      <div class="gold-cell-value">${zona.t1500}</div>
+    </div>
+    <div class="gold-cell">
+      <div class="gold-cell-label">2000m</div>
+      <div class="gold-cell-value">${zona.t2000}</div>
+    </div>
+  `;
+
+  document.getElementById('goldMeta').innerHTML = `
+    <div class="gold-meta-item">
+      <div class="gold-meta-label">Velocidad</div>
+      <div class="gold-meta-val">${zona.vel} m/s</div>
+    </div>
+    <div class="gold-meta-item">
+      <div class="gold-meta-label">Intensidad</div>
+      <div class="gold-meta-val">${zona.pct}%</div>
+    </div>
+    <div class="gold-meta-item">
+      <div class="gold-meta-label">Tiempo base</div>
+      <div class="gold-meta-val">${data.tiempoBase}</div>
+    </div>
+  `;
+}
+
+function selectZona(zona, el) {
+  zonaActiva = zona;
+  document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderGold();
+}
+
+// ─── PANEL ───────────────────────────────────────────────
+function renderPanel() {
+  const cont = document.getElementById('panelRemeros');
+  cont.innerHTML = REMEROS.map(r => {
+    const hist = registros[r.id] || [];
+    const ultimo = hist[hist.length - 1];
+    return `
+      <div class="remero-row">
+        <div class="remero-name">${r.nombre}</div>
+        ${ultimo ? `
+          <div class="mini-scores">
+            ${ultimo.cansancio ? `<div class="mini-score ${cansancioClass(ultimo.cansancio)}" title="Cansancio">⚡${ultimo.cansancio}</div>` : ''}
+            ${ultimo.focos.map((s,i) => `<div class="mini-score ${scoreClass(s)}">${s}</div>`).join('')}
+            ${ultimo.bote ? `<div class="mini-score ${scoreClass(ultimo.bote)}">${ultimo.bote}</div>` : ''}
+          </div>
+        ` : '<div style="font-size:12px;color:var(--muted)">Sin registro hoy</div>'}
+      </div>
+    `;
+  }).join('');
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Cerrar modales tocando afuera
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+</script>
+</body>
+</html>
