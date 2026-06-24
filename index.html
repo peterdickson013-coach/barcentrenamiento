@@ -707,7 +707,7 @@
           <div class="card-label">Objetivos técnicos</div>
           <div class="card-title" id="perfilNombre">—</div>
         </div>
-        <button class="btn-secondary" onclick="abrirModalFoco()" id="btnAddFoco">+ Foco</button>
+
       </div>
       <div id="listaFocos"></div>
     </div>
@@ -716,7 +716,6 @@
     <div class="card">
       <div class="card-header">
         <div class="card-label">Referencias y análisis</div>
-        <button class="btn-secondary" onclick="abrirModalVideo()">+ Video</button>
       </div>
       <div id="listaVideos" class="video-grid"></div>
     </div>
@@ -884,16 +883,18 @@ function parseCSV(text) {
 async function cargarDatos() {
   mostrarCargando(true);
   try {
-    const [rRes, fRes, vRes] = await Promise.all([
+    const [rRes, fRes, vRes, gRes] = await Promise.all([
       fetch(SHEET_URL('Remeros')),
       fetch(SHEET_URL('Focos')),
       fetch(SHEET_URL('Videos')),
+      fetch(SHEET_URL('Gold')),
     ]);
-    const [rText, fText, vText] = await Promise.all([rRes.text(), fRes.text(), vRes.text()]);
+    const [rText, fText, vText, gText] = await Promise.all([rRes.text(), fRes.text(), vRes.text(), gRes.text()]);
 
     const remeroRows = parseCSV(rText);
     const focoRows = parseCSV(fText);
     const videoRows = parseCSV(vText);
+    const goldRows = parseCSV(gText);
 
     REMEROS = remeroRows.map(r => ({
       id: r.id,
@@ -903,6 +904,19 @@ async function cargarDatos() {
       focos: focoRows.filter(f => f.remero_id === r.id).sort((a,b) => a.orden - b.orden).map(f => f.foco),
       videos: videoRows.filter(v => v.remero_id === r.id).map(v => ({ titulo: v.titulo, url: v.url, tipo: v.tipo })),
     }));
+
+    // Build GOLD object from sheet rows
+    goldRows.forEach(row => {
+      if (!row.bote || !row.zona) return;
+      if (!GOLD[row.bote]) GOLD[row.bote] = { zonas: {} };
+      GOLD[row.bote].zonas[row.zona] = {
+        pct: parseInt(row.pct),
+        t500: row.t500,
+        t1000: row.t1000,
+        t1500: row.t1500,
+        t2000: row.t2000,
+      };
+    });
 
     if (REMEROS.length > 0) {
       boteActivo = REMEROS[0].bote;
@@ -978,7 +992,6 @@ function renderFocos() {
     <div class="foco-item">
       <div class="foco-num">0${i+1}</div>
       <div class="foco-text">${f}</div>
-      <button class="foco-edit" onclick="eliminarFoco(${i})">✕</button>
     </div>
   `).join('');
 }
@@ -1239,4 +1252,3 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
- 
