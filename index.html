@@ -1286,7 +1286,8 @@ async function guardarRegistro() {
   const bote = scores['bote'] || 0;
   const cansancio = scores['cansancio'] || 0;
   const nota = document.getElementById('notaRegistro').value.trim();
-  const fecha = new Date().toLocaleDateString('es-AR', { day:'numeric', month:'short', year:'numeric' });
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 
   const payload = {
     fecha,
@@ -1521,19 +1522,12 @@ function renderCalendar() {
   const grid = document.getElementById('calGrid');
   const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
   
-  // Get days with data - handle Spanish date format "24 jun. 2026"
   const daysWithData = new Set();
-  const monthNames = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   allRegistros.forEach(r => {
     if (!r.fecha) return;
-    const parts = r.fecha.toString().toLowerCase().replace('.','').split(' ');
-    if (parts.length >= 3) {
-      const d = parseInt(parts[0]);
-      const m = monthNames.indexOf(parts[1].replace('.',''));
-      const y = parseInt(parts[2]);
-      if (!isNaN(d) && m !== -1 && !isNaN(y) && m === calMonth && y === calYear) {
-        daysWithData.add(d);
-      }
+    const d = new Date(r.fecha);
+    if (!isNaN(d) && d.getUTCMonth() === calMonth && d.getUTCFullYear() === calYear) {
+      daysWithData.add(d.getUTCDate());
     }
   });
 
@@ -1565,17 +1559,10 @@ function selectDay(day) {
   calSelectedDay = day;
   renderCalendar();
 
-  const monthNames2 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const dayRegistros = allRegistros.filter(r => {
     if (!r.fecha) return false;
-    const parts = r.fecha.toString().toLowerCase().replace('.','').split(' ');
-    if (parts.length >= 3) {
-      const d = parseInt(parts[0]);
-      const m = monthNames2.indexOf(parts[1].replace('.',''));
-      const y = parseInt(parts[2]);
-      return d === day && m === calMonth && y === calYear;
-    }
-    return false;
+    const d = new Date(r.fecha);
+    return !isNaN(d) && d.getUTCDate() === day && d.getUTCMonth() === calMonth && d.getUTCFullYear() === calYear;
   });
 
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -1625,3 +1612,8 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
+Listo
+Pegá ese código en GitHub. Y en tu Sheets, cambiá las fechas viejas de la columna A de 24 de jun de 2026 a 2026-06-24. Los registros nuevos ya salen solos en ese formato.
+
+
+
