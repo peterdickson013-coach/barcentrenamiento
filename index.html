@@ -1521,14 +1521,18 @@ function renderCalendar() {
   const grid = document.getElementById('calGrid');
   const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
   
-  // Get days with data
+  // Get days with data - handle Spanish date format "24 jun. 2026"
   const daysWithData = new Set();
+  const monthNames = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   allRegistros.forEach(r => {
-    if (r.fecha) {
-      // Try to match month/year from fecha string
-      const d = new Date(r.fecha);
-      if (!isNaN(d) && d.getMonth() === calMonth && d.getFullYear() === calYear) {
-        daysWithData.add(d.getDate());
+    if (!r.fecha) return;
+    const parts = r.fecha.toString().toLowerCase().replace('.','').split(' ');
+    if (parts.length >= 3) {
+      const d = parseInt(parts[0]);
+      const m = monthNames.indexOf(parts[1].replace('.',''));
+      const y = parseInt(parts[2]);
+      if (!isNaN(d) && m !== -1 && !isNaN(y) && m === calMonth && y === calYear) {
+        daysWithData.add(d);
       }
     }
   });
@@ -1561,12 +1565,17 @@ function selectDay(day) {
   calSelectedDay = day;
   renderCalendar();
 
-  // Filter registros for this day
-  const dayStr = day;
+  const monthNames2 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const dayRegistros = allRegistros.filter(r => {
     if (!r.fecha) return false;
-    const d = new Date(r.fecha);
-    return !isNaN(d) && d.getDate() === day && d.getMonth() === calMonth && d.getFullYear() === calYear;
+    const parts = r.fecha.toString().toLowerCase().replace('.','').split(' ');
+    if (parts.length >= 3) {
+      const d = parseInt(parts[0]);
+      const m = monthNames2.indexOf(parts[1].replace('.',''));
+      const y = parseInt(parts[2]);
+      return d === day && m === calMonth && y === calYear;
+    }
+    return false;
   });
 
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
