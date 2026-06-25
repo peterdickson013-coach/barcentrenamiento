@@ -847,6 +847,7 @@
 // ─── CONFIG ──────────────────────────────────────────────
 const SHEET_ID = '1e0BoNh1fnsfL_f80S6XFRI3iN-45Epz8Ku7ZtdSUR4o';
 const SHEET_URL = (sheet) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkS5Xer-Qm8wxauJuLQDy_T_jiTqHVOHDLgOfwoah8wMHxOa_rTCpInKMclqd-tvnPiA/exec';
 
 // ─── DATA ────────────────────────────────────────────────
 let REMEROS = [];
@@ -918,8 +919,8 @@ async function cargarDatos() {
       };
     });
 
-    if (REMEROS.length > 0) {
-      boteActivo = REMEROS[0].bote;
+    if (REMEROS.length > 0 && !boteActivo) {
+      boteActivo = Object.keys(GOLD)[0] || REMEROS[0].bote;
     }
 
     renderRemeroSelector();
@@ -1080,13 +1081,36 @@ function setScore(key, val) {
 }
 
 // ─── GUARDAR REGISTRO ────────────────────────────────────
-function guardarRegistro() {
+async function guardarRegistro() {
   const focos = remeroActivo.focos.map((_, i) => scores[`foco${i}`] || 0);
   const bote = scores['bote'] || 0;
   const cansancio = scores['cansancio'] || 0;
   const nota = document.getElementById('notaRegistro').value.trim();
-  const fecha = new Date().toLocaleDateString('es-AR', { day:'numeric', month:'short' });
+  const fecha = new Date().toLocaleDateString('es-AR', { day:'numeric', month:'short', year:'numeric' });
 
+  const payload = {
+    fecha,
+    remero_id: remeroActivo.id,
+    remero_nombre: remeroActivo.nombre,
+    cansancio,
+    focos,
+    bote,
+    nota
+  };
+
+  // Save to Google Sheets via Apps Script
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {
+    console.error('Error guardando en Sheets:', e);
+  }
+
+  // Also save locally for immediate historial display
   if (!registros[remeroActivo.id]) registros[remeroActivo.id] = [];
   registros[remeroActivo.id].push({ fecha, focos, bote, cansancio, nota });
   localStorage.setItem('barc_registros', JSON.stringify(registros));
@@ -1138,8 +1162,8 @@ function guardarVideo() {
 
 // ─── GOLD STANDARD ───────────────────────────────────────
 function renderBoteTabs() {
-  const botes = [...new Set(REMEROS.map(r => r.bote))];
-  if (!boteActivo && botes.length) boteActivo = botes[0];
+  const botes = Object.keys(GOLD);
+  if (!boteActivo || !GOLD[boteActivo]) boteActivo = botes[0];
   const cont = document.getElementById('boteTabs');
   cont.innerHTML = botes.map(b => `
     <button class="bote-tab ${b===boteActivo?'active':''}" onclick="selectBote('${b}',this)">${b}</button>
@@ -1252,3 +1276,6 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
+
+
+
