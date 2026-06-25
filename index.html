@@ -977,7 +977,6 @@
         <input class="pin-input" type="password" maxlength="1" id="pin2" oninput="pinNext(this,'pin3')">
         <input class="pin-input" type="password" maxlength="1" id="pin3" oninput="pinNext(this,'pin4')">
         <input class="pin-input" type="password" maxlength="1" id="pin4" oninput="pinNext(this,null)">
-        <input class="pin-input" type="password" maxlength="1" id="pin5" oninput="pinNext(this,null)">
       </div>
       <div id="pinError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">PIN incorrecto</div>
       <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkPin()">Entrar</button>
@@ -1463,23 +1462,23 @@ function renderPanel() {
 }
 
 // ─── COACH ───────────────────────────────────────────────
-const COACH_PIN = '12889';
+const COACH_PIN = '1288';
 let coachUnlocked = false;
 let calYear, calMonth, allRegistros = [];
 let calSelectedDay = null;
 
 function pinNext(el, nextId) {
   if (el.value && nextId) document.getElementById(nextId).focus();
-  if (!nextId || !document.getElementById(nextId)) checkPinAuto();
+  if (!nextId) checkPinAuto();
 }
 
 function checkPinAuto() {
-  const pin = ['pin1','pin2','pin3','pin4','pin5'].map(id => document.getElementById(id).value).join('');
-  if (pin.length === 5) checkPin();
+  const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('');
+  if (pin.length === 4) checkPin();
 }
 
 function checkPin() {
-  const pin = ['pin1','pin2','pin3','pin4','pin5'].map(id => document.getElementById(id).value).join('');
+  const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('');
   if (pin === COACH_PIN) {
     coachUnlocked = true;
     document.getElementById('coachLogin').style.display = 'none';
@@ -1487,7 +1486,7 @@ function checkPin() {
     cargarRegistrosCoach();
   } else {
     document.getElementById('pinError').style.display = 'block';
-    ['pin1','pin2','pin3','pin4','pin5'].forEach(id => document.getElementById(id).value = '');
+    ['pin1','pin2','pin3','pin4'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pin1').focus();
   }
 }
@@ -1612,8 +1611,3 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
-Listo
-Pegá ese código en GitHub. Y en tu Sheets, cambiá las fechas viejas de la columna A de 24 de jun de 2026 a 2026-06-24. Los registros nuevos ya salen solos en ese formato.
-
-
-
