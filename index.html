@@ -597,6 +597,154 @@
     font-weight: 700;
   }
 
+  /* COACH LOGIN */
+  .coach-login {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .coach-login-icon { font-size: 40px; margin-bottom: 16px; }
+  .coach-login-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .coach-login-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  .pin-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .pin-input {
+    width: 48px;
+    height: 56px;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--white);
+    outline: none;
+  }
+
+  .pin-input:focus { border-color: var(--accent); }
+
+  /* CALENDAR */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .cal-month {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .cal-nav {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .cal-day-name {
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding: 6px 0;
+    letter-spacing: 0.05em;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cal-day.empty { cursor: default; }
+  .cal-day.has-data { background: var(--card); border-color: var(--border); }
+  .cal-day.has-data:hover { border-color: var(--accent); }
+  .cal-day.today { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .cal-day.selected { background: var(--accent); color: var(--navy); font-weight: 700; border-color: var(--accent); }
+
+  .cal-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* DAY DETAIL */
+  .day-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .back-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .day-remero-card {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .day-remero-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .day-scores-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .day-nota {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
   /* ADD FOCO MODAL */
   .modal-overlay {
     position: fixed;
@@ -676,6 +824,7 @@
     <button class="nav-tab active" onclick="showView('remeros')">Remeros</button>
     <button class="nav-tab" onclick="showView('gold')">Gold</button>
     <button class="nav-tab" onclick="showView('panel')">Panel</button>
+    <button class="nav-tab" onclick="showView('coach')">🔒</button>
   </div>
   <div class="nav-role">
     <div class="role-badge" id="roleLabel">ENTRENADOR</div>
@@ -811,6 +960,56 @@
       <div class="card-label">Hoy · <span id="panelFecha"></span></div>
     </div>
     <div id="panelRemeros"></div>
+  </div>
+</div>
+
+<!-- VIEW: COACH -->
+<div class="view" id="view-coach">
+  <div style="margin-top:16px">
+
+    <!-- LOGIN -->
+    <div id="coachLogin" class="coach-login">
+      <div class="coach-login-icon">🏅</div>
+      <div class="coach-login-title">Vista Entrenador</div>
+      <div class="coach-login-sub">Ingresá tu PIN para acceder</div>
+      <div class="pin-inputs">
+        <input class="pin-input" type="password" maxlength="1" id="pin1" oninput="pinNext(this,'pin2')">
+        <input class="pin-input" type="password" maxlength="1" id="pin2" oninput="pinNext(this,'pin3')">
+        <input class="pin-input" type="password" maxlength="1" id="pin3" oninput="pinNext(this,'pin4')">
+        <input class="pin-input" type="password" maxlength="1" id="pin4" oninput="pinNext(this,null)">
+        <input class="pin-input" type="password" maxlength="1" id="pin5" oninput="pinNext(this,null)">
+      </div>
+      <div id="pinError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">PIN incorrecto</div>
+      <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkPin()">Entrar</button>
+    </div>
+
+    <!-- CALENDARIO -->
+    <div id="coachCalendar" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Coach</div>
+        <div class="section-title">Calendario</div>
+        <div class="section-sub">Registros por día</div>
+      </div>
+
+      <div class="card">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calNav(-1)">‹</button>
+          <div class="cal-month" id="calMonth"></div>
+          <button class="cal-nav" onclick="calNav(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <!-- DAY DETAIL -->
+      <div id="dayDetail" style="display:none">
+        <div class="day-detail-header">
+          <button class="back-btn" onclick="closeDayDetail()">← Volver</button>
+          <div class="card-title" id="dayDetailTitle"></div>
+        </div>
+        <div id="dayDetailContent"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -955,6 +1154,7 @@ function showView(id) {
   event.target.classList.add('active');
   if (id === 'gold') renderGold();
   if (id === 'panel') renderPanel();
+  if (id === 'coach' && coachUnlocked) cargarRegistrosCoach();
 }
 
 // ─── REMEROS ─────────────────────────────────────────────
@@ -1261,6 +1461,146 @@ function renderPanel() {
   }).join('');
 }
 
+// ─── COACH ───────────────────────────────────────────────
+const COACH_PIN = '12889';
+let coachUnlocked = false;
+let calYear, calMonth, allRegistros = [];
+let calSelectedDay = null;
+
+function pinNext(el, nextId) {
+  if (el.value && nextId) document.getElementById(nextId).focus();
+  if (!nextId || !document.getElementById(nextId)) checkPinAuto();
+}
+
+function checkPinAuto() {
+  const pin = ['pin1','pin2','pin3','pin4','pin5'].map(id => document.getElementById(id).value).join('');
+  if (pin.length === 5) checkPin();
+}
+
+function checkPin() {
+  const pin = ['pin1','pin2','pin3','pin4','pin5'].map(id => document.getElementById(id).value).join('');
+  if (pin === COACH_PIN) {
+    coachUnlocked = true;
+    document.getElementById('coachLogin').style.display = 'none';
+    document.getElementById('coachCalendar').style.display = 'block';
+    cargarRegistrosCoach();
+  } else {
+    document.getElementById('pinError').style.display = 'block';
+    ['pin1','pin2','pin3','pin4','pin5'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('pin1').focus();
+  }
+}
+
+async function cargarRegistrosCoach() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    allRegistros = data;
+  } catch(e) {
+    console.error('Error cargando registros:', e);
+    allRegistros = [];
+  }
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  renderCalendar();
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+  closeDayDetail();
+}
+
+function renderCalendar() {
+  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('calMonth').textContent = `${months[calMonth]} ${calYear}`;
+
+  const grid = document.getElementById('calGrid');
+  const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  
+  // Get days with data
+  const daysWithData = new Set();
+  allRegistros.forEach(r => {
+    if (r.fecha) {
+      // Try to match month/year from fecha string
+      const d = new Date(r.fecha);
+      if (!isNaN(d) && d.getMonth() === calMonth && d.getFullYear() === calYear) {
+        daysWithData.add(d.getDate());
+      }
+    }
+  });
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+
+  let html = dayNames.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+  
+  for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
+  
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = today.getDate() === d && today.getMonth() === calMonth && today.getFullYear() === calYear;
+    const hasData = daysWithData.has(d);
+    const isSelected = calSelectedDay === d;
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (hasData) cls += ' has-data';
+    if (isSelected) cls += ' selected';
+    const dot = hasData && !isSelected ? '<div class="cal-dot"></div>' : '';
+    html += `<div class="${cls}" onclick="selectDay(${d})">${d}${dot}</div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+function selectDay(day) {
+  calSelectedDay = day;
+  renderCalendar();
+
+  // Filter registros for this day
+  const dayStr = day;
+  const dayRegistros = allRegistros.filter(r => {
+    if (!r.fecha) return false;
+    const d = new Date(r.fecha);
+    return !isNaN(d) && d.getDate() === day && d.getMonth() === calMonth && d.getFullYear() === calYear;
+  });
+
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  document.getElementById('dayDetailTitle').textContent = `${day} de ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][calMonth]}`;
+
+  if (!dayRegistros.length) {
+    document.getElementById('dayDetailContent').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros este día</div></div>';
+  } else {
+    document.getElementById('dayDetailContent').innerHTML = dayRegistros.map(r => {
+      let focos = [];
+      try { focos = JSON.parse(r.focos || '[]'); } catch(e) {}
+      return `
+        <div class="day-remero-card">
+          <div class="day-remero-name">${r.remero_nombre || r.remero_id}</div>
+          <div class="day-scores-row">
+            ${r.cansancio ? `<span class="score-chip ${cansancioClass(parseInt(r.cansancio))}">⚡ ${r.cansancio}</span>` : ''}
+            ${focos.map((s,i) => `<span class="score-chip ${scoreClass(parseInt(s))}">F${i+1}: ${s}</span>`).join('')}
+            ${r.bote ? `<span class="score-chip ${scoreClass(parseInt(r.bote))}">Bote: ${r.bote}</span>` : ''}
+          </div>
+          ${r.nota ? `<div class="day-nota">"${r.nota}"</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('dayDetail').style.display = 'block';
+}
+
+function closeDayDetail() {
+  calSelectedDay = null;
+  document.getElementById('dayDetail').style.display = 'none';
+  renderCalendar();
+}
+
 // ─── TOAST ───────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1276,6 +1616,3 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
-
-
-
