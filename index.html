@@ -973,11 +973,15 @@
       <!-- Zona -->
       <div class="escala-container">
         <div class="escala-title">Zona de entrenamiento</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap" id="ergoZonaSelector">
-          ${['Z1','Z2','Z3','Z4','Z5'].map(z => `
-            <button class="zona-tab" onclick="selectErgoZona('${z}',this)">${z}</button>
-          `).join('')}
-        </div>
+        <select id="ergoZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none;appearance:none;cursor:pointer" onchange="ergoZonaActiva=this.value">
+          <option value="">Seleccioná una zona...</option>
+          <option value="Z1">Z1</option>
+          <option value="Z2">Z2</option>
+          <option value="Z3">Z3</option>
+          <option value="Z4">Z4</option>
+          <option value="Z5">Z5</option>
+          <option value="Post GYM">Post GYM</option>
+        </select>
       </div>
 
       <!-- Tipo -->
@@ -1573,6 +1577,13 @@ function selectErgoRemero(id, el) {
   el.classList.add('active');
   document.getElementById('ergoForm').style.display = 'block';
   document.getElementById('ergoRemeroNombre').textContent = ergoRemeroActivo.nombre;
+  // Reset form
+  ergoZonaActiva = null;
+  document.getElementById('ergoZonaSelect').value = '';
+  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   renderErgoHistorial();
 }
 
@@ -1584,6 +1595,7 @@ function selectErgoZona(zona, el) {
 
 async function guardarErgo() {
   if (!ergoRemeroActivo) return showToast('⚠️ Seleccioná un remero');
+  ergoZonaActiva = document.getElementById('ergoZonaSelect').value;
   if (!ergoZonaActiva) return showToast('⚠️ Seleccioná una zona');
 
   const now = new Date();
@@ -1610,15 +1622,13 @@ async function guardarErgo() {
     });
   } catch(e) { console.error('Error guardando ergo:', e); }
 
-  // Save locally
   if (!ergoRegistros[ergoRemeroActivo.id]) ergoRegistros[ergoRemeroActivo.id] = [];
   ergoRegistros[ergoRemeroActivo.id].push(payload);
   localStorage.setItem('barc_ergo', JSON.stringify(ergoRegistros));
 
-  // Clear form
   ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ergoZonaSelect').value = '';
   ergoZonaActiva = null;
-  document.querySelectorAll('#ergoZonaSelector .zona-tab').forEach(t => t.classList.remove('active'));
 
   renderErgoHistorial();
   showToast('✓ Trabajo guardado');
@@ -1863,7 +1873,4 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
-Listo
-Pegá todo ese código en GitHub desde <!DOCTYPE html> hasta </html>.
-
 
