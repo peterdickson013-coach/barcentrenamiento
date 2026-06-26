@@ -1576,13 +1576,16 @@ function selectErgoRemero(id, el) {
   document.querySelectorAll('#ergoRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('ergoForm').style.display = 'block';
-  document.getElementById('ergoRemeroNombre').textContent = ergoRemeroActivo.nombre;
+  // Force DOM update
+  const nombreEl = document.getElementById('ergoRemeroNombre');
+  nombreEl.textContent = '';
+  setTimeout(() => { nombreEl.textContent = ergoRemeroActivo.nombre; }, 0);
   // Reset form
   ergoZonaActiva = null;
   document.getElementById('ergoZonaSelect').value = '';
-  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(fid => {
+    const field = document.getElementById(fid);
+    if (field) field.value = '';
   });
   renderErgoHistorial();
 }
@@ -1873,4 +1876,3 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
-
