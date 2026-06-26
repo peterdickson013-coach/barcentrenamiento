@@ -823,6 +823,7 @@
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showView('remeros')">Remeros</button>
     <button class="nav-tab" onclick="showView('gold')">Gold</button>
+    <button class="nav-tab" onclick="showView('ergo')">Ergo</button>
     <button class="nav-tab" onclick="showView('panel')">Panel</button>
     <button class="nav-tab" onclick="showView('coach')">🔒</button>
   </div>
@@ -947,6 +948,81 @@
   </div>
 </div>
 
+<!-- VIEW: ERGO -->
+<div class="view" id="view-ergo">
+  <div class="section-header" style="margin-top:16px">
+    <div class="section-eyebrow">Ergómetro</div>
+    <div class="section-title">Registro Ergo</div>
+    <div class="section-sub">Cargá tu trabajo de hoy</div>
+  </div>
+
+  <!-- Selector remero -->
+  <div class="card">
+    <div class="card-label" style="margin-bottom:10px">¿Quién sos?</div>
+    <div id="ergoRemeroSelector" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </div>
+
+  <!-- Formulario -->
+  <div id="ergoForm" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Nuevo trabajo</div>
+        <div class="card-title" id="ergoRemeroNombre"></div>
+      </div>
+
+      <!-- Zona -->
+      <div class="escala-container">
+        <div class="escala-title">Zona de entrenamiento</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="ergoZonaSelector">
+          ${['Z1','Z2','Z3','Z4','Z5'].map(z => `
+            <button class="zona-tab" onclick="selectErgoZona('${z}',this)">${z}</button>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Tipo -->
+      <div class="escala-container">
+        <div class="escala-title">Tipo de trabajo</div>
+        <input type="text" id="ergoTipo" placeholder="Ej: Continuo 20min, 4x2000m..." style="margin-bottom:0">
+      </div>
+
+      <!-- Tiempo -->
+      <div class="escala-container">
+        <div class="escala-title">Tiempo total</div>
+        <input type="text" id="ergoTiempo" placeholder="Ej: 20:00" style="margin-bottom:0">
+      </div>
+
+      <!-- Parcial -->
+      <div class="escala-container">
+        <div class="escala-title">Parcial promedio final (/500m)</div>
+        <input type="text" id="ergoParcial" placeholder="Ej: 1'52\"" style="margin-bottom:0">
+      </div>
+
+      <!-- Metros -->
+      <div class="escala-container">
+        <div class="escala-title">Metros</div>
+        <input type="number" id="ergoMetros" placeholder="Ej: 5240" style="margin-bottom:0;width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none">
+      </div>
+
+      <!-- RPM -->
+      <div class="escala-container">
+        <div class="escala-title">Remadas por minuto promedio</div>
+        <input type="number" id="ergoRpm" placeholder="Ej: 20" style="margin-bottom:0;width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none">
+      </div>
+
+      <button class="btn-primary" onclick="guardarErgo()">Guardar trabajo</button>
+    </div>
+
+    <!-- Historial personal -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Mi historial</div>
+      </div>
+      <div id="ergoHistorial"></div>
+    </div>
+  </div>
+</div>
+
 <!-- VIEW: PANEL ENTRENADOR -->
 <div class="view" id="view-panel">
   <div class="section-header" style="margin-top:16px">
@@ -1007,6 +1083,20 @@
         </div>
         <div id="dayDetailContent"></div>
       </div>
+
+      <!-- ERGO COACH VIEW -->
+      <div class="card" style="margin-top:20px">
+        <div class="card-header">
+          <div class="card-label">Trabajos de Ergo</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="zona-tab active" onclick="filtrarErgoCoach('todos',this)">Todos</button>
+          ${['Z1','Z2','Z3','Z4','Z5'].map(z => `
+            <button class="zona-tab" onclick="filtrarErgoCoach('${z}',this)">${z}</button>
+          `).join('')}
+        </div>
+        <div id="ergoCoachContent"><div class="empty"><div class="empty-text">Cargando...</div></div></div>
+      </div>
     </div>
 
   </div>
@@ -1046,6 +1136,9 @@
 const SHEET_ID = '1e0BoNh1fnsfL_f80S6XFRI3iN-45Epz8Ku7ZtdSUR4o';
 const SHEET_URL = (sheet) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkS5Xer-Qm8wxauJuLQDy_T_jiTqHVOHDLgOfwoah8wMHxOa_rTCpInKMclqd-tvnPiA/exec';
+const ERGO_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgjTl3gCruICo1nWEo0sg6d79Qe6rn8DgguZYUekZwI7owTe9VHUd28ETGAfl6Ck9qwA/exec';
+const ERGO_SHEET_ID = '1Ck5rJqTyOu8Z4FxinXD2tNS1RV6ZAOhs8X2LmXp7kwA';
+const ERGO_URL = `https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`;
 
 // ─── DATA ────────────────────────────────────────────────
 let REMEROS = [];
@@ -1153,6 +1246,7 @@ function showView(id) {
   event.target.classList.add('active');
   if (id === 'gold') renderGold();
   if (id === 'panel') renderPanel();
+  if (id === 'ergo') renderErgoRemeroSelector();
   if (id === 'coach' && coachUnlocked) cargarRegistrosCoach();
 }
 
@@ -1461,6 +1555,109 @@ function renderPanel() {
   }).join('');
 }
 
+// ─── ERGO ────────────────────────────────────────────────
+let ergoRemeroActivo = null;
+let ergoZonaActiva = null;
+let ergoRegistros = JSON.parse(localStorage.getItem('barc_ergo') || '{}');
+
+function renderErgoRemeroSelector() {
+  const cont = document.getElementById('ergoRemeroSelector');
+  cont.innerHTML = REMEROS.map(r => `
+    <button class="remero-btn" onclick="selectErgoRemero('${r.id}',this)">${r.nombre}</button>
+  `).join('');
+}
+
+function selectErgoRemero(id, el) {
+  ergoRemeroActivo = REMEROS.find(r => r.id === id);
+  document.querySelectorAll('#ergoRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ergoForm').style.display = 'block';
+  document.getElementById('ergoRemeroNombre').textContent = ergoRemeroActivo.nombre;
+  renderErgoHistorial();
+}
+
+function selectErgoZona(zona, el) {
+  ergoZonaActiva = zona;
+  document.querySelectorAll('#ergoZonaSelector .zona-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function guardarErgo() {
+  if (!ergoRemeroActivo) return showToast('⚠️ Seleccioná un remero');
+  if (!ergoZonaActiva) return showToast('⚠️ Seleccioná una zona');
+
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  const payload = {
+    fecha,
+    remero_id: ergoRemeroActivo.id,
+    remero_nombre: ergoRemeroActivo.nombre,
+    zona: ergoZonaActiva,
+    tipo: document.getElementById('ergoTipo').value.trim(),
+    tiempo: document.getElementById('ergoTiempo').value.trim(),
+    parcial: document.getElementById('ergoParcial').value.trim(),
+    metros: document.getElementById('ergoMetros').value.trim(),
+    rpm: document.getElementById('ergoRpm').value.trim(),
+  };
+
+  try {
+    await fetch(ERGO_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { console.error('Error guardando ergo:', e); }
+
+  // Save locally
+  if (!ergoRegistros[ergoRemeroActivo.id]) ergoRegistros[ergoRemeroActivo.id] = [];
+  ergoRegistros[ergoRemeroActivo.id].push(payload);
+  localStorage.setItem('barc_ergo', JSON.stringify(ergoRegistros));
+
+  // Clear form
+  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(id => document.getElementById(id).value = '');
+  ergoZonaActiva = null;
+  document.querySelectorAll('#ergoZonaSelector .zona-tab').forEach(t => t.classList.remove('active'));
+
+  renderErgoHistorial();
+  showToast('✓ Trabajo guardado');
+}
+
+function renderErgoHistorial() {
+  const cont = document.getElementById('ergoHistorial');
+  const hist = ergoRegistros[ergoRemeroActivo?.id] || [];
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣</div><div class="empty-text">Sin trabajos registrados aún</div></div>';
+    return;
+  }
+  // Group by zona
+  const byZona = {};
+  [...hist].reverse().forEach(r => {
+    if (!byZona[r.zona]) byZona[r.zona] = [];
+    byZona[r.zona].push(r);
+  });
+  cont.innerHTML = Object.entries(byZona).map(([zona, items]) => `
+    <div style="margin-bottom:16px">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:8px">${zona}</div>
+      ${items.map(r => `
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+            <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
+            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
 // ─── COACH ───────────────────────────────────────────────
 const COACH_PIN = '1288';
 let coachUnlocked = false;
@@ -1493,17 +1690,72 @@ function checkPin() {
 
 async function cargarRegistrosCoach() {
   try {
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
-    allRegistros = data;
+    const [regRes, ergoRes] = await Promise.all([
+      fetch(SCRIPT_URL),
+      fetch(ERGO_SCRIPT_URL)
+    ]);
+    allRegistros = await regRes.json();
+    allErgoRegistros = await ergoRes.json();
   } catch(e) {
     console.error('Error cargando registros:', e);
     allRegistros = [];
+    allErgoRegistros = [];
   }
   const now = new Date();
   calYear = now.getFullYear();
   calMonth = now.getMonth();
   renderCalendar();
+  filtrarErgoCoach('todos', document.querySelector('#ergoCoachContent')?.previousElementSibling?.querySelector('.zona-tab'));
+  renderErgoCoach('todos');
+}
+
+let allErgoRegistros = [];
+let ergoFiltroActivo = 'todos';
+
+function filtrarErgoCoach(zona, el) {
+  ergoFiltroActivo = zona;
+  document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderErgoCoach(zona);
+}
+
+function renderErgoCoach(zona) {
+  const cont = document.getElementById('ergoCoachContent');
+  let data = allErgoRegistros;
+  if (zona !== 'todos') data = data.filter(r => r.zona === zona);
+
+  if (!data.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-text">Sin registros</div></div>';
+    return;
+  }
+
+  // Group by remero
+  const byRemero = {};
+  data.forEach(r => {
+    const nombre = r.remero_nombre || r.remero_id;
+    if (!byRemero[nombre]) byRemero[nombre] = [];
+    byRemero[nombre].push(r);
+  });
+
+  cont.innerHTML = Object.entries(byRemero).map(([nombre, items]) => `
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px">${nombre}</div>
+      ${items.slice(-5).reverse().map(r => `
+        <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha} · <span style="color:var(--gold)">${r.zona}</span></span>
+            <span style="font-size:11px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
+            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
 }
 
 function calNav(dir) {
@@ -1611,3 +1863,7 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
+Listo
+Pegá todo ese código en GitHub desde <!DOCTYPE html> hasta </html>.
+
+
