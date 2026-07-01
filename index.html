@@ -970,48 +970,74 @@
         <div class="card-title" id="ergoRemeroNombre"></div>
       </div>
 
-      <!-- Zona -->
-      <div class="escala-container">
-        <div class="escala-title">Zona de entrenamiento</div>
-        <select id="ergoZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none;appearance:none;cursor:pointer" onchange="ergoZonaActiva=this.value">
-          <option value="">Seleccioná una zona...</option>
-          <option value="Z1">Z1</option>
-          <option value="Z2">Z2</option>
-          <option value="Z3">Z3</option>
-          <option value="Z4">Z4</option>
-          <option value="Z5">Z5</option>
-          <option value="Post GYM">Post GYM</option>
-        </select>
+      <!-- Zona + Tipo en una fila -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div>
+          <div class="escala-title" style="margin-bottom:6px">Zona</div>
+          <select id="ergoZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer" onchange="ergoZonaActiva=this.value">
+            <option value="">Zona...</option>
+            <option value="Post GYM">Post GYM</option>
+            <option value="Z1">Z1</option>
+            <option value="Z2">Z2</option>
+            <option value="Z3">Z3</option>
+            <option value="Z4">Z4</option>
+            <option value="Z5">Z5</option>
+          </select>
+        </div>
+        <div>
+          <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
+          <input type="text" id="ergoTipo" placeholder="Continuo, 4x2000m..." style="margin-bottom:0;padding:10px;font-size:13px">
+        </div>
       </div>
 
-      <!-- Tipo -->
-      <div class="escala-container">
-        <div class="escala-title">Tipo de trabajo</div>
-        <input type="text" id="ergoTipo" placeholder="Ej: Continuo 20min, 4x2000m..." style="margin-bottom:0">
+      <!-- Tiempo total -->
+      <div style="margin-bottom:14px">
+        <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div>
+            <input type="number" id="ergoTiempoMin" placeholder="00" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+          </div>
+          <div>
+            <input type="number" id="ergoTiempoSeg" placeholder="00" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+          </div>
+          <div>
+            <input type="number" id="ergoTiempoMil" placeholder="00" min="0" max="99" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Tiempo -->
-      <div class="escala-container">
-        <div class="escala-title">Tiempo total</div>
-        <input type="text" id="ergoTiempo" placeholder="Ej: 20:00" style="margin-bottom:0">
+      <!-- Parcial promedio -->
+      <div style="margin-bottom:14px">
+        <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div>
+            <input type="number" id="ergoParcialMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+          </div>
+          <div>
+            <input type="number" id="ergoParcialSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+          </div>
+          <div>
+            <input type="number" id="ergoParcialMil" placeholder="0" min="0" max="99" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Parcial -->
-      <div class="escala-container">
-        <div class="escala-title">Parcial promedio final (/500m)</div>
-        <input type="text" id="ergoParcial" placeholder="Ej: 1'52\"" style="margin-bottom:0">
-      </div>
-
-      <!-- Metros -->
-      <div class="escala-container">
-        <div class="escala-title">Metros</div>
-        <input type="number" id="ergoMetros" placeholder="Ej: 5240" style="margin-bottom:0;width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none">
-      </div>
-
-      <!-- RPM -->
-      <div class="escala-container">
-        <div class="escala-title">Remadas por minuto promedio</div>
-        <input type="number" id="ergoRpm" placeholder="Ej: 20" style="margin-bottom:0;width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-size:14px;outline:none">
+      <!-- Metros + RPM en una fila -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div>
+          <div class="escala-title" style="margin-bottom:6px">Metros</div>
+          <input type="number" id="ergoMetros" placeholder="5240" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
+        </div>
+        <div>
+          <div class="escala-title" style="margin-bottom:6px">RPM promedio</div>
+          <input type="number" id="ergoRpm" placeholder="20" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
+        </div>
       </div>
 
       <button class="btn-primary" onclick="guardarErgo()">Guardar trabajo</button>
@@ -1269,26 +1295,22 @@ function showView(id) {
 // ─── REMEROS ─────────────────────────────────────────────
 function renderRemeroSelector() {
   const cont = document.getElementById('remeroSelector');
-  cont.innerHTML = REMEROS.map(r => `
-    <button class="remero-btn" onclick="selectRemero('${r.id}')">${r.nombre}</button>
+  cont.innerHTML = REMEROS.map((r, i) => `
+    <button class="remero-btn" onclick="selectRemero(${i})">${r.nombre}</button>
   `).join('');
 }
 
-function selectRemero(id) {
-  remeroActivo = REMEROS.find(r => r.id === id);
+function selectRemero(idx) {
+  remeroActivo = REMEROS[idx];
   scores = {};
-
   document.querySelectorAll('.remero-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-
   document.getElementById('perfilRemero').style.display = 'block';
   document.getElementById('perfilNombre').textContent = remeroActivo.nombre + ' · ' + remeroActivo.categoria;
-
   renderFocos();
   renderVideos();
   renderEscalas();
   renderHistorial();
-
   document.getElementById('notaRegistro').value = '';
 }
 
@@ -1578,24 +1600,21 @@ let ergoRegistros = JSON.parse(localStorage.getItem('barc_ergo') || '{}');
 
 function renderErgoRemeroSelector() {
   const cont = document.getElementById('ergoRemeroSelector');
-  cont.innerHTML = REMEROS.map(r => `
-    <button class="remero-btn" onclick="selectErgoRemero('${r.id}',this)">${r.nombre}</button>
+  cont.innerHTML = REMEROS.map((r, i) => `
+    <button class="remero-btn" onclick="selectErgoRemero(${i},this)">${r.nombre}</button>
   `).join('');
 }
 
-function selectErgoRemero(id, el) {
-  ergoRemeroActivo = REMEROS.find(r => r.id === id);
+function selectErgoRemero(idx, el) {
+  ergoRemeroActivo = REMEROS[idx];
   document.querySelectorAll('#ergoRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('ergoForm').style.display = 'block';
-  // Force DOM update
   const nombreEl = document.getElementById('ergoRemeroNombre');
-  nombreEl.textContent = '';
-  setTimeout(() => { nombreEl.textContent = ergoRemeroActivo.nombre; }, 0);
-  // Reset form
+  nombreEl.textContent = ergoRemeroActivo.nombre;
   ergoZonaActiva = null;
   document.getElementById('ergoZonaSelect').value = '';
-  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(fid => {
+  ['ergoTipo','ergoTiempoMin','ergoTiempoSeg','ergoTiempoMil','ergoParcialMin','ergoParcialSeg','ergoParcialMil','ergoMetros','ergoRpm'].forEach(fid => {
     const field = document.getElementById(fid);
     if (field) field.value = '';
   });
@@ -1616,14 +1635,24 @@ async function guardarErgo() {
   const now = new Date();
   const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 
+  const tMin = document.getElementById('ergoTiempoMin').value || '0';
+  const tSeg = document.getElementById('ergoTiempoSeg').value || '0';
+  const tMil = document.getElementById('ergoTiempoMil').value || '0';
+  const tiempo = `${tMin}'${tSeg.padStart(2,'0')}.${tMil}"`;
+
+  const pMin = document.getElementById('ergoParcialMin').value || '0';
+  const pSeg = document.getElementById('ergoParcialSeg').value || '0';
+  const pMil = document.getElementById('ergoParcialMil').value || '0';
+  const parcial = `${pMin}'${pSeg.padStart(2,'0')}.${pMil}"`;
+
   const payload = {
     fecha,
     remero_id: ergoRemeroActivo.id,
     remero_nombre: ergoRemeroActivo.nombre,
     zona: ergoZonaActiva,
     tipo: document.getElementById('ergoTipo').value.trim(),
-    tiempo: document.getElementById('ergoTiempo').value.trim(),
-    parcial: document.getElementById('ergoParcial').value.trim(),
+    tiempo,
+    parcial,
     metros: document.getElementById('ergoMetros').value.trim(),
     rpm: document.getElementById('ergoRpm').value.trim(),
   };
@@ -1641,7 +1670,10 @@ async function guardarErgo() {
   ergoRegistros[ergoRemeroActivo.id].push(payload);
   localStorage.setItem('barc_ergo', JSON.stringify(ergoRegistros));
 
-  ['ergoTipo','ergoTiempo','ergoParcial','ergoMetros','ergoRpm'].forEach(id => document.getElementById(id).value = '');
+  ['ergoTipo','ergoTiempoMin','ergoTiempoSeg','ergoTiempoMil','ergoParcialMin','ergoParcialSeg','ergoParcialMil','ergoMetros','ergoRpm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   document.getElementById('ergoZonaSelect').value = '';
   ergoZonaActiva = null;
 
