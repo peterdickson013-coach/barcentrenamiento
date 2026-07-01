@@ -1093,14 +1093,23 @@
         <div class="card-header">
           <div class="card-label">Trabajos de Ergo</div>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
-          <button class="zona-tab active" onclick="filtrarErgoCoach('todos',this)">Todos</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Z1',this)">Z1</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Z2',this)">Z2</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Z3',this)">Z3</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Z4',this)">Z4</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Z5',this)">Z5</button>
-          <button class="zona-tab" onclick="filtrarErgoCoach('Post GYM',this)">Post GYM</button>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ZONA</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="zona-tab active" onclick="filtrarErgoCoach('zona','todos',this)">Todas</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Post GYM',this)">Post GYM</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z1',this)">Z1</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z2',this)">Z2</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z3',this)">Z3</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z4',this)">Z4</button>
+            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z5',this)">Z5</button>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ATLETA</div>
+          <div id="ergoAtletaFiltros" style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="bote-tab active" onclick="filtrarErgoCoach('atleta','todos',this)">Todos</button>
+          </div>
         </div>
         <div id="ergoCoachContent"><div class="empty"><div class="empty-text">Cargando...</div></div></div>
       </div>
@@ -1726,30 +1735,44 @@ async function cargarRegistrosCoach() {
   calYear = now.getFullYear();
   calMonth = now.getMonth();
   renderCalendar();
-  renderErgoCoach('todos');
+  renderErgoAtletaFiltros();
+  renderErgoCoach();
 }
 
 let allErgoRegistros = [];
-let ergoFiltroActivo = 'todos';
+let ergoFiltroZona = 'todos';
+let ergoFiltroAtleta = 'todos';
 
-function filtrarErgoCoach(zona, el) {
-  ergoFiltroActivo = zona;
-  document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderErgoCoach(zona);
+function renderErgoAtletaFiltros() {
+  const nombres = [...new Set(allErgoRegistros.map(r => r.remero_nombre || r.remero_id))].filter(Boolean);
+  const cont = document.getElementById('ergoAtletaFiltros');
+  cont.innerHTML = `<button class="bote-tab ${ergoFiltroAtleta==='todos'?'active':''}" onclick="filtrarErgoCoach('atleta','todos',this)">Todos</button>` +
+    nombres.map(n => `<button class="bote-tab ${ergoFiltroAtleta===n?'active':''}" onclick="filtrarErgoCoach('atleta','${n}',this)">${n}</button>`).join('');
 }
 
-function renderErgoCoach(zona) {
+function filtrarErgoCoach(tipo, valor, el) {
+  if (tipo === 'zona') {
+    ergoFiltroZona = valor;
+    document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
+  } else {
+    ergoFiltroAtleta = valor;
+    document.querySelectorAll('#ergoAtletaFiltros .bote-tab').forEach(t => t.classList.remove('active'));
+  }
+  if (el) el.classList.add('active');
+  renderErgoCoach();
+}
+
+function renderErgoCoach() {
   const cont = document.getElementById('ergoCoachContent');
   let data = allErgoRegistros;
-  if (zona !== 'todos') data = data.filter(r => r.zona === zona);
+  if (ergoFiltroZona !== 'todos') data = data.filter(r => r.zona === ergoFiltroZona);
+  if (ergoFiltroAtleta !== 'todos') data = data.filter(r => (r.remero_nombre || r.remero_id) === ergoFiltroAtleta);
 
   if (!data.length) {
     cont.innerHTML = '<div class="empty"><div class="empty-text">Sin registros</div></div>';
     return;
   }
 
-  // Group by remero
   const byRemero = {};
   data.forEach(r => {
     const nombre = r.remero_nombre || r.remero_id;
