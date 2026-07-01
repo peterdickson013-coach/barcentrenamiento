@@ -1095,9 +1095,12 @@
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
           <button class="zona-tab active" onclick="filtrarErgoCoach('todos',this)">Todos</button>
-          ${['Z1','Z2','Z3','Z4','Z5'].map(z => `
-            <button class="zona-tab" onclick="filtrarErgoCoach('${z}',this)">${z}</button>
-          `).join('')}
+          <button class="zona-tab" onclick="filtrarErgoCoach('Z1',this)">Z1</button>
+          <button class="zona-tab" onclick="filtrarErgoCoach('Z2',this)">Z2</button>
+          <button class="zona-tab" onclick="filtrarErgoCoach('Z3',this)">Z3</button>
+          <button class="zona-tab" onclick="filtrarErgoCoach('Z4',this)">Z4</button>
+          <button class="zona-tab" onclick="filtrarErgoCoach('Z5',this)">Z5</button>
+          <button class="zona-tab" onclick="filtrarErgoCoach('Post GYM',this)">Post GYM</button>
         </div>
         <div id="ergoCoachContent"><div class="empty"><div class="empty-text">Cargando...</div></div></div>
       </div>
@@ -1704,11 +1707,16 @@ function checkPin() {
 async function cargarRegistrosCoach() {
   try {
     const [regRes, ergoRes] = await Promise.all([
-      fetch(SCRIPT_URL),
-      fetch(ERGO_SCRIPT_URL)
+      fetch(SHEET_URL('Registros')),
+      fetch(`https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`),
     ]);
-    allRegistros = await regRes.json();
-    allErgoRegistros = await ergoRes.json();
+    const [regText, ergoText] = await Promise.all([regRes.text(), ergoRes.text()]);
+
+    allRegistros = parseCSV(regText).map(r => ({
+      ...r,
+      fecha: r.fecha ? new Date(r.fecha).toISOString() : ''
+    }));
+    allErgoRegistros = parseCSV(ergoText);
   } catch(e) {
     console.error('Error cargando registros:', e);
     allRegistros = [];
@@ -1718,7 +1726,6 @@ async function cargarRegistrosCoach() {
   calYear = now.getFullYear();
   calMonth = now.getMonth();
   renderCalendar();
-  filtrarErgoCoach('todos', document.querySelector('#ergoCoachContent')?.previousElementSibling?.querySelector('.zona-tab'));
   renderErgoCoach('todos');
 }
 
