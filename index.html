@@ -1755,7 +1755,7 @@ async function cargarRegistrosCoach() {
 
     allRegistros = parseCSV(regText).map(r => ({
       ...r,
-      fecha: r.fecha ? new Date(r.fecha).toISOString() : ''
+      fecha: r.fecha ? String(r.fecha).trim() : ''
     }));
     allErgoRegistros = parseCSV(ergoText);
   } catch(e) {
@@ -1851,9 +1851,12 @@ function renderCalendar() {
   const daysWithData = new Set();
   allRegistros.forEach(r => {
     if (!r.fecha) return;
-    const d = new Date(r.fecha);
-    if (!isNaN(d) && d.getUTCMonth() === calMonth && d.getUTCFullYear() === calYear) {
-      daysWithData.add(d.getUTCDate());
+    const parts = String(r.fecha).trim().split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0]);
+      const m = parseInt(parts[1]) - 1;
+      const d = parseInt(parts[2]);
+      if (m === calMonth && y === calYear) daysWithData.add(d);
     }
   });
 
@@ -1887,8 +1890,14 @@ function selectDay(day) {
 
   const dayRegistros = allRegistros.filter(r => {
     if (!r.fecha) return false;
-    const d = new Date(r.fecha);
-    return !isNaN(d) && d.getUTCDate() === day && d.getUTCMonth() === calMonth && d.getUTCFullYear() === calYear;
+    const parts = String(r.fecha).trim().split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0]);
+      const m = parseInt(parts[1]) - 1;
+      const d = parseInt(parts[2]);
+      return d === day && m === calMonth && y === calYear;
+    }
+    return false;
   });
 
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
