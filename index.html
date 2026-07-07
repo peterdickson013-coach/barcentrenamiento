@@ -1079,10 +1079,7 @@
       <div class="coach-login-title">Vista Entrenador</div>
       <div class="coach-login-sub">Ingresá tu PIN para acceder</div>
       <div class="pin-inputs">
-        <input class="pin-input" type="password" maxlength="1" id="pin1" oninput="pinNext(this,'pin2')">
-        <input class="pin-input" type="password" maxlength="1" id="pin2" oninput="pinNext(this,'pin3')">
-        <input class="pin-input" type="password" maxlength="1" id="pin3" oninput="pinNext(this,'pin4')">
-        <input class="pin-input" type="password" maxlength="1" id="pin4" oninput="pinNext(this,null)">
+        <input type="password" id="pinInput" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;font-family:'Inter',sans-serif;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;letter-spacing:0.1em" oninput="if(this.value.length>=5)checkPin()" onkeydown="if(event.key==='Enter')checkPin()">
       </div>
       <div id="pinError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">PIN incorrecto</div>
       <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkPin()">Entrar</button>
@@ -1716,32 +1713,24 @@ function renderErgoHistorial() {
 }
 
 // ─── COACH ───────────────────────────────────────────────
-const COACH_PIN = '1288';
+const COACH_PIN = 'creer';
 let coachUnlocked = false;
 let calYear, calMonth, allRegistros = [];
 let calSelectedDay = null;
 
-function pinNext(el, nextId) {
-  if (el.value && nextId) document.getElementById(nextId).focus();
-  if (!nextId) checkPinAuto();
-}
-
-function checkPinAuto() {
-  const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('');
-  if (pin.length === 4) checkPin();
-}
+function pinNext(el, nextId) {}
+function checkPinAuto() {}
 
 function checkPin() {
-  const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('');
+  const pin = document.getElementById('pinInput').value;
   if (pin === COACH_PIN) {
     coachUnlocked = true;
     document.getElementById('coachLogin').style.display = 'none';
     document.getElementById('coachCalendar').style.display = 'block';
     cargarRegistrosCoach();
-  } else {
+  } else if (pin.length >= COACH_PIN.length) {
     document.getElementById('pinError').style.display = 'block';
-    ['pin1','pin2','pin3','pin4'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('pin1').focus();
+    document.getElementById('pinInput').value = '';
   }
 }
 
