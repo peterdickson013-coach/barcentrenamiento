@@ -934,17 +934,35 @@
   </div>
 
   <div class="bote-tabs" id="boteTabs"></div>
-  <div class="zona-tabs" id="zonaTabs"></div>
 
-  <div class="card" id="goldCard">
+  <!-- Todas las zonas -->
+  <div id="goldZonasContainer"></div>
+
+  <!-- Calculadora de pace -->
+  <div class="card">
     <div class="card-header">
+      <div class="card-label">Calculadora de pace</div>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Ingresá tu tiempo cada 500m y te decimos en qué % del tiempo base estás</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
       <div>
-        <div class="card-label" id="goldBoteLabel">—</div>
-        <div class="card-title" id="goldZonaLabel">—</div>
+        <input type="number" id="calcMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
+        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+      </div>
+      <div>
+        <input type="number" id="calcSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
+        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+      </div>
+      <div>
+        <input type="number" id="calcDec" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
+        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
       </div>
     </div>
-    <div class="gold-grid" id="goldGrid"></div>
-    <div class="gold-meta" id="goldMeta"></div>
+    <div id="calcResult" style="text-align:center;padding:14px;background:var(--navy);border-radius:10px;border:1px solid var(--border);display:none">
+      <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">RESULTADO</div>
+      <div id="calcPct" style="font-size:28px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace"></div>
+      <div id="calcZona" style="font-size:13px;color:var(--gold);margin-top:4px;font-weight:600"></div>
+    </div>
   </div>
 </div>
 
@@ -1509,57 +1527,41 @@ function selectBote(bote, el) {
 
 function renderGold() {
   if (!boteActivo || !GOLD[boteActivo]) {
-    document.getElementById('goldGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Gold Standard no configurado aún para este bote.</div>';
-    document.getElementById('zonaTabs').innerHTML = '';
-    document.getElementById('goldMeta').innerHTML = '';
+    document.getElementById('goldZonasContainer').innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Gold Standard no configurado aún para este bote.</div>';
     return;
   }
   const data = GOLD[boteActivo];
   const zonas = Object.keys(data.zonas);
-  if (!zonaActiva || !data.zonas[zonaActiva]) zonaActiva = zonas[0];
 
-  // Zona tabs
-  document.getElementById('zonaTabs').innerHTML = zonas.map(z => `
-    <button class="zona-tab ${z===zonaActiva?'active':''}" onclick="selectZona('${z}',this)">${z}</button>
-  `).join('');
-
-  const zona = data.zonas[zonaActiva];
-  document.getElementById('goldBoteLabel').textContent = boteActivo;
-  document.getElementById('goldZonaLabel').textContent = zonaActiva + ' · ' + zona.pct + '% del tiempo base';
-
-  document.getElementById('goldGrid').innerHTML = `
-    <div class="gold-cell">
-      <div class="gold-cell-label">500m</div>
-      <div class="gold-cell-value">${zona.t500}</div>
-    </div>
-    <div class="gold-cell">
-      <div class="gold-cell-label">1000m</div>
-      <div class="gold-cell-value">${zona.t1000}</div>
-    </div>
-    <div class="gold-cell">
-      <div class="gold-cell-label">1500m</div>
-      <div class="gold-cell-value">${zona.t1500}</div>
-    </div>
-    <div class="gold-cell">
-      <div class="gold-cell-label">2000m</div>
-      <div class="gold-cell-value">${zona.t2000}</div>
-    </div>
-  `;
-
-  document.getElementById('goldMeta').innerHTML = `
-    <div class="gold-meta-item">
-      <div class="gold-meta-label">Velocidad</div>
-      <div class="gold-meta-val">${zona.vel} m/s</div>
-    </div>
-    <div class="gold-meta-item">
-      <div class="gold-meta-label">Intensidad</div>
-      <div class="gold-meta-val">${zona.pct}%</div>
-    </div>
-    <div class="gold-meta-item">
-      <div class="gold-meta-label">Tiempo base</div>
-      <div class="gold-meta-val">${data.tiempoBase}</div>
-    </div>
-  `;
+  document.getElementById('goldZonasContainer').innerHTML = zonas.map(z => {
+    const zona = data.zonas[z];
+    return `
+      <div class="card" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${z}</div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">${zona.pct}%</div>
+        </div>
+        <div class="gold-grid">
+          <div class="gold-cell">
+            <div class="gold-cell-label">500m</div>
+            <div class="gold-cell-value">${zona.t500}</div>
+          </div>
+          <div class="gold-cell">
+            <div class="gold-cell-label">1000m</div>
+            <div class="gold-cell-value">${zona.t1000}</div>
+          </div>
+          <div class="gold-cell">
+            <div class="gold-cell-label">1500m</div>
+            <div class="gold-cell-value">${zona.t1500}</div>
+          </div>
+          <div class="gold-cell">
+            <div class="gold-cell-label">2000m</div>
+            <div class="gold-cell-value">${zona.t2000}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function selectZona(zona, el) {
@@ -1567,6 +1569,41 @@ function selectZona(zona, el) {
   document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   renderGold();
+}
+
+function calcPace() {
+  const min = parseFloat(document.getElementById('calcMin').value) || 0;
+  const seg = parseFloat(document.getElementById('calcSeg').value) || 0;
+  const dec = parseFloat(document.getElementById('calcDec').value) || 0;
+  const totalSeg = min * 60 + seg + dec / 10;
+  if (totalSeg === 0 || !boteActivo || !GOLD[boteActivo]) return;
+
+  // velocity at this pace: 500m / totalSeg
+  const vPace = 500 / totalSeg;
+
+  // Find base velocity from MAX zone (100%)
+  const data = GOLD[boteActivo];
+  const maxZona = data.zonas['MAX'] || data.zonas[Object.keys(data.zonas)[0]];
+  // parse t500 of MAX zone to get base velocity
+  const t500str = maxZona.t500; // e.g. "1'27.0"
+  const parts = t500str.replace('"','').split("'");
+  const baseT500 = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+  const vBase = 500 / baseT500;
+
+  const pct = Math.round(vPace / vBase * 100);
+
+  // Find closest zona
+  const zonas = Object.entries(data.zonas);
+  let closestZona = '';
+  let minDiff = Infinity;
+  zonas.forEach(([z, zdata]) => {
+    const diff = Math.abs(zdata.pct - pct);
+    if (diff < minDiff) { minDiff = diff; closestZona = z; }
+  });
+
+  document.getElementById('calcResult').style.display = 'block';
+  document.getElementById('calcPct').textContent = pct + '%';
+  document.getElementById('calcZona').textContent = closestZona ? 'Cerca de ' + closestZona : '';
 }
 
 // ─── PANEL ───────────────────────────────────────────────
