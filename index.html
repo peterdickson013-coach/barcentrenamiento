@@ -929,7 +929,7 @@
 <div class="view" id="view-gold">
   <div class="section-header" style="margin-top:16px">
     <div class="section-eyebrow">Referencia</div>
-    <div class="section-title">Gold Standard</div>
+    <div class="section-title">Parciales por zona</div>
     <div class="section-sub">Velocidades objetivo por bote y zona</div>
   </div>
 
@@ -1536,27 +1536,27 @@ function renderGold() {
   document.getElementById('goldZonasContainer').innerHTML = zonas.map(z => {
     const zona = data.zonas[z];
     return `
-      <div class="card" style="margin-bottom:10px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${z}</div>
-          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">${zona.pct}%</div>
+      <div class="card" style="margin-bottom:8px;padding:12px 14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)">${z}</div>
+          <div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace">${zona.pct}%</div>
         </div>
-        <div class="gold-grid">
-          <div class="gold-cell">
-            <div class="gold-cell-label">500m</div>
-            <div class="gold-cell-value">${zona.t500}</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
+            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">500m</div>
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t500}</div>
           </div>
-          <div class="gold-cell">
-            <div class="gold-cell-label">1000m</div>
-            <div class="gold-cell-value">${zona.t1000}</div>
+          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
+            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">1000m</div>
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t1000}</div>
           </div>
-          <div class="gold-cell">
-            <div class="gold-cell-label">1500m</div>
-            <div class="gold-cell-value">${zona.t1500}</div>
+          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
+            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">1500m</div>
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t1500}</div>
           </div>
-          <div class="gold-cell">
-            <div class="gold-cell-label">2000m</div>
-            <div class="gold-cell-value">${zona.t2000}</div>
+          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
+            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">2000m</div>
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t2000}</div>
           </div>
         </div>
       </div>
