@@ -1533,35 +1533,21 @@ function renderGold() {
   const data = GOLD[boteActivo];
   const zonas = Object.keys(data.zonas);
 
-  document.getElementById('goldZonasContainer').innerHTML = zonas.map(z => {
-    const zona = data.zonas[z];
-    return `
-      <div class="card" style="margin-bottom:8px;padding:12px 14px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)">${z}</div>
-          <div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace">${zona.pct}%</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
-            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">500m</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t500}</div>
-          </div>
-          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
-            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">1000m</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t1000}</div>
-          </div>
-          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
-            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">1500m</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t1500}</div>
-          </div>
-          <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center">
-            <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">2000m</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${zona.t2000}</div>
-          </div>
-        </div>
+  document.getElementById('goldZonasContainer').innerHTML = `
+    <div class="card" style="padding:12px 14px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;margin-bottom:6px">
+        <div></div>
+        ${['500m','1000m','1500m','2000m'].map(d => `<div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-align:center;text-transform:uppercase;letter-spacing:0.04em">${d}</div>`).join('')}
       </div>
-    `;
-  }).join('');
+      ${zonas.map(z => {
+        const zona = data.zonas[z];
+        return `<div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;padding:6px 0;border-top:1px solid var(--border)">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:flex;align-items:center">${z}</div>
+          ${[zona.t500,zona.t1000,zona.t1500,zona.t2000].map(t => `<div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:600;color:var(--white);text-align:center;display:flex;align-items:center;justify-content:center">${t}</div>`).join('')}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
 }
 
 function selectZona(zona, el) {
@@ -1973,4 +1959,3 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 </script>
 </body>
 </html>
-
