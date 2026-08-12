@@ -2079,13 +2079,23 @@ function selectDay(day) {
     return false;
   });
 
-  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  // Filter ergo data for this day
+  const dayErgos = allErgoRegistros.filter(r => {
+    if (!r.fecha) return false;
+    try {
+      const d = new Date(r.fecha);
+      return d.getDate() === day && d.getMonth() === calMonth && d.getFullYear() === calYear;
+    } catch(e) { return false; }
+  });
+
   document.getElementById('dayDetailTitle').textContent = `${day} de ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][calMonth]}`;
 
-  if (!dayRegistros.length) {
-    document.getElementById('dayDetailContent').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros este día</div></div>';
-  } else {
-    document.getElementById('dayDetailContent').innerHTML = dayRegistros.map(r => {
+  let html = '';
+
+  // Registros de entrenamiento
+  if (dayRegistros.length) {
+    html += `<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:8px">ENTRENAMIENTO</div>`;
+    html += dayRegistros.map(r => {
       let focos = [];
       try { focos = JSON.parse(r.focos || '[]'); } catch(e) {}
       return `
@@ -2102,6 +2112,31 @@ function selectDay(day) {
     }).join('');
   }
 
+  // Ergos del día
+  if (dayErgos.length) {
+    html += `<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin:16px 0 8px">ERGO</div>`;
+    html += dayErgos.map(r => `
+      <div class="day-remero-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div class="day-remero-name">${r.remero_nombre || r.remero_id}</div>
+          <span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold)">${r.zona}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">${r.tipo || '—'}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          ${r.tiempo ? `<span style="font-size:12px;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
+          ${r.parcial ? `<span style="font-size:12px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+          ${r.metros ? `<span style="font-size:12px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+          ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  if (!html) {
+    html = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros este día</div></div>';
+  }
+
+  document.getElementById('dayDetailContent').innerHTML = html;
   document.getElementById('dayDetail').style.display = 'block';
 }
 
