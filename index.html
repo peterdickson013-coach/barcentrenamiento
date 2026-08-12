@@ -2082,10 +2082,14 @@ function selectDay(day) {
   // Filter ergo data for this day
   const dayErgos = allErgoRegistros.filter(r => {
     if (!r.fecha) return false;
-    try {
-      const d = new Date(r.fecha);
-      return d.getDate() === day && d.getMonth() === calMonth && d.getFullYear() === calYear;
-    } catch(e) { return false; }
+    const parts = String(r.fecha).trim().split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0]);
+      const m = parseInt(parts[1]) - 1;
+      const d = parseInt(parts[2]);
+      return d === day && m === calMonth && y === calYear;
+    }
+    return false;
   });
 
   document.getElementById('dayDetailTitle').textContent = `${day} de ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][calMonth]}`;
