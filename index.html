@@ -825,6 +825,7 @@
     <button class="nav-tab" onclick="showView('gold')">Gold</button>
     <button class="nav-tab" onclick="showView('ergo')">Ergo</button>
     <button class="nav-tab" onclick="showView('panel')">Panel</button>
+    <button class="nav-tab" onclick="showView('lara')">Lara</button>
     <button class="nav-tab" onclick="showView('coach')">🔒</button>
   </div>
   <div class="nav-role">
@@ -1165,6 +1166,186 @@
   </div>
 </div>
 
+<!-- VIEW: LARA -->
+<div class="view" id="view-lara">
+  <div style="margin-top:16px">
+
+    <!-- LOGIN -->
+    <div id="laraLogin" class="coach-login">
+      <div class="coach-login-icon">🚣‍♀️</div>
+      <div class="coach-login-title">Lara</div>
+      <div class="coach-login-sub">Ingresá tu contraseña</div>
+      <div class="pin-inputs">
+        <input type="password" id="laraPasswordInput" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;font-family:'Inter',sans-serif;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;letter-spacing:0.1em" onkeydown="if(event.key==='Enter')checkLaraPin()">
+      </div>
+      <div id="laraError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">Contraseña incorrecta</div>
+      <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkLaraPin()">Entrar</button>
+    </div>
+
+    <!-- ERGO LARA -->
+    <div id="laraPanel" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Ergómetro</div>
+        <div class="section-title">Lara</div>
+        <div class="section-sub">Cargá tu trabajo de hoy</div>
+      </div>
+
+      <!-- Tabs Entrenamiento / Test -->
+      <div style="margin-bottom:14px">
+        <div class="nav-tabs" style="width:fit-content">
+          <button class="nav-tab active" id="laraTabEntrenamiento" onclick="switchLaraTab('entrenamiento')">Entrenamiento</button>
+          <button class="nav-tab" id="laraTabTest" onclick="switchLaraTab('test')">Test 2k</button>
+        </div>
+      </div>
+
+      <!-- Formulario ENTRENAMIENTO -->
+      <div id="laraErgoForm">
+        <div class="card">
+          <div class="card-label" style="margin-bottom:14px">Nuevo trabajo</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">Zona</div>
+              <select id="laraZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
+                <option value="">Zona...</option>
+                <option value="Post GYM">Post GYM</option>
+                <option value="Z1">Z1</option>
+                <option value="Z2">Z2</option>
+                <option value="Z3">Z3</option>
+                <option value="Z4">Z4</option>
+                <option value="Z5">Z5</option>
+              </select>
+            </div>
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
+              <input type="text" id="laraTipo" placeholder="Continuo, 4x2000m..." style="margin-bottom:0;padding:10px;font-size:13px">
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <input type="number" id="laraTiempoMin" placeholder="00" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+              </div>
+              <div>
+                <input type="number" id="laraTiempoSeg" placeholder="00" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+              </div>
+              <div>
+                <input type="number" id="laraTiempoMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <input type="number" id="laraParcialMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+              </div>
+              <div>
+                <input type="number" id="laraParcialSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+              </div>
+              <div>
+                <input type="number" id="laraParcialMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">Metros</div>
+              <input type="number" id="laraMetros" placeholder="5240" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
+            </div>
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">RPM promedio</div>
+              <input type="number" id="laraRpm" placeholder="20" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="guardarLaraErgo()">Guardar trabajo</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-label">Mi historial</div></div>
+          <div id="laraHistorial"></div>
+        </div>
+      </div>
+
+      <!-- Formulario TEST -->
+      <div id="laraTestForm" style="display:none">
+        <div class="card">
+          <div class="card-label" style="margin-bottom:14px">Test 2000m</div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Tipo</div>
+            <select id="laraTestTipo" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
+              <option value="2k MAX">2k MAX</option>
+              <option value="1k MAX">1k MAX</option>
+              <option value="500m MAX">500m MAX</option>
+              <option value="6k MAX">6k MAX</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <input type="number" id="laraTestMin" placeholder="7" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+              </div>
+              <div>
+                <input type="number" id="laraTestSeg" placeholder="30" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+              </div>
+              <div>
+                <input type="number" id="laraTestMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <input type="number" id="laraTestPMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
+              </div>
+              <div>
+                <input type="number" id="laraTestPSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
+              </div>
+              <div>
+                <input type="number" id="laraTestPMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
+                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div class="escala-title" style="margin-bottom:6px">Paladas promedio</div>
+            <input type="number" id="laraTestPaladas" placeholder="34" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
+          </div>
+
+          <button class="btn-primary" onclick="guardarLaraTest()">Guardar test</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-label">Mis tests</div></div>
+          <div id="laraTestHistorial"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- VIEW: COACH -->
 <div class="view" id="view-coach">
   <div style="margin-top:16px">
@@ -1383,6 +1564,7 @@ function showView(id) {
   if (id === 'gold') renderGold();
   if (id === 'panel') renderPanel();
   if (id === 'ergo') renderErgoRemeroSelector();
+  if (id === 'lara' && laraUnlocked) { renderLaraHistorial(); renderLaraTestHistorial(); }
   if (id === 'coach' && coachUnlocked) cargarRegistrosCoach();
 }
 
@@ -1898,6 +2080,185 @@ function renderErgoHistorial() {
           </div>
         </div>
       `).join('')}
+    </div>
+  `).join('');
+}
+
+// ─── LARA ────────────────────────────────────────────────
+const LARA_PIN = 'Andy';
+let laraUnlocked = false;
+let laraRegistros = JSON.parse(localStorage.getItem('barc_lara') || '[]');
+
+function checkLaraPin() {
+  const pin = document.getElementById('laraPasswordInput').value;
+  if (pin === LARA_PIN) {
+    laraUnlocked = true;
+    document.getElementById('laraLogin').style.display = 'none';
+    document.getElementById('laraPanel').style.display = 'block';
+    renderLaraHistorial();
+    renderLaraTestHistorial();
+  } else {
+    document.getElementById('laraError').style.display = 'block';
+    document.getElementById('laraPasswordInput').value = '';
+  }
+}
+
+function switchLaraTab(tab) {
+  document.getElementById('laraTabEntrenamiento').classList.toggle('active', tab === 'entrenamiento');
+  document.getElementById('laraTabTest').classList.toggle('active', tab === 'test');
+  document.getElementById('laraErgoForm').style.display = tab === 'entrenamiento' ? 'block' : 'none';
+  document.getElementById('laraTestForm').style.display = tab === 'test' ? 'block' : 'none';
+}
+
+async function guardarLaraErgo() {
+  const zona = document.getElementById('laraZonaSelect').value;
+  if (!zona) return showToast('⚠️ Seleccioná una zona');
+
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  const tMin = document.getElementById('laraTiempoMin').value || '0';
+  const tSeg = document.getElementById('laraTiempoSeg').value || '0';
+  const tMil = document.getElementById('laraTiempoMil').value || '0';
+  const tiempo = `${tMin}'${String(tSeg).padStart(2,'0')}.${tMil}"`;
+
+  const pMin = document.getElementById('laraParcialMin').value || '0';
+  const pSeg = document.getElementById('laraParcialSeg').value || '0';
+  const pMil = document.getElementById('laraParcialMil').value || '0';
+  const parcial = `${pMin}'${String(pSeg).padStart(2,'0')}.${pMil}"`;
+
+  const payload = {
+    fecha,
+    remero_id: 'lara',
+    remero_nombre: 'Lara',
+    zona,
+    tipo: document.getElementById('laraTipo').value.trim(),
+    tiempo,
+    parcial,
+    metros: document.getElementById('laraMetros').value.trim(),
+    rpm: document.getElementById('laraRpm').value.trim(),
+  };
+
+  try {
+    await fetch(ERGO_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { console.error('Error guardando ergo Lara:', e); }
+
+  laraRegistros.push(payload);
+  localStorage.setItem('barc_lara', JSON.stringify(laraRegistros));
+
+  ['laraTipo','laraTiempoMin','laraTiempoSeg','laraTiempoMil','laraParcialMin','laraParcialSeg','laraParcialMil','laraMetros','laraRpm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('laraZonaSelect').value = '';
+
+  renderLaraHistorial();
+  showToast('✓ Trabajo guardado');
+}
+
+async function guardarLaraTest() {
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  const tMin = document.getElementById('laraTestMin').value || '0';
+  const tSeg = document.getElementById('laraTestSeg').value || '0';
+  const tMil = document.getElementById('laraTestMil').value || '0';
+  const tiempo = `${tMin}'${String(tSeg).padStart(2,'0')}.${tMil}"`;
+
+  const pMin = document.getElementById('laraTestPMin').value || '0';
+  const pSeg = document.getElementById('laraTestPSeg').value || '0';
+  const pMil = document.getElementById('laraTestPMil').value || '0';
+  const parcial = `${pMin}'${String(pSeg).padStart(2,'0')}.${pMil}"`;
+
+  const payload = {
+    fecha,
+    remero_id: 'lara',
+    remero_nombre: 'Lara',
+    zona: 'MAX',
+    tipo: document.getElementById('laraTestTipo').value,
+    tiempo,
+    parcial,
+    metros: '',
+    rpm: document.getElementById('laraTestPaladas').value.trim(),
+  };
+
+  try {
+    await fetch(ERGO_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { console.error('Error guardando test Lara:', e); }
+
+  laraRegistros.push(payload);
+  localStorage.setItem('barc_lara', JSON.stringify(laraRegistros));
+
+  ['laraTestMin','laraTestSeg','laraTestMil','laraTestPMin','laraTestPSeg','laraTestPMil','laraTestPaladas'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  renderLaraTestHistorial();
+  showToast('✓ Test guardado');
+}
+
+function renderLaraHistorial() {
+  const cont = document.getElementById('laraHistorial');
+  const hist = laraRegistros.filter(r => r.zona !== 'MAX');
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣‍♀️</div><div class="empty-text">Sin trabajos registrados aún</div></div>';
+    return;
+  }
+  const byZona = {};
+  [...hist].reverse().forEach(r => {
+    if (!byZona[r.zona]) byZona[r.zona] = [];
+    byZona[r.zona].push(r);
+  });
+  cont.innerHTML = Object.entries(byZona).map(([zona, items]) => `
+    <div style="margin-bottom:16px">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:8px">${zona}</div>
+      ${items.map(r => `
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+            <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
+            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function renderLaraTestHistorial() {
+  const cont = document.getElementById('laraTestHistorial');
+  const hist = laraRegistros.filter(r => r.zona === 'MAX');
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';
+    return;
+  }
+  cont.innerHTML = [...hist].reverse().map(r => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        ${r.tiempo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
+        ${r.parcial ? `<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+        ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>` : ''}
+      </div>
     </div>
   `).join('');
 }
