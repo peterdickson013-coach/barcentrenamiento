@@ -1274,6 +1274,15 @@
 
         <div class="card">
           <div class="card-header"><div class="card-label">Mi historial</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+            <button class="zona-tab active" onclick="filtrarLaraHistorial('todos',this)">Todas</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Post GYM',this)">Post GYM</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Z1',this)">Z1</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Z2',this)">Z2</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Z3',this)">Z3</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Z4',this)">Z4</button>
+            <button class="zona-tab" onclick="filtrarLaraHistorial('Z5',this)">Z5</button>
+          </div>
           <div id="laraHistorial"></div>
         </div>
       </div>
@@ -1456,6 +1465,9 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkS5Xer-Qm8wxauJuLQ
 const ERGO_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgjTl3gCruICo1nWEo0sg6d79Qe6rn8DgguZYUekZwI7owTe9VHUd28ETGAfl6Ck9qwA/exec';
 const ERGO_SHEET_ID = '1Ck5rJqTyOu8Z4FxinXD2tNS1RV6ZAOhs8X2LmXp7kwA';
 const ERGO_URL = `https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`;
+const LARA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzemWKgFR_FnQGqXZQMZtx8z0vGC93lfCQ89Kuqxj7Z2HDwUQe3omqVgX6zMJXQqYgq/exec';
+const LARA_SHEET_ID = '1-5zBHpObyFf7NE-KnI-KmRr1AeedG9WmTRDQZ25cQaU';
+const LARA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${LARA_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`;
 
 // ─── DATA ────────────────────────────────────────────────
 let REMEROS = [];
@@ -2095,12 +2107,28 @@ function checkLaraPin() {
     laraUnlocked = true;
     document.getElementById('laraLogin').style.display = 'none';
     document.getElementById('laraPanel').style.display = 'block';
-    renderLaraHistorial();
-    renderLaraTestHistorial();
+    cargarDatosLara();
   } else {
     document.getElementById('laraError').style.display = 'block';
     document.getElementById('laraPasswordInput').value = '';
   }
+}
+
+async function cargarDatosLara() {
+  try {
+    const res = await fetch(LARA_SHEET_URL);
+    const text = await res.text();
+    const fromSheet = parseCSV(text);
+    // Merge with localStorage (localStorage takes priority for today)
+    const local = JSON.parse(localStorage.getItem('barc_lara') || '[]');
+    const localFechas = new Set(local.map(r => r.fecha + r.zona + r.tipo));
+    const sheetOnly = fromSheet.filter(r => !localFechas.has(r.fecha + r.zona + r.tipo));
+    laraRegistros = [...sheetOnly, ...local];
+  } catch(e) {
+    console.error('Error cargando datos Lara:', e);
+  }
+  renderLaraHistorial();
+  renderLaraTestHistorial();
 }
 
 function switchLaraTab(tab) {
@@ -2140,7 +2168,7 @@ async function guardarLaraErgo() {
   };
 
   try {
-    await fetch(ERGO_SCRIPT_URL, {
+    await fetch(LARA_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
@@ -2188,7 +2216,7 @@ async function guardarLaraTest() {
   };
 
   try {
-    await fetch(ERGO_SCRIPT_URL, {
+    await fetch(LARA_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
@@ -2208,35 +2236,38 @@ async function guardarLaraTest() {
   showToast('✓ Test guardado');
 }
 
+let laraFiltroZona = 'todos';
+
+function filtrarLaraHistorial(zona, el) {
+  laraFiltroZona = zona;
+  document.querySelectorAll('#view-lara .zona-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderLaraHistorial();
+}
+
 function renderLaraHistorial() {
   const cont = document.getElementById('laraHistorial');
-  const hist = laraRegistros.filter(r => r.zona !== 'MAX');
+  let hist = laraRegistros.filter(r => r.zona !== 'MAX');
+  if (laraFiltroZona !== 'todos') hist = hist.filter(r => r.zona === laraFiltroZona);
   if (!hist.length) {
     cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣‍♀️</div><div class="empty-text">Sin trabajos registrados aún</div></div>';
     return;
   }
-  const byZona = {};
-  [...hist].reverse().forEach(r => {
-    if (!byZona[r.zona]) byZona[r.zona] = [];
-    byZona[r.zona].push(r);
-  });
-  cont.innerHTML = Object.entries(byZona).map(([zona, items]) => `
-    <div style="margin-bottom:16px">
-      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:8px">${zona}</div>
-      ${items.map(r => `
-        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-            <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-            <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
-            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-          </div>
+  cont.innerHTML = [...hist].reverse().map(r => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);font-weight:700">${r.zona}</span>
+          <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
         </div>
-      `).join('')}
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
+        ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+        ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+        ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+      </div>
     </div>
   `).join('');
 }
