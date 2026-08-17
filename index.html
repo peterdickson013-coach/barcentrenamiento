@@ -1428,6 +1428,22 @@
   </div>
 </div>
 
+<!-- MODAL: PESO -->
+<div class="modal-overlay" id="modalPeso">
+  <div class="modal">
+    <div class="modal-title">⚖️ Registro de peso semanal</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Es martes — cargá tu peso de esta semana.</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <input type="number" id="inputPeso" placeholder="Ej: 72.5" step="0.1" min="30" max="150" style="flex:1;margin-bottom:0">
+      <span style="font-size:14px;color:var(--muted);font-weight:600">kg</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" style="flex:1" onclick="guardarPeso()">Guardar</button>
+      <button class="btn-secondary" onclick="cerrarModal('modalPeso')">Ahora no</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: FOCO -->
 <div class="modal-overlay" id="modalFoco">
   <div class="modal">
@@ -1600,6 +1616,45 @@ function selectRemero(idx) {
   renderEscalas();
   renderHistorial();
   document.getElementById('notaRegistro').value = '';
+
+  // Show peso reminder on Tuesdays
+  const hoy = new Date();
+  const esMarte = hoy.getDay() === 2;
+  const pesoKey = `barc_peso_${remeroActivo.id}_${hoy.getFullYear()}_${hoy.getMonth()}_semana${Math.ceil(hoy.getDate()/7)}`;
+  if (esMarte && !localStorage.getItem(pesoKey)) {
+    setTimeout(() => document.getElementById('modalPeso').classList.add('open'), 600);
+  }
+}
+
+async function guardarPeso() {
+  const peso = document.getElementById('inputPeso').value.trim();
+  if (!peso || isNaN(peso)) return showToast('⚠️ Ingresá un peso válido');
+
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const pesoKey = `barc_peso_${remeroActivo.id}_${now.getFullYear()}_${now.getMonth()}_semana${Math.ceil(now.getDate()/7)}`;
+
+  const payload = {
+    tipo: 'fisico',
+    fecha,
+    remero_id: remeroActivo.id,
+    remero_nombre: remeroActivo.nombre,
+    peso: parseFloat(peso)
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { console.error('Error guardando peso:', e); }
+
+  localStorage.setItem(pesoKey, '1');
+  document.getElementById('inputPeso').value = '';
+  cerrarModal('modalPeso');
+  showToast('✓ Peso guardado');
 }
 
 function renderFocos() {
