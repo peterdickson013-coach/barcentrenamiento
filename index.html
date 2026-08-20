@@ -1562,7 +1562,6 @@ function mostrarCargando(show) {
 document.addEventListener('DOMContentLoaded', () => {
   const fecha = new Date().toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long' });
   document.getElementById('fechaHoy').textContent = fecha;
-  document.getElementById('panelFecha').textContent = fecha;
   cargarDatos();
 });
 
