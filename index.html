@@ -1380,10 +1380,52 @@
         <div id="dayDetailContent"></div>
       </div>
 
-      <!-- ERGO COACH VIEW -->
+      <!-- REGISTRO DEL DIA -->
       <div class="card" style="margin-top:20px">
         <div class="card-header">
-          <div class="card-label">Trabajos de Ergo</div>
+          <div class="card-label">Registro del día</div>
+          <div class="card-title" id="coachFechaHoy"></div>
+        </div>
+
+        <!-- Plan del día -->
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:10px">PLAN DEL DÍA</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">Zona</div>
+              <select id="planZona" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
+                <option value="">Zona...</option>
+                <option value="Post GYM">Post GYM</option>
+                <option value="Z1">Z1</option>
+                <option value="Z2">Z2</option>
+                <option value="Z3">Z3</option>
+                <option value="Z4">Z4</option>
+                <option value="Z5">Z5</option>
+                <option value="Mixto">Mixto</option>
+                <option value="Gimnasio">Gimnasio</option>
+              </select>
+            </div>
+            <div>
+              <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
+              <input type="text" id="planTipo" placeholder="Ej: 4x8', 10x1k..." style="margin-bottom:0;padding:10px;font-size:13px">
+            </div>
+          </div>
+          <div>
+            <div class="escala-title" style="margin-bottom:6px">Notas del entrenador</div>
+            <textarea id="planNotas" rows="2" placeholder="Observaciones, condiciones del agua, etc..."></textarea>
+          </div>
+        </div>
+
+        <!-- Asistencia -->
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:10px">ASISTENCIA Y BOTES</div>
+          <div id="asistenciaList"></div>
+        </div>
+
+        <button class="btn-primary" onclick="guardarRegistroDia()" style="margin-top:16px">Guardar registro del día</button>
+      </div>
+      <!-- ERGO COACH VIEW -->
+      <div class="card" style="margin-top:20px">
         </div>
         <div style="margin-bottom:10px">
           <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ZONA</div>
@@ -2376,6 +2418,77 @@ async function cargarRegistrosCoach() {
   renderCalendar();
   renderErgoAtletaFiltros();
   renderErgoCoach();
+  renderAsistenciaList();
+}
+
+// ─── REGISTRO DEL DIA ────────────────────────────────────
+function renderAsistenciaList() {
+  const now = new Date();
+  document.getElementById('coachFechaHoy').textContent = now.toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long'});
+
+  const botes = ['4x', '2x', '2-', '1x', 'Gimnasio', 'Ausente'];
+
+  document.getElementById('asistenciaList').innerHTML = REMEROS.map((r, i) => `
+    <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:600;color:var(--white)">${r.nombre}</div>
+      <select id="asistencia_${i}" style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:12px;outline:none;cursor:pointer;min-width:110px">
+        <option value="">— bote —</option>
+        ${botes.map(b => `<option value="${b}">${b}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+async function guardarRegistroDia() {
+  const now = new Date();
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  const zona = document.getElementById('planZona').value;
+  const tipo_trabajo = document.getElementById('planTipo').value.trim();
+  const notas = document.getElementById('planNotas').value.trim();
+
+  if (zona || tipo_trabajo || notas) {
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'plandia', fecha, zona, tipo_trabajo, notas })
+      });
+    } catch(e) { console.error('Error guardando plan:', e); }
+  }
+
+  const registros = REMEROS.map((r, i) => {
+    const bote = document.getElementById(`asistencia_${i}`)?.value || '';
+    return {
+      fecha,
+      remero_id: r.id,
+      remero_nombre: r.nombre,
+      presente: bote && bote !== 'Ausente' ? 'si' : 'no',
+      bote
+    };
+  }).filter(r => r.bote);
+
+  if (registros.length) {
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'asistencia', registros })
+      });
+    } catch(e) { console.error('Error guardando asistencia:', e); }
+  }
+
+  document.getElementById('planZona').value = '';
+  document.getElementById('planTipo').value = '';
+  document.getElementById('planNotas').value = '';
+  REMEROS.forEach((r, i) => {
+    const el = document.getElementById(`asistencia_${i}`);
+    if (el) el.value = '';
+  });
+
+  showToast('✓ Registro del día guardado');
 }
 
 let allErgoRegistros = [];
