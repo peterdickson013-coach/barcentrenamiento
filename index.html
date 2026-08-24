@@ -2396,21 +2396,24 @@ function checkPin() {
 
 async function cargarRegistrosCoach() {
   try {
-    const [regRes, ergoRes] = await Promise.all([
+    const [regRes, ergoRes, asistRes, planRes] = await Promise.all([
       fetch(SHEET_URL('Registros')),
       fetch(`https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`),
+      fetch(SHEET_URL('Asistencia')),
+      fetch(SHEET_URL('PlanDia')),
     ]);
-    const [regText, ergoText] = await Promise.all([regRes.text(), ergoRes.text()]);
+    const [regText, ergoText, asistText, planText] = await Promise.all([regRes.text(), ergoRes.text(), asistRes.text(), planRes.text()]);
 
-    allRegistros = parseCSV(regText).map(r => ({
-      ...r,
-      fecha: r.fecha ? String(r.fecha).trim() : ''
-    }));
+    allRegistros = parseCSV(regText).map(r => ({ ...r, fecha: r.fecha ? String(r.fecha).trim() : '' }));
     allErgoRegistros = parseCSV(ergoText);
+    allAsistencia = parseCSV(asistText);
+    allPlanDia = parseCSV(planText);
   } catch(e) {
     console.error('Error cargando registros:', e);
     allRegistros = [];
     allErgoRegistros = [];
+    allAsistencia = [];
+    allPlanDia = [];
   }
   const now = new Date();
   calYear = now.getFullYear();
@@ -2492,6 +2495,8 @@ async function guardarRegistroDia() {
 }
 
 let allErgoRegistros = [];
+let allAsistencia = [];
+let allPlanDia = [];
 let ergoFiltroZona = 'todos';
 let ergoFiltroAtleta = 'todos';
 
@@ -2636,6 +2641,51 @@ function selectDay(day) {
   document.getElementById('dayDetailTitle').textContent = `${day} de ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][calMonth]}`;
 
   let html = '';
+
+  // Plan del día
+  const planDia = allPlanDia.find(p => {
+    if (!p.fecha) return false;
+    const parts = String(p.fecha).trim().split('-');
+    if (parts.length === 3) {
+      return parseInt(parts[2]) === day && parseInt(parts[1])-1 === calMonth && parseInt(parts[0]) === calYear;
+    }
+    return false;
+  });
+
+  if (planDia) {
+    html += `<div style="background:var(--water);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:8px">PLAN DEL DÍA</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+        ${planDia.zona ? `<span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)">${planDia.zona}</span>` : ''}
+        ${planDia.tipo_trabajo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">${planDia.tipo_trabajo}</span>` : ''}
+      </div>
+      ${planDia.notas ? `<div style="font-size:12px;color:var(--muted);font-style:italic">"${planDia.notas}"</div>` : ''}
+    </div>`;
+  }
+
+  // Asistencia del día
+  const asistDia = allAsistencia.filter(a => {
+    if (!a.fecha) return false;
+    const parts = String(a.fecha).trim().split('-');
+    if (parts.length === 3) {
+      return parseInt(parts[2]) === day && parseInt(parts[1])-1 === calMonth && parseInt(parts[0]) === calYear;
+    }
+    return false;
+  });
+
+  if (asistDia.length) {
+    const presentes = asistDia.filter(a => a.presente === 'si');
+    const ausentes = asistDia.filter(a => a.presente === 'no');
+    html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:10px">ASISTENCIA (${presentes.length}/${asistDia.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        ${presentes.map(a => `<span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--success);font-weight:500">${a.remero_nombre} <span style="font-size:10px;opacity:0.7">${a.bote}</span></span>`).join('')}
+      </div>
+      ${ausentes.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${ausentes.map(a => `<span style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--danger);font-weight:500">${a.remero_nombre}</span>`).join('')}
+      </div>` : ''}
+    </div>`;
+  }
 
   // Registros de entrenamiento
   if (dayRegistros.length) {
