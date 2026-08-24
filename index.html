@@ -824,6 +824,7 @@
     <button class="nav-tab active" onclick="showView('remeros')">Remeros</button>
     <button class="nav-tab" onclick="showView('gold')">Gold</button>
     <button class="nav-tab" onclick="showView('ergo')">Ergo</button>
+    <button class="nav-tab" onclick="showView('misergos')">Mis Ergos</button>
     <button class="nav-tab" onclick="showView('lara')">Lara</button>
     <button class="nav-tab" onclick="showView('coach')">🔒</button>
   </div>
@@ -1064,13 +1065,6 @@
 
       <button class="btn-primary" onclick="guardarErgo()">Guardar trabajo</button>
     </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-label">Mi historial</div>
-      </div>
-      <div id="ergoHistorial"></div>
-    </div>
   </div>
 
   <!-- Formulario TEST -->
@@ -1145,6 +1139,59 @@
         <div class="card-label">Mis tests</div>
       </div>
       <div id="testHistorial"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: MIS ERGOS -->
+<div class="view" id="view-misergos">
+  <div class="section-header" style="margin-top:16px">
+    <div class="section-eyebrow">Historial</div>
+    <div class="section-title">Mis Ergos</div>
+    <div class="section-sub">Seleccioná tu nombre para ver tus trabajos</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:10px">¿Quién sos?</div>
+    <div id="misErgosRemeroSelector" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </div>
+
+  <div id="misErgosContent" style="display:none">
+    <!-- Tabs entrenamiento / tests -->
+    <div style="margin-bottom:14px">
+      <div class="nav-tabs" style="width:fit-content">
+        <button class="nav-tab active" id="misErgoTabEnt" onclick="switchMisErgosTab('entrenamiento')">Entrenamiento</button>
+        <button class="nav-tab" id="misErgoTabTest" onclick="switchMisErgosTab('test')">Tests</button>
+      </div>
+    </div>
+
+    <!-- Historial entrenamiento -->
+    <div id="misErgosEntPanel">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-label">Historial por zona</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="zona-tab active" onclick="filtrarMisErgos('todos',this)">Todas</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Post GYM',this)">Post GYM</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Z1',this)">Z1</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Z2',this)">Z2</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Z3',this)">Z3</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Z4',this)">Z4</button>
+          <button class="zona-tab" onclick="filtrarMisErgos('Z5',this)">Z5</button>
+        </div>
+        <div id="misErgosHistorial"></div>
+      </div>
+    </div>
+
+    <!-- Historial tests -->
+    <div id="misErgosTestPanel" style="display:none">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-label">Mis tests</div>
+        </div>
+        <div id="misErgosTests"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1613,8 +1660,8 @@ function showView(id) {
   document.getElementById('view-' + id).classList.add('active');
   event.target.classList.add('active');
   if (id === 'gold') renderGold();
-  if (id === 'panel') renderPanel();
   if (id === 'ergo') renderErgoRemeroSelector();
+  if (id === 'misergos') renderMisErgosSelector();
   if (id === 'lara' && laraUnlocked) { renderLaraHistorial(); renderLaraTestHistorial(); }
   if (id === 'coach' && coachUnlocked) cargarRegistrosCoach();
 }
@@ -2170,6 +2217,109 @@ function renderErgoHistorial() {
           </div>
         </div>
       `).join('')}
+    </div>
+  `).join('');
+}
+
+// ─── MIS ERGOS ───────────────────────────────────────────
+let misErgosRemeroActivo = null;
+let misErgosFiltroZona = 'todos';
+let misErgosData = [];
+
+async function renderMisErgosSelector() {
+  const cont = document.getElementById('misErgosRemeroSelector');
+  cont.innerHTML = REMEROS.map((r, i) => `
+    <button class="remero-btn" onclick="selectMisErgosRemero(${i},this)">${r.nombre}</button>
+  `).join('');
+}
+
+async function selectMisErgosRemero(idx, el) {
+  misErgosRemeroActivo = REMEROS[idx];
+  document.querySelectorAll('#misErgosRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('misErgosContent').style.display = 'block';
+
+  // Load from Sheets
+  try {
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`);
+    const text = await res.text();
+    const all = parseCSV(text);
+    misErgosData = all.filter(r => r.remero_nombre === misErgosRemeroActivo.nombre || r.remero_id === misErgosRemeroActivo.id);
+  } catch(e) {
+    misErgosData = [];
+  }
+
+  misErgosFiltroZona = 'todos';
+  document.querySelectorAll('#view-misergos .zona-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent === 'Todas');
+  });
+  renderMisErgosHistorial();
+  renderMisErgosTests();
+}
+
+function switchMisErgosTab(tab) {
+  document.getElementById('misErgoTabEnt').classList.toggle('active', tab === 'entrenamiento');
+  document.getElementById('misErgoTabTest').classList.toggle('active', tab === 'test');
+  document.getElementById('misErgosEntPanel').style.display = tab === 'entrenamiento' ? 'block' : 'none';
+  document.getElementById('misErgosTestPanel').style.display = tab === 'test' ? 'block' : 'none';
+}
+
+function filtrarMisErgos(zona, el) {
+  misErgosFiltroZona = zona;
+  document.querySelectorAll('#view-misergos .zona-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderMisErgosHistorial();
+}
+
+function renderMisErgosHistorial() {
+  const cont = document.getElementById('misErgosHistorial');
+  let hist = misErgosData.filter(r => r.zona !== 'MAX');
+  if (misErgosFiltroZona !== 'todos') hist = hist.filter(r => r.zona === misErgosFiltroZona);
+
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣</div><div class="empty-text">Sin trabajos en esta zona</div></div>';
+    return;
+  }
+
+  cont.innerHTML = [...hist].reverse().map(r => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);font-weight:700">${r.zona}</span>
+          <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
+        ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+        ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
+        ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMisErgosTests() {
+  const cont = document.getElementById('misErgosTests');
+  const hist = misErgosData.filter(r => r.zona === 'MAX');
+
+  if (!hist.length) {
+    cont.innerHTML = '<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';
+    return;
+  }
+
+  cont.innerHTML = [...hist].reverse().map(r => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        ${r.tiempo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
+        ${r.parcial ? `<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
+        ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>` : ''}
+      </div>
     </div>
   `).join('');
 }
