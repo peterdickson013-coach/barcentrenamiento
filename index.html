@@ -1464,6 +1464,8 @@
       </div>
       <!-- ERGO COACH VIEW -->
       <div class="card" style="margin-top:20px">
+        <div class="card-header">
+          <div class="card-label">Trabajos de Ergo</div>
         </div>
         <div style="margin-bottom:10px">
           <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ZONA</div>
@@ -1624,6 +1626,7 @@ async function cargarDatos() {
 
     renderRemeroSelector();
     renderBoteTabs();
+    renderGold();
     mostrarCargando(false);
   } catch(e) {
     mostrarCargando(false);
@@ -1675,7 +1678,6 @@ function selectRemero(idx) {
   renderFocos();
   renderVideos();
   renderEscalas();
-  renderHistorial();
   document.getElementById('notaRegistro').value = '';
 
   // Show peso reminder on Tuesdays
@@ -1855,8 +1857,6 @@ async function guardarRegistro() {
   document.getElementById('notaRegistro').value = '';
   document.querySelectorAll('.escala-dot').forEach(d => d.classList.remove('selected'));
 
-  renderHistorial();
-  renderPanel();
   showToast('✓ Registro guardado');
 }
 
