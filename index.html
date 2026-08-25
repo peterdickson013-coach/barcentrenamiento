@@ -477,7 +477,7 @@
 <div class="modal-overlay" id="modalPeso">
   <div class="modal">
     <div class="modal-title">⚖️ Registro de peso semanal</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Es viernes — cargá tu peso de esta semana.</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Es martes — cargá tu peso de esta semana.</div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
       <input type="number" id="inputPeso" placeholder="Ej: 72.5" step="0.1" min="30" max="150" style="flex:1;margin-bottom:0">
       <span style="font-size:14px;color:var(--muted);font-weight:600">kg</span>
@@ -582,9 +582,9 @@ function selectRemero(idx,el){
   renderFocos(); renderVideos(); renderEscalas();
   document.getElementById('notaRegistro').value='';
   const hoy=new Date();
-  if(hoy.getDay()===5){
+  if(hoy.getDay()===2){
     const k=`barc_peso_${remeroActivo.id}_${hoy.getFullYear()}_${hoy.getMonth()}_${Math.ceil(hoy.getDate()/7)}`;
-    if(!localStorage.getItem(k))setTimeout(()=>document.getElementById('modalPeso').classList.add('open'),600);
+    if(!localStorage.getItem(k))document.getElementById('modalPeso').classList.add('open');
   }
 }
 
