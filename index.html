@@ -6,814 +6,100 @@
 <title>BARC · Entrenamiento</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
-
   :root {
-    --navy: #0B1C2D;
-    --water: #1A3A5C;
-    --blue-mid: #1E5F8E;
-    --accent: #00C2FF;
-    --gold: #F0B429;
-    --white: #F4F8FB;
-    --muted: #8AAFC8;
-    --card: #132436;
-    --border: #1E3A52;
-    --success: #22C55E;
-    --danger: #EF4444;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--navy);
-    color: var(--white);
-    min-height: 100vh;
-  }
-
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--navy);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-  }
-
-  .nav-logo span { color: var(--muted); font-weight: 400; }
-
-  .nav-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--card);
-    padding: 4px;
-    border-radius: 10px;
-  }
-
-  .nav-tab {
-    padding: 7px 14px;
-    border-radius: 7px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    transition: all 0.2s;
-  }
-
-  .nav-tab.active {
-    background: var(--blue-mid);
-    color: var(--white);
-  }
-
-  .nav-role {
-    font-size: 12px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .role-badge {
-    background: var(--water);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-  }
-
-  /* VIEWS */
-  .view { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
-  .view.active { display: block; }
-
-  /* SECTION HEADER */
-  .section-header {
-    margin-bottom: 20px;
-  }
-
-  .section-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .section-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.2;
-  }
-
-  .section-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-
-  /* CARD */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 14px;
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-
-  .card-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    letter-spacing: 0.02em;
-  }
-
-  .card-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* REMERO SELECTOR */
-  .remero-selector {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
-  .remero-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .remero-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,194,255,0.08);
-  }
-
-  /* FOCOS TÉCNICOS */
-  .foco-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .foco-item:last-child { border-bottom: none; }
-
-  .foco-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    min-width: 20px;
-    padding-top: 2px;
-  }
-
-  .foco-text {
-    font-size: 14px;
-    color: var(--white);
-    line-height: 1.5;
-    flex: 1;
-  }
-
-  .foco-edit {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: color 0.2s;
-  }
-
-  .foco-edit:hover { color: var(--accent); }
-
-  /* REGISTRO DIARIO */
-  .registro-label {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .escala-container {
-    margin-bottom: 18px;
-  }
-
-  .escala-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--white);
-    margin-bottom: 10px;
-  }
-
-  .escala-dots {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .escala-dot {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: var(--navy);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .escala-dot:hover { border-color: var(--accent); color: var(--accent); }
-
-  .escala-dot.selected {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--navy);
-  }
-
-  .escala-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 6px;
-  }
-
-  .escala-label-text {
-    font-size: 10px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-  }
-
-  textarea {
-    width: 100%;
-    background: var(--navy);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    color: var(--white);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    resize: none;
-    outline: none;
-    transition: border-color 0.2s;
-    line-height: 1.5;
-  }
-
-  textarea:focus { border-color: var(--accent); }
-  textarea::placeholder { color: var(--muted); }
-
-  /* BOTONES */
-  .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--accent);
-    color: var(--navy);
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 6px;
-    letter-spacing: 0.02em;
-  }
-
-  .btn-primary:hover { opacity: 0.88; }
-
-  .btn-secondary {
-    padding: 8px 14px;
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-secondary:hover { background: rgba(0,194,255,0.08); }
-
-  /* GOLD STANDARD */
-  .zona-tabs {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .zona-tab {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
-  }
-
-  .zona-tab.active {
-    border-color: var(--gold);
-    color: var(--gold);
-    background: rgba(240,180,41,0.08);
-  }
-
-  .bote-tabs {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .bote-tab {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .bote-tab.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,194,255,0.08);
-  }
-
-  .gold-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-top: 4px;
-  }
-
-  .gold-cell {
-    background: var(--navy);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 10px;
-    text-align: center;
-  }
-
-  .gold-cell-label {
-    font-size: 10px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-  }
-
-  .gold-cell-value {
-    font-family: 'Space Mono', monospace;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  .gold-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0 4px;
-    border-top: 1px solid var(--border);
-    margin-top: 14px;
-  }
-
-  .gold-meta-item {
-    text-align: center;
-  }
-
-  .gold-meta-label {
-    font-size: 10px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .gold-meta-val {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    margin-top: 2px;
-  }
-
-  /* VIDEOS */
-  .video-grid {
-    display: grid;
-    gap: 12px;
-  }
-
-  .video-card {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    padding: 14px;
-    background: var(--navy);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-    text-decoration: none;
-  }
-
-  .video-card:hover { border-color: var(--accent); }
-
-  .video-thumb {
-    width: 56px;
-    height: 40px;
-    background: var(--water);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .video-info { flex: 1; }
-
-  .video-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 3px;
-  }
-
-  .video-sub {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* HISTORIAL */
-  .historial-item {
-    display: flex;
-    gap: 14px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    align-items: flex-start;
-  }
-
-  .historial-item:last-child { border-bottom: none; }
-
-  .historial-date {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    min-width: 80px;
-    padding-top: 2px;
-  }
-
-  .historial-scores {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    flex: 1;
-  }
-
-  .score-chip {
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-  }
-
-  .score-high { background: rgba(34,197,94,0.15); color: var(--success); }
-  .score-mid { background: rgba(240,180,41,0.15); color: var(--gold); }
-  .score-low { background: rgba(239,68,68,0.15); color: var(--danger); }
-
-  .historial-nota {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-style: italic;
-    line-height: 1.4;
-  }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--success);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    transition: transform 0.3s ease;
-    z-index: 999;
-  }
-
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* PANEL ENTRENADOR */
-  .remero-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-
-  .remero-row:last-child { border-bottom: none; }
-
-  .remero-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--white);
-    min-width: 90px;
-  }
-
-  .mini-scores {
-    display: flex;
-    gap: 5px;
-    flex: 1;
-  }
-
-  .mini-score {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-  }
-
-  /* COACH LOGIN */
-  .coach-login {
-    text-align: center;
-    padding: 60px 20px;
-  }
-
-  .coach-login-icon { font-size: 40px; margin-bottom: 16px; }
-  .coach-login-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-  .coach-login-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-
-  .pin-inputs {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  .pin-input {
-    width: 48px;
-    height: 56px;
-    text-align: center;
-    font-size: 22px;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    color: var(--white);
-    outline: none;
-  }
-
-  .pin-input:focus { border-color: var(--accent); }
-
-  /* CALENDAR */
-  .cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .cal-month {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--white);
-  }
-
-  .cal-nav {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 12px;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 16px;
-  }
-
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-bottom: 20px;
-  }
-
-  .cal-day-name {
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    padding: 6px 0;
-    letter-spacing: 0.05em;
-  }
-
-  .cal-day {
-    aspect-ratio: 1;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s;
-    position: relative;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .cal-day.empty { cursor: default; }
-  .cal-day.has-data { background: var(--card); border-color: var(--border); }
-  .cal-day.has-data:hover { border-color: var(--accent); }
-  .cal-day.today { border-color: var(--accent); color: var(--accent); font-weight: 700; }
-  .cal-day.selected { background: var(--accent); color: var(--navy); font-weight: 700; border-color: var(--accent); }
-
-  .cal-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-
-  /* DAY DETAIL */
-  .day-detail-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .back-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 12px;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 13px;
-  }
-
-  .day-remero-card {
-    background: var(--navy);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-
-  .day-remero-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .day-scores-row {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .day-nota {
-    font-size: 12px;
-    color: var(--muted);
-    font-style: italic;
-    margin-top: 8px;
-    line-height: 1.4;
-  }
-
-  /* ADD FOCO MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 200;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    border-radius: 18px 18px 0 0;
-    padding: 24px 20px 36px;
-    width: 100%;
-    max-width: 700px;
-  }
-
-  .modal-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    background: var(--navy);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    color: var(--white);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 12px;
-  }
-
-  input[type="text"]:focus { border-color: var(--accent); }
-  input[type="text"]::placeholder { color: var(--muted); }
-
-  .modal-actions { display: flex; gap: 10px; }
-
-  .water-line {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    margin: 20px 0;
-    opacity: 0.3;
-  }
-
-  /* EMPTY STATE */
-  .empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--muted);
-  }
-
-  .empty-icon { font-size: 32px; margin-bottom: 10px; }
-  .empty-text { font-size: 13px; line-height: 1.5; }
-
-  @media (max-width: 480px) {
-    .gold-grid { grid-template-columns: repeat(2, 1fr); }
-    .nav-tab { padding: 7px 10px; font-size: 12px; }
-    .gold-cell-value { font-size: 13px; }
-  }
+    --navy:#0B1C2D; --water:#1A3A5C; --blue-mid:#1E5F8E;
+    --accent:#00C2FF; --gold:#F0B429; --white:#F4F8FB;
+    --muted:#8AAFC8; --card:#132436; --border:#1E3A52;
+    --success:#22C55E; --danger:#EF4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);min-height:100vh}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--navy);position:sticky;top:0;z-index:100}
+  .nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+  .nav-logo span{color:var(--muted);font-weight:400}
+  .nav-tabs{display:flex;gap:4px;background:var(--card);padding:4px;border-radius:10px}
+  .nav-tab{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .2s}
+  .nav-tab.active{background:var(--blue-mid);color:var(--white)}
+  .role-badge{background:var(--water);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.05em}
+  .view{display:none;padding:20px;max-width:700px;margin:0 auto}
+  .view.active{display:block}
+  .section-header{margin-bottom:20px}
+  .section-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+  .section-title{font-size:22px;font-weight:700;color:var(--white);line-height:1.2}
+  .section-sub{font-size:13px;color:var(--muted);margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .card-title{font-size:13px;font-weight:600;color:var(--white)}
+  .card-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .remero-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+  .remero-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,194,255,.08)}
+  .foco-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .foco-item:last-child{border-bottom:none}
+  .foco-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);min-width:20px;padding-top:2px}
+  .foco-text{font-size:14px;color:var(--white);line-height:1.5;flex:1}
+  .escala-container{margin-bottom:18px}
+  .escala-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:10px}
+  .escala-dots{display:flex;gap:8px;align-items:center}
+  .escala-dot{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--border);background:var(--navy);color:var(--muted);font-family:'Space Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+  .escala-dot:hover{border-color:var(--accent);color:var(--accent)}
+  .escala-dot.selected{background:var(--accent);border-color:var(--accent);color:var(--navy)}
+  .escala-labels{display:flex;justify-content:space-between;margin-top:6px}
+  .escala-label-text{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace}
+  textarea,input[type="text"],input[type="number"]{width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;margin-bottom:12px}
+  textarea{resize:none;line-height:1.5}
+  input[type="text"]:focus,input[type="number"]:focus,textarea:focus{border-color:var(--accent)}
+  input::placeholder,textarea::placeholder{color:var(--muted)}
+  select{width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer}
+  .btn-primary{width:100%;padding:14px;background:var(--accent);color:var(--navy);border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:6px;letter-spacing:.02em}
+  .btn-primary:hover{opacity:.88}
+  .btn-secondary{padding:8px 14px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+  .zona-tab{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.05em}
+  .zona-tab.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.08)}
+  .bote-tab{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+  .bote-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,194,255,.08)}
+  .video-card{display:flex;gap:14px;align-items:center;padding:14px;background:var(--navy);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:border-color .2s;text-decoration:none;margin-bottom:10px}
+  .video-card:hover{border-color:var(--accent)}
+  .video-thumb{width:56px;height:40px;background:var(--water);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .video-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+  .video-sub{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace}
+  .score-chip{padding:3px 8px;border-radius:6px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700}
+  .score-high{background:rgba(34,197,94,.15);color:var(--success)}
+  .score-mid{background:rgba(240,180,41,.15);color:var(--gold)}
+  .score-low{background:rgba(239,68,68,.15);color:var(--danger)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;transition:transform .3s ease;z-index:999}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .coach-login{text-align:center;padding:60px 20px}
+  .coach-login-icon{font-size:40px;margin-bottom:16px}
+  .coach-login-title{font-size:20px;font-weight:700;margin-bottom:8px}
+  .coach-login-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+  .pin-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .cal-month{font-size:15px;font-weight:700;color:var(--white)}
+  .cal-nav{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--muted);cursor:pointer;font-size:16px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px}
+  .cal-day-name{text-align:center;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);padding:6px 0;letter-spacing:.05em}
+  .cal-day{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1px solid transparent;transition:all .15s;position:relative;flex-direction:column;gap:2px}
+  .cal-day.empty{cursor:default}
+  .cal-day.has-data{background:var(--card);border-color:var(--border)}
+  .cal-day.has-data:hover{border-color:var(--accent)}
+  .cal-day.today{border-color:var(--accent);color:var(--accent);font-weight:700}
+  .cal-day.selected{background:var(--accent);color:var(--navy);font-weight:700;border-color:var(--accent)}
+  .cal-dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .back-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--muted);cursor:pointer;font-size:13px}
+  .day-remero-card{background:var(--navy);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+  .day-remero-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
+  .day-scores-row{display:flex;gap:6px;flex-wrap:wrap}
+  .day-nota{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.4}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-end;justify-content:center}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--card);border-top:1px solid var(--border);border-radius:18px 18px 0 0;padding:24px 20px 36px;width:100%;max-width:700px}
+  .modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
+  .modal-actions{display:flex;gap:10px}
+  .water-line{height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:20px 0;opacity:.3}
+  .empty{text-align:center;padding:40px 20px;color:var(--muted)}
+  .empty-icon{font-size:32px;margin-bottom:10px}
+  .empty-text{font-size:13px;line-height:1.5}
+  @media(max-width:480px){.nav-tab{padding:7px 10px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -821,66 +107,44 @@
 <nav>
   <div class="nav-logo">BARC <span>/ Entrenamiento</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showView('remeros')">Remeros</button>
-    <button class="nav-tab" onclick="showView('gold')">Gold</button>
-    <button class="nav-tab" onclick="showView('ergo')">Ergo</button>
-    <button class="nav-tab" onclick="showView('misergos')">Mis Ergos</button>
-    <button class="nav-tab" onclick="showView('lara')">Lara</button>
-    <button class="nav-tab" onclick="showView('coach')">🔒</button>
+    <button class="nav-tab active" onclick="showView('remeros',this)">Remeros</button>
+    <button class="nav-tab" onclick="showView('gold',this)">Gold</button>
+    <button class="nav-tab" onclick="showView('ergo',this)">Ergo</button>
+    <button class="nav-tab" onclick="showView('misergos',this)">Mis Ergos</button>
+    <button class="nav-tab" onclick="showView('lara',this)">Lara</button>
+    <button class="nav-tab" onclick="showView('coach',this)">🔒</button>
   </div>
-  <div class="nav-role">
-    <div class="role-badge" id="roleLabel">ENTRENADOR</div>
-  </div>
+  <div class="role-badge">ENTRENADOR</div>
 </nav>
 
-<!-- VIEW: REMEROS -->
+<!-- REMEROS -->
 <div class="view active" id="view-remeros">
   <div class="section-header" style="margin-top:16px">
     <div class="section-eyebrow">Plantilla</div>
     <div class="section-title">Mis remeros</div>
     <div class="section-sub">Seleccioná un remero para ver su perfil</div>
   </div>
-
-  <div class="remero-selector" id="remeroSelector" style="display:none"></div>
-  <div id="loadingState" style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px">
-    Cargando remeros...
-  </div>
-  <div id="errorCarga" style="display:none;text-align:center;padding:20px;color:var(--danger);font-size:13px">
-    ⚠️ No se pudo cargar la planilla. Verificá que esté compartida como pública.
-  </div>
-
-  <!-- PERFIL REMERO -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px" id="remeroSelector"></div>
+  <div id="loadingState" style="text-align:center;padding:40px;color:var(--muted);font-size:13px">Cargando remeros...</div>
+  <div id="errorCarga" style="display:none;text-align:center;padding:20px;color:var(--danger);font-size:13px">⚠️ No se pudo cargar la planilla.</div>
   <div id="perfilRemero" style="display:none">
-    <!-- Focos técnicos -->
     <div class="card">
       <div class="card-header">
-        <div>
-          <div class="card-label">Objetivos técnicos</div>
-          <div class="card-title" id="perfilNombre">—</div>
-        </div>
-
+        <div><div class="card-label">Objetivos técnicos</div><div class="card-title" id="perfilNombre"></div></div>
       </div>
       <div id="listaFocos"></div>
     </div>
-
-    <!-- Videos -->
     <div class="card">
-      <div class="card-header">
-        <div class="card-label">Referencias y análisis</div>
-      </div>
-      <div id="listaVideos" class="video-grid"></div>
+      <div class="card-header"><div class="card-label">Referencias y análisis</div></div>
+      <div id="listaVideos"></div>
     </div>
-
     <div class="water-line"></div>
-
-    <!-- Registro diario -->
     <div class="card">
       <div class="card-header">
         <div class="card-label">Registro del día</div>
         <div class="card-title" id="fechaHoy"></div>
       </div>
-
-      <div class="escala-container" style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="escala-container" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:16px">
         <div class="escala-title">¿Cómo llegás hoy? <span style="color:var(--muted);font-weight:400;font-size:12px">Nivel de cansancio</span></div>
         <div class="escala-dots" id="escala-cansancio">
           <button class="escala-dot" onclick="setScore('cansancio',1)">1</button>
@@ -889,14 +153,9 @@
           <button class="escala-dot" onclick="setScore('cansancio',4)">4</button>
           <button class="escala-dot" onclick="setScore('cansancio',5)">5</button>
         </div>
-        <div class="escala-labels">
-          <span class="escala-label-text">Fresco</span>
-          <span class="escala-label-text">Agotado</span>
-        </div>
+        <div class="escala-labels"><span class="escala-label-text">Fresco</span><span class="escala-label-text">Agotado</span></div>
       </div>
-
       <div id="escalasRegistro"></div>
-
       <div class="escala-container">
         <div class="escala-title">¿Cómo estuvo el bote hoy?</div>
         <div class="escala-dots" id="escala-bote">
@@ -906,500 +165,255 @@
           <button class="escala-dot" onclick="setScore('bote',4)">4</button>
           <button class="escala-dot" onclick="setScore('bote',5)">5</button>
         </div>
-        <div class="escala-labels">
-          <span class="escala-label-text">Difícil</span>
-          <span class="escala-label-text">Excelente</span>
-        </div>
+        <div class="escala-labels"><span class="escala-label-text">Difícil</span><span class="escala-label-text">Excelente</span></div>
       </div>
-
       <textarea id="notaRegistro" rows="3" placeholder="Anotá algo sobre el entrenamiento... (opcional)"></textarea>
       <button class="btn-primary" onclick="guardarRegistro()">Guardar registro</button>
     </div>
+  </div>
 </div>
 
-<!-- VIEW: GOLD STANDARD -->
+<!-- GOLD -->
 <div class="view" id="view-gold">
   <div class="section-header" style="margin-top:16px">
     <div class="section-eyebrow">Referencia</div>
     <div class="section-title">Parciales por zona</div>
     <div class="section-sub">Velocidades objetivo por bote y zona</div>
   </div>
-
-  <div class="bote-tabs" id="boteTabs"></div>
-
-  <!-- Todas las zonas -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="boteTabs"></div>
   <div id="goldZonasContainer"></div>
-
-  <!-- Calculadora de pace -->
   <div class="card">
-    <div class="card-header">
-      <div class="card-label">Calculadora de pace</div>
-    </div>
+    <div class="card-header"><div class="card-label">Calculadora de pace</div></div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Ingresá tu tiempo cada 500m y te decimos en qué % del tiempo base estás</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
-      <div>
-        <input type="number" id="calcMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
-        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-      </div>
-      <div>
-        <input type="number" id="calcSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
-        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-      </div>
-      <div>
-        <input type="number" id="calcDec" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center" oninput="calcPace()">
-        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-      </div>
+      <div><input type="number" id="calcMin" placeholder="1" min="0" style="text-align:center;margin-bottom:0" oninput="calcPace()"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+      <div><input type="number" id="calcSeg" placeholder="52" min="0" max="59" style="text-align:center;margin-bottom:0" oninput="calcPace()"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+      <div><input type="number" id="calcDec" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0" oninput="calcPace()"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
     </div>
-    <div id="calcResult" style="text-align:center;padding:14px;background:var(--navy);border-radius:10px;border:1px solid var(--border);display:none">
-      <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">RESULTADO</div>
+    <div id="calcResult" style="display:none;text-align:center;padding:14px;background:var(--navy);border-radius:10px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.06em;margin-bottom:6px">RESULTADO</div>
       <div id="calcPct" style="font-size:28px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace"></div>
       <div id="calcZona" style="font-size:13px;color:var(--gold);margin-top:4px;font-weight:600"></div>
     </div>
   </div>
 </div>
 
-<!-- VIEW: ERGO -->
+<!-- ERGO -->
 <div class="view" id="view-ergo">
   <div class="section-header" style="margin-top:16px">
     <div class="section-eyebrow">Ergómetro</div>
     <div class="section-title">Registro Ergo</div>
     <div class="section-sub">Cargá tu trabajo de hoy</div>
   </div>
-
-  <!-- Selector remero -->
   <div class="card">
     <div class="card-label" style="margin-bottom:10px">¿Quién sos?</div>
     <div id="ergoRemeroSelector" style="display:flex;gap:8px;flex-wrap:wrap"></div>
   </div>
-
-  <!-- Tabs Entrenamiento / Test -->
   <div id="ergoTabs" style="display:none;margin-bottom:14px">
     <div class="nav-tabs" style="width:fit-content">
-      <button class="nav-tab active" id="tabEntrenamiento" onclick="switchErgoTab('entrenamiento')">Entrenamiento</button>
+      <button class="nav-tab active" id="tabEnt" onclick="switchErgoTab('ent')">Entrenamiento</button>
       <button class="nav-tab" id="tabTest" onclick="switchErgoTab('test')">Test 2k</button>
     </div>
   </div>
-
-  <!-- Formulario ENTRENAMIENTO -->
-  <div id="ergoForm" style="display:none">
+  <div id="ergoEntForm" style="display:none">
     <div class="card">
-      <div class="card-header">
-        <div class="card-label">Nuevo trabajo</div>
-        <div class="card-title" id="ergoRemeroNombre"></div>
-      </div>
-
+      <div class="card-header"><div class="card-label">Nuevo trabajo</div><div class="card-title" id="ergoNombre"></div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div>
-          <div class="escala-title" style="margin-bottom:6px">Zona</div>
-          <select id="ergoZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer" onchange="ergoZonaActiva=this.value">
-            <option value="">Zona...</option>
-            <option value="Post GYM">Post GYM</option>
-            <option value="Z1">Z1</option>
-            <option value="Z2">Z2</option>
-            <option value="Z3">Z3</option>
-            <option value="Z4">Z4</option>
-            <option value="Z5">Z5</option>
-          </select>
-        </div>
-        <div>
-          <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
-          <input type="text" id="ergoTipo" placeholder="Continuo, 4x2000m..." style="margin-bottom:0;padding:10px;font-size:13px">
-        </div>
+        <div><div class="escala-title" style="margin-bottom:6px">Zona</div>
+          <select id="ergoZona"><option value="">Zona...</option><option>Post GYM</option><option>Z1</option><option>Z2</option><option>Z3</option><option>Z4</option><option>Z5</option></select></div>
+        <div><div class="escala-title" style="margin-bottom:6px">Tipo</div><input type="text" id="ergoTipo" placeholder="4x8', 10x1k..." style="margin-bottom:0"></div>
       </div>
-
       <div style="margin-bottom:14px">
         <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <input type="number" id="ergoTiempoMin" placeholder="00" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-          </div>
-          <div>
-            <input type="number" id="ergoTiempoSeg" placeholder="00" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-          </div>
-          <div>
-            <input type="number" id="ergoTiempoMil" placeholder="00" min="0" max="99" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-          </div>
+          <div><input type="number" id="ergoTMin" placeholder="00" min="0" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+          <div><input type="number" id="ergoTSeg" placeholder="00" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+          <div><input type="number" id="ergoTMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
         </div>
       </div>
-
       <div style="margin-bottom:14px">
-        <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+        <div class="escala-title" style="margin-bottom:6px">Parcial (/500m)</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <input type="number" id="ergoParcialMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-          </div>
-          <div>
-            <input type="number" id="ergoParcialSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-          </div>
-          <div>
-            <input type="number" id="ergoParcialMil" placeholder="0" min="0" max="99" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-          </div>
+          <div><input type="number" id="ergoPMin" placeholder="1" min="0" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+          <div><input type="number" id="ergoPSeg" placeholder="52" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+          <div><input type="number" id="ergoPMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
         </div>
       </div>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div>
-          <div class="escala-title" style="margin-bottom:6px">Metros</div>
-          <input type="number" id="ergoMetros" placeholder="5240" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-        </div>
-        <div>
-          <div class="escala-title" style="margin-bottom:6px">RPM promedio</div>
-          <input type="number" id="ergoRpm" placeholder="20" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-        </div>
+        <div><div class="escala-title" style="margin-bottom:6px">Metros</div><input type="number" id="ergoMetros" placeholder="5240" style="margin-bottom:0"></div>
+        <div><div class="escala-title" style="margin-bottom:6px">RPM</div><input type="number" id="ergoRpm" placeholder="20" style="margin-bottom:0"></div>
       </div>
-
       <button class="btn-primary" onclick="guardarErgo()">Guardar trabajo</button>
     </div>
   </div>
-
-  <!-- Formulario TEST -->
-  <div id="testForm" style="display:none">
+  <div id="ergoTestForm" style="display:none">
     <div class="card">
-      <div class="card-header">
-        <div class="card-label">Test 2000m</div>
-        <div class="card-title" id="testRemeroNombre"></div>
-      </div>
-
-      <!-- Tipo de test -->
-      <div style="margin-bottom:14px">
-        <div class="escala-title" style="margin-bottom:6px">Tipo</div>
-        <select id="testTipo" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
-          <option value="2k MAX">2k MAX</option>
-          <option value="1k MAX">1k MAX</option>
-          <option value="500m MAX">500m MAX</option>
-          <option value="6k MAX">6k MAX</option>
-        </select>
-      </div>
-
-      <!-- Tiempo total -->
+      <div class="card-header"><div class="card-label">Test 2000m</div><div class="card-title" id="ergoTestNombre"></div></div>
+      <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Tipo</div>
+        <select id="ergoTestTipo"><option value="2k MAX">2k MAX</option><option value="1k MAX">1k MAX</option><option value="500m MAX">500m MAX</option><option value="6k MAX">6k MAX</option></select></div>
       <div style="margin-bottom:14px">
         <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <input type="number" id="testTiempoMin" placeholder="6" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-          </div>
-          <div>
-            <input type="number" id="testTiempoSeg" placeholder="45" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-          </div>
-          <div>
-            <input type="number" id="testTiempoMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-          </div>
+          <div><input type="number" id="testTMin" placeholder="6" min="0" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+          <div><input type="number" id="testTSeg" placeholder="45" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+          <div><input type="number" id="testTMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
         </div>
       </div>
-
-      <!-- Parcial -->
       <div style="margin-bottom:14px">
-        <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+        <div class="escala-title" style="margin-bottom:6px">Parcial (/500m)</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <input type="number" id="testParcialMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-          </div>
-          <div>
-            <input type="number" id="testParcialSeg" placeholder="42" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-          </div>
-          <div>
-            <input type="number" id="testParcialMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-            <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-          </div>
+          <div><input type="number" id="testPMin" placeholder="1" min="0" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+          <div><input type="number" id="testPSeg" placeholder="42" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+          <div><input type="number" id="testPMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
         </div>
       </div>
-
-      <!-- Paladas -->
-      <div style="margin-bottom:14px">
-        <div class="escala-title" style="margin-bottom:6px">Paladas promedio</div>
-        <input type="number" id="testPaladas" placeholder="34" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-      </div>
-
+      <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Paladas promedio</div><input type="number" id="testPaladas" placeholder="34" style="margin-bottom:0"></div>
       <button class="btn-primary" onclick="guardarTest()">Guardar test</button>
-    </div>
-
-    <!-- Historial de tests -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-label">Mis tests</div>
-      </div>
-      <div id="testHistorial"></div>
     </div>
   </div>
 </div>
 
-<!-- VIEW: MIS ERGOS -->
+<!-- MIS ERGOS -->
 <div class="view" id="view-misergos">
   <div class="section-header" style="margin-top:16px">
     <div class="section-eyebrow">Historial</div>
     <div class="section-title">Mis Ergos</div>
     <div class="section-sub">Seleccioná tu nombre para ver tus trabajos</div>
   </div>
-
-  <div class="card">
-    <div class="card-label" style="margin-bottom:10px">¿Quién sos?</div>
-    <div id="misErgosRemeroSelector" style="display:flex;gap:8px;flex-wrap:wrap"></div>
-  </div>
-
+  <div class="card"><div class="card-label" style="margin-bottom:10px">¿Quién sos?</div><div id="misErgosSelector" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
   <div id="misErgosContent" style="display:none">
-    <!-- Tabs entrenamiento / tests -->
     <div style="margin-bottom:14px">
       <div class="nav-tabs" style="width:fit-content">
-        <button class="nav-tab active" id="misErgoTabEnt" onclick="switchMisErgosTab('entrenamiento')">Entrenamiento</button>
-        <button class="nav-tab" id="misErgoTabTest" onclick="switchMisErgosTab('test')">Tests</button>
+        <button class="nav-tab active" id="meTabEnt" onclick="switchMeTab('ent')">Entrenamiento</button>
+        <button class="nav-tab" id="meTabTest" onclick="switchMeTab('test')">Tests</button>
       </div>
     </div>
-
-    <!-- Historial entrenamiento -->
-    <div id="misErgosEntPanel">
+    <div id="meEntPanel">
       <div class="card">
-        <div class="card-header">
-          <div class="card-label">Historial por zona</div>
-        </div>
+        <div class="card-header"><div class="card-label">Historial</div></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
-          <button class="zona-tab active" onclick="filtrarMisErgos('todos',this)">Todas</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Post GYM',this)">Post GYM</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Z1',this)">Z1</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Z2',this)">Z2</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Z3',this)">Z3</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Z4',this)">Z4</button>
-          <button class="zona-tab" onclick="filtrarMisErgos('Z5',this)">Z5</button>
+          <button class="zona-tab active" onclick="filtrarMe('todos',this)">Todas</button>
+          <button class="zona-tab" onclick="filtrarMe('Post GYM',this)">Post GYM</button>
+          <button class="zona-tab" onclick="filtrarMe('Z1',this)">Z1</button>
+          <button class="zona-tab" onclick="filtrarMe('Z2',this)">Z2</button>
+          <button class="zona-tab" onclick="filtrarMe('Z3',this)">Z3</button>
+          <button class="zona-tab" onclick="filtrarMe('Z4',this)">Z4</button>
+          <button class="zona-tab" onclick="filtrarMe('Z5',this)">Z5</button>
         </div>
-        <div id="misErgosHistorial"></div>
+        <div id="meHistorial"></div>
       </div>
     </div>
-
-    <!-- Historial tests -->
-    <div id="misErgosTestPanel" style="display:none">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-label">Mis tests</div>
-        </div>
-        <div id="misErgosTests"></div>
-      </div>
+    <div id="meTestPanel" style="display:none">
+      <div class="card"><div class="card-header"><div class="card-label">Mis tests</div></div><div id="meTests"></div></div>
     </div>
   </div>
 </div>
 
-<!-- VIEW: LARA -->
+<!-- LARA -->
 <div class="view" id="view-lara">
   <div style="margin-top:16px">
-
-    <!-- LOGIN -->
     <div id="laraLogin" class="coach-login">
       <div class="coach-login-icon">🚣‍♀️</div>
       <div class="coach-login-title">Lara</div>
       <div class="coach-login-sub">Ingresá tu contraseña</div>
       <div class="pin-inputs">
-        <input type="password" id="laraPasswordInput" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;font-family:'Inter',sans-serif;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;letter-spacing:0.1em" onkeydown="if(event.key==='Enter')checkLaraPin()">
+        <input type="password" id="laraPass" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;margin-bottom:0" onkeydown="if(event.key==='Enter')checkLara()">
       </div>
       <div id="laraError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">Contraseña incorrecta</div>
-      <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkLaraPin()">Entrar</button>
+      <button class="btn-primary" style="max-width:200px;margin:8px auto 0" onclick="checkLara()">Entrar</button>
     </div>
-
-    <!-- ERGO LARA -->
     <div id="laraPanel" style="display:none">
-      <div class="section-header">
-        <div class="section-eyebrow">Ergómetro</div>
-        <div class="section-title">Lara</div>
-        <div class="section-sub">Cargá tu trabajo de hoy</div>
-      </div>
-
-      <!-- Tabs Entrenamiento / Test -->
+      <div class="section-header"><div class="section-eyebrow">Ergómetro</div><div class="section-title">Lara</div><div class="section-sub">Cargá tu trabajo de hoy</div></div>
       <div style="margin-bottom:14px">
         <div class="nav-tabs" style="width:fit-content">
-          <button class="nav-tab active" id="laraTabEntrenamiento" onclick="switchLaraTab('entrenamiento')">Entrenamiento</button>
+          <button class="nav-tab active" id="laraTabEnt" onclick="switchLaraTab('ent')">Entrenamiento</button>
           <button class="nav-tab" id="laraTabTest" onclick="switchLaraTab('test')">Test 2k</button>
         </div>
       </div>
-
-      <!-- Formulario ENTRENAMIENTO -->
-      <div id="laraErgoForm">
+      <div id="laraEntForm">
         <div class="card">
           <div class="card-label" style="margin-bottom:14px">Nuevo trabajo</div>
-
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">Zona</div>
-              <select id="laraZonaSelect" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
-                <option value="">Zona...</option>
-                <option value="Post GYM">Post GYM</option>
-                <option value="Z1">Z1</option>
-                <option value="Z2">Z2</option>
-                <option value="Z3">Z3</option>
-                <option value="Z4">Z4</option>
-                <option value="Z5">Z5</option>
-              </select>
-            </div>
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
-              <input type="text" id="laraTipo" placeholder="Continuo, 4x2000m..." style="margin-bottom:0;padding:10px;font-size:13px">
-            </div>
+            <div><div class="escala-title" style="margin-bottom:6px">Zona</div><select id="laraZona"><option value="">Zona...</option><option>Post GYM</option><option>Z1</option><option>Z2</option><option>Z3</option><option>Z4</option><option>Z5</option></select></div>
+            <div><div class="escala-title" style="margin-bottom:6px">Tipo</div><input type="text" id="laraTipo" placeholder="Continuo, 4x2000m..." style="margin-bottom:0"></div>
           </div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-              <div>
-                <input type="number" id="laraTiempoMin" placeholder="00" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-              </div>
-              <div>
-                <input type="number" id="laraTiempoSeg" placeholder="00" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-              </div>
-              <div>
-                <input type="number" id="laraTiempoMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-              </div>
+              <div><input type="number" id="laraTMin" placeholder="00" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+              <div><input type="number" id="laraTSeg" placeholder="00" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+              <div><input type="number" id="laraTMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
             </div>
           </div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Parcial (/500m)</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-              <div>
-                <input type="number" id="laraParcialMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-              </div>
-              <div>
-                <input type="number" id="laraParcialSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-              </div>
-              <div>
-                <input type="number" id="laraParcialMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-              </div>
+              <div><input type="number" id="laraPMin" placeholder="1" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+              <div><input type="number" id="laraPSeg" placeholder="52" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+              <div><input type="number" id="laraPMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
             </div>
           </div>
-
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">Metros</div>
-              <input type="number" id="laraMetros" placeholder="5240" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-            </div>
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">RPM promedio</div>
-              <input type="number" id="laraRpm" placeholder="20" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-            </div>
+            <div><div class="escala-title" style="margin-bottom:6px">Metros</div><input type="number" id="laraMetros" placeholder="5240" style="margin-bottom:0"></div>
+            <div><div class="escala-title" style="margin-bottom:6px">RPM</div><input type="number" id="laraRpm" placeholder="20" style="margin-bottom:0"></div>
           </div>
-
           <button class="btn-primary" onclick="guardarLaraErgo()">Guardar trabajo</button>
         </div>
-
         <div class="card">
           <div class="card-header"><div class="card-label">Mi historial</div></div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-            <button class="zona-tab active" onclick="filtrarLaraHistorial('todos',this)">Todas</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Post GYM',this)">Post GYM</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Z1',this)">Z1</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Z2',this)">Z2</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Z3',this)">Z3</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Z4',this)">Z4</button>
-            <button class="zona-tab" onclick="filtrarLaraHistorial('Z5',this)">Z5</button>
+            <button class="zona-tab active" onclick="filtrarLara('todos',this)">Todas</button>
+            <button class="zona-tab" onclick="filtrarLara('Post GYM',this)">Post GYM</button>
+            <button class="zona-tab" onclick="filtrarLara('Z1',this)">Z1</button>
+            <button class="zona-tab" onclick="filtrarLara('Z2',this)">Z2</button>
+            <button class="zona-tab" onclick="filtrarLara('Z3',this)">Z3</button>
+            <button class="zona-tab" onclick="filtrarLara('Z4',this)">Z4</button>
+            <button class="zona-tab" onclick="filtrarLara('Z5',this)">Z5</button>
           </div>
           <div id="laraHistorial"></div>
         </div>
       </div>
-
-      <!-- Formulario TEST -->
       <div id="laraTestForm" style="display:none">
         <div class="card">
           <div class="card-label" style="margin-bottom:14px">Test 2000m</div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Tipo</div>
-            <select id="laraTestTipo" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
-              <option value="2k MAX">2k MAX</option>
-              <option value="1k MAX">1k MAX</option>
-              <option value="500m MAX">500m MAX</option>
-              <option value="6k MAX">6k MAX</option>
-            </select>
-          </div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Tipo</div><select id="laraTestTipo"><option value="2k MAX">2k MAX</option><option value="1k MAX">1k MAX</option><option value="500m MAX">500m MAX</option><option value="6k MAX">6k MAX</option></select></div>
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Tiempo total</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-              <div>
-                <input type="number" id="laraTestMin" placeholder="7" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-              </div>
-              <div>
-                <input type="number" id="laraTestSeg" placeholder="30" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-              </div>
-              <div>
-                <input type="number" id="laraTestMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-              </div>
+              <div><input type="number" id="laraTestTMin" placeholder="7" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+              <div><input type="number" id="laraTestTSeg" placeholder="30" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+              <div><input type="number" id="laraTestTMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
             </div>
           </div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Parcial promedio (/500m)</div>
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Parcial (/500m)</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-              <div>
-                <input type="number" id="laraTestPMin" placeholder="1" min="0" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div>
-              </div>
-              <div>
-                <input type="number" id="laraTestPSeg" placeholder="52" min="0" max="59" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div>
-              </div>
-              <div>
-                <input type="number" id="laraTestPMil" placeholder="0" min="0" max="9" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:14px;outline:none;text-align:center">
-                <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div>
-              </div>
+              <div><input type="number" id="laraTestPMin" placeholder="1" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">MIN</div></div>
+              <div><input type="number" id="laraTestPSeg" placeholder="52" min="0" max="59" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">SEG</div></div>
+              <div><input type="number" id="laraTestPMil" placeholder="0" min="0" max="9" style="text-align:center;margin-bottom:0"><div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;font-family:'Space Mono',monospace">1/10</div></div>
             </div>
           </div>
-
-          <div style="margin-bottom:14px">
-            <div class="escala-title" style="margin-bottom:6px">Paladas promedio</div>
-            <input type="number" id="laraTestPaladas" placeholder="34" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;margin-bottom:0">
-          </div>
-
+          <div style="margin-bottom:14px"><div class="escala-title" style="margin-bottom:6px">Paladas promedio</div><input type="number" id="laraTestPaladas" placeholder="34" style="margin-bottom:0"></div>
           <button class="btn-primary" onclick="guardarLaraTest()">Guardar test</button>
         </div>
-
-        <div class="card">
-          <div class="card-header"><div class="card-label">Mis tests</div></div>
-          <div id="laraTestHistorial"></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="card-label">Mis tests</div></div><div id="laraTestHistorial"></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- VIEW: COACH -->
+<!-- COACH -->
 <div class="view" id="view-coach">
   <div style="margin-top:16px">
-
-    <!-- LOGIN -->
     <div id="coachLogin" class="coach-login">
       <div class="coach-login-icon">🏅</div>
       <div class="coach-login-title">Vista Entrenador</div>
-      <div class="coach-login-sub">Ingresá tu PIN para acceder</div>
+      <div class="coach-login-sub">Ingresá tu contraseña para acceder</div>
       <div class="pin-inputs">
-        <input type="password" id="pinInput" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;font-family:'Inter',sans-serif;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;letter-spacing:0.1em" oninput="if(this.value.length>=5)checkPin()" onkeydown="if(event.key==='Enter')checkPin()">
+        <input type="password" id="coachPass" placeholder="Contraseña" style="width:200px;text-align:center;font-size:16px;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--white);outline:none;margin-bottom:0" onkeydown="if(event.key==='Enter')checkCoach()">
       </div>
-      <div id="pinError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">PIN incorrecto</div>
-      <button class="btn-primary" style="max-width:200px;margin:0 auto" onclick="checkPin()">Entrar</button>
+      <div id="coachError" style="color:var(--danger);font-size:13px;display:none;margin-bottom:12px">Contraseña incorrecta</div>
+      <button class="btn-primary" style="max-width:200px;margin:8px auto 0" onclick="checkCoach()">Entrar</button>
     </div>
-
-    <!-- CALENDARIO -->
-    <div id="coachCalendar" style="display:none">
-      <div class="section-header">
-        <div class="section-eyebrow">Coach</div>
-        <div class="section-title">Calendario</div>
-        <div class="section-sub">Registros por día</div>
-      </div>
-
+    <div id="coachPanel" style="display:none">
+      <div class="section-header"><div class="section-eyebrow">Coach</div><div class="section-title">Panel</div></div>
+      <!-- Calendario -->
       <div class="card">
         <div class="cal-header">
           <button class="cal-nav" onclick="calNav(-1)">‹</button>
@@ -1408,96 +422,62 @@
         </div>
         <div class="cal-grid" id="calGrid"></div>
       </div>
-
-      <!-- DAY DETAIL -->
+      <!-- Detalle día -->
       <div id="dayDetail" style="display:none">
-        <div class="day-detail-header">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
           <button class="back-btn" onclick="closeDayDetail()">← Volver</button>
           <div class="card-title" id="dayDetailTitle"></div>
         </div>
         <div id="dayDetailContent"></div>
       </div>
-
-      <!-- REGISTRO DEL DIA -->
+      <!-- Registro del día -->
       <div class="card" style="margin-top:20px">
-        <div class="card-header">
-          <div class="card-label">Registro del día</div>
-          <div class="card-title" id="coachFechaHoy"></div>
-        </div>
-
-        <!-- Plan del día -->
+        <div class="card-header"><div class="card-label">Registro del día</div><div class="card-title" id="coachFechaHoy"></div></div>
         <div style="margin-bottom:16px">
-          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:10px">PLAN DEL DÍA</div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.06em;margin-bottom:10px">PLAN DEL DÍA</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">Zona</div>
-              <select id="planZona" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--white);font-size:13px;outline:none;cursor:pointer">
-                <option value="">Zona...</option>
-                <option value="Post GYM">Post GYM</option>
-                <option value="Z1">Z1</option>
-                <option value="Z2">Z2</option>
-                <option value="Z3">Z3</option>
-                <option value="Z4">Z4</option>
-                <option value="Z5">Z5</option>
-                <option value="Mixto">Mixto</option>
-                <option value="Gimnasio">Gimnasio</option>
-              </select>
-            </div>
-            <div>
-              <div class="escala-title" style="margin-bottom:6px">Tipo de trabajo</div>
-              <input type="text" id="planTipo" placeholder="Ej: 4x8', 10x1k..." style="margin-bottom:0;padding:10px;font-size:13px">
-            </div>
+            <div><div class="escala-title" style="margin-bottom:6px">Zona</div><select id="planZona"><option value="">Zona...</option><option>Post GYM</option><option>Z1</option><option>Z2</option><option>Z3</option><option>Z4</option><option>Z5</option><option>Mixto</option><option>Gimnasio</option></select></div>
+            <div><div class="escala-title" style="margin-bottom:6px">Tipo</div><input type="text" id="planTipo" placeholder="4x8', 10x1k..." style="margin-bottom:0"></div>
           </div>
-          <div>
-            <div class="escala-title" style="margin-bottom:6px">Notas del entrenador</div>
-            <textarea id="planNotas" rows="2" placeholder="Observaciones, condiciones del agua, etc..."></textarea>
-          </div>
+          <textarea id="planNotas" rows="2" placeholder="Observaciones, condiciones del agua..."></textarea>
         </div>
-
-        <!-- Asistencia -->
         <div>
-          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:10px">ASISTENCIA Y BOTES</div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.06em;margin-bottom:10px">ASISTENCIA Y BOTES</div>
           <div id="asistenciaList"></div>
         </div>
-
-        <button class="btn-primary" onclick="guardarRegistroDia()" style="margin-top:16px">Guardar registro del día</button>
+        <button class="btn-primary" onclick="guardarDia()" style="margin-top:16px">Guardar registro del día</button>
       </div>
-      <!-- ERGO COACH VIEW -->
+      <!-- Ergo coach -->
       <div class="card" style="margin-top:20px">
-        <div class="card-header">
-          <div class="card-label">Trabajos de Ergo</div>
-        </div>
+        <div class="card-header"><div class="card-label">Trabajos de Ergo</div></div>
         <div style="margin-bottom:10px">
-          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ZONA</div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.06em;margin-bottom:6px">ZONA</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="zona-tab active" onclick="filtrarErgoCoach('zona','todos',this)">Todas</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','MAX',this)">MAX</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Post GYM',this)">Post GYM</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z1',this)">Z1</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z2',this)">Z2</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z3',this)">Z3</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z4',this)">Z4</button>
-            <button class="zona-tab" onclick="filtrarErgoCoach('zona','Z5',this)">Z5</button>
+            <button class="zona-tab active" onclick="filtrarErgoC('zona','todos',this)">Todas</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','MAX',this)">MAX</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Post GYM',this)">Post GYM</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Z1',this)">Z1</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Z2',this)">Z2</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Z3',this)">Z3</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Z4',this)">Z4</button>
+            <button class="zona-tab" onclick="filtrarErgoC('zona','Z5',this)">Z5</button>
           </div>
         </div>
         <div style="margin-bottom:14px">
-          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">ATLETA</div>
-          <div id="ergoAtletaFiltros" style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="bote-tab active" onclick="filtrarErgoCoach('atleta','todos',this)">Todos</button>
-          </div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.06em;margin-bottom:6px">ATLETA</div>
+          <div id="ergoAtletaFiltros" style="display:flex;gap:6px;flex-wrap:wrap"></div>
         </div>
         <div id="ergoCoachContent"><div class="empty"><div class="empty-text">Cargando...</div></div></div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- MODAL: PESO -->
+<!-- MODALES -->
 <div class="modal-overlay" id="modalPeso">
   <div class="modal">
     <div class="modal-title">⚖️ Registro de peso semanal</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Es martes — cargá tu peso de esta semana.</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Es viernes — cargá tu peso de esta semana.</div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
       <input type="number" id="inputPeso" placeholder="Ej: 72.5" step="0.1" min="30" max="150" style="flex:1;margin-bottom:0">
       <span style="font-size:14px;color:var(--muted);font-weight:600">kg</span>
@@ -1509,1393 +489,483 @@
   </div>
 </div>
 
-<!-- MODAL: FOCO -->
-<div class="modal-overlay" id="modalFoco">
-  <div class="modal">
-    <div class="modal-title">Nuevo foco técnico</div>
-    <input type="text" id="inputFoco" placeholder="Ej: Mantener el pecho arriba en la toma..." />
-    <div class="modal-actions">
-      <button class="btn-primary" style="flex:1" onclick="guardarFoco()">Agregar</button>
-      <button class="btn-secondary" onclick="cerrarModal('modalFoco')">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: VIDEO -->
-<div class="modal-overlay" id="modalVideo">
-  <div class="modal">
-    <div class="modal-title">Agregar video / referencia</div>
-    <input type="text" id="inputVideoTitulo" placeholder="Título del video..." />
-    <input type="text" id="inputVideoUrl" placeholder="URL (YouTube, Drive...)" />
-    <input type="text" id="inputVideoTipo" placeholder="Tipo: Elite / Análisis propio / Técnica" />
-    <div class="modal-actions">
-      <button class="btn-primary" style="flex:1" onclick="guardarVideo()">Agregar</button>
-      <button class="btn-secondary" onclick="cerrarModal('modalVideo')">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">✓ Registro guardado</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────
-const SHEET_ID = '1e0BoNh1fnsfL_f80S6XFRI3iN-45Epz8Ku7ZtdSUR4o';
-const SHEET_URL = (sheet) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkS5Xer-Qm8wxauJuLQDy_T_jiTqHVOHDLgOfwoah8wMHxOa_rTCpInKMclqd-tvnPiA/exec';
-const ERGO_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgjTl3gCruICo1nWEo0sg6d79Qe6rn8DgguZYUekZwI7owTe9VHUd28ETGAfl6Ck9qwA/exec';
-const ERGO_SHEET_ID = '1Ck5rJqTyOu8Z4FxinXD2tNS1RV6ZAOhs8X2LmXp7kwA';
-const ERGO_URL = `https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`;
-const LARA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzemWKgFR_FnQGqXZQMZtx8z0vGC93lfCQ89Kuqxj7Z2HDwUQe3omqVgX6zMJXQqYgq/exec';
-const LARA_SHEET_ID = '1-5zBHpObyFf7NE-KnI-KmRr1AeedG9WmTRDQZ25cQaU';
-const LARA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${LARA_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`;
+// ── CONFIG ──────────────────────────────────────────────
+const SID   = '1e0BoNh1fnsfL_f80S6XFRI3iN-45Epz8Ku7ZtdSUR4o';
+const ESID  = '1Ck5rJqTyOu8Z4FxinXD2tNS1RV6ZAOhs8X2LmXp7kwA';
+const LSID  = '1-5zBHpObyFf7NE-KnI-KmRr1AeedG9WmTRDQZ25cQaU';
+const SURL  = 'https://script.google.com/macros/s/AKfycbzkS5Xer-Qm8wxauJuLQDy_T_jiTqHVOHDLgOfwoah8wMHxOa_rTCpInKMclqd-tvnPiA/exec';
+const ESURL = 'https://script.google.com/macros/s/AKfycbxgjTl3gCruICo1nWEo0sg6d79Qe6rn8DgguZYUekZwI7owTe9VHUd28ETGAfl6Ck9qwA/exec';
+const LSURL = 'https://script.google.com/macros/s/AKfycbzemWKgFR_FnQGqXZQMZtx8z0vGC93lfCQ89Kuqxj7Z2HDwUQe3omqVgX6zMJXQqYgq/exec';
+const csv   = s => `https://docs.google.com/spreadsheets/d/${s}/gviz/tq?tqx=out:csv&sheet=`;
 
-// ─── DATA ────────────────────────────────────────────────
-let REMEROS = [];
-const GOLD = {};
+// ── STATE ───────────────────────────────────────────────
+let REMEROS=[], GOLD={};
+let remeroActivo=null, scores={};
+let ergoActivo=null;
+let meActivo=null, meFiltro='todos', meData=[];
+let laraUnlocked=false, laraData=[], laraFiltro='todos';
+let coachUnlocked=false;
+let allReg=[], allErgo=[], allAsist=[], allPlan=[];
+let calYear, calMonth, calDay=null;
+let ecFiltroZona='todos', ecFiltroAtleta='todos';
 
-// Registros en localStorage por remero y fecha
-let registros = JSON.parse(localStorage.getItem('barc_registros') || '{}');
-let remeroActivo = null;
-let boteActivo = null;
-let zonaActiva = null;
-let scores = {};
-
-// ─── CSV PARSER ──────────────────────────────────────────
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
-  return lines.slice(1).map(line => {
-    // Handle quoted fields with commas
-    const vals = [];
-    let cur = '', inQ = false;
-    for (let c of line) {
-      if (c === '"') inQ = !inQ;
-      else if (c === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
-      else cur += c;
-    }
+// ── CSV PARSER ──────────────────────────────────────────
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const headers=lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim());
+  return lines.slice(1).map(line=>{
+    const vals=[]; let cur='',inQ=false;
+    for(const c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){vals.push(cur.trim());cur='';}else cur+=c;}
     vals.push(cur.trim());
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = (vals[i] || '').replace(/^"|"$/g, '').trim());
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=(vals[i]||'').replace(/^"|"$/g,'').trim());
     return obj;
-  }).filter(r => Object.values(r).some(v => v));
+  }).filter(r=>Object.values(r).some(v=>v));
 }
 
-// ─── LOAD FROM SHEETS ────────────────────────────────────
-async function cargarDatos() {
-  mostrarCargando(true);
-  try {
-    const [rRes, fRes, vRes, gRes] = await Promise.all([
-      fetch(SHEET_URL('Remeros')),
-      fetch(SHEET_URL('Focos')),
-      fetch(SHEET_URL('Videos')),
-      fetch(SHEET_URL('Gold')),
-    ]);
-    const [rText, fText, vText, gText] = await Promise.all([rRes.text(), fRes.text(), vRes.text(), gRes.text()]);
+function fmt(n){return String(n).padStart(2,'0')}
+function mkFecha(d){return `${d.getFullYear()}-${fmt(d.getMonth()+1)}-${fmt(d.getDate())}`}
+function parseFecha(s){if(!s)return null;const p=String(s).trim().split('-');if(p.length!==3)return null;return new Date(+p[0],+p[1]-1,+p[2]);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function cerrarModal(id){document.getElementById(id).classList.remove('open');}
+function scoreClass(s){if(s>=4)return'score-high';if(s>=3)return'score-mid';return'score-low';}
+function cClass(s){if(s<=2)return'score-high';if(s===3)return'score-mid';return'score-low';}
 
-    const remeroRows = parseCSV(rText);
-    const focoRows = parseCSV(fText);
-    const videoRows = parseCSV(vText);
-    const goldRows = parseCSV(gText);
+// ── VIEWS ───────────────────────────────────────────────
+function showView(id,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  if(id==='gold')renderGold();
+  if(id==='ergo')renderErgoSelector();
+  if(id==='misergos')renderMeSelector();
+  if(id==='lara'&&laraUnlocked){renderLaraHistorial();renderLaraTests();}
+  if(id==='coach'&&coachUnlocked)cargarCoach();
+}
 
-    REMEROS = remeroRows.map(r => ({
-      id: r.id,
-      nombre: r.nombre,
-      categoria: r.categoria,
-      bote: r.bote,
-      focos: focoRows.filter(f => f.remero_id === r.id).sort((a,b) => a.orden - b.orden).map(f => f.foco),
-      videos: videoRows.filter(v => v.remero_id === r.id).map(v => ({ titulo: v.titulo, url: v.url, tipo: v.tipo })),
-    }));
-
-    // Build GOLD object from sheet rows
-    goldRows.forEach(row => {
-      if (!row.bote || !row.zona) return;
-      if (!GOLD[row.bote]) GOLD[row.bote] = { zonas: {} };
-      GOLD[row.bote].zonas[row.zona] = {
-        pct: parseInt(row.pct),
-        t500: row.t500,
-        t1000: row.t1000,
-        t1500: row.t1500,
-        t2000: row.t2000,
-      };
-    });
-
-    if (REMEROS.length > 0 && !boteActivo) {
-      boteActivo = Object.keys(GOLD)[0] || REMEROS[0].bote;
-    }
-
+// ── CARGAR DATOS ────────────────────────────────────────
+async function cargarDatos(){
+  try{
+    const [rR,fR,vR,gR]=await Promise.all([csv(SID)+'Remeros',csv(SID)+'Focos',csv(SID)+'Videos',csv(SID)+'Gold'].map(u=>fetch(u)));
+    const [rT,fT,vT,gT]=await Promise.all([rR,fR,vR,gR].map(r=>r.text()));
+    const remRows=parseCSV(rT), focoRows=parseCSV(fT), vidRows=parseCSV(vT), goldRows=parseCSV(gT);
+    REMEROS=remRows.map(r=>({id:r.id,nombre:r.nombre,categoria:r.categoria,bote:r.bote,focos:focoRows.filter(f=>f.remero_id===r.id).sort((a,b)=>a.orden-b.orden).map(f=>f.foco),videos:vidRows.filter(v=>v.remero_id===r.id).map(v=>({titulo:v.titulo,url:v.url,tipo:v.tipo}))}));
+    goldRows.forEach(row=>{if(!row.bote||!row.zona)return;if(!GOLD[row.bote])GOLD[row.bote]={zonas:{}};GOLD[row.bote].zonas[row.zona]={pct:+row.pct,t500:row.t500,t1000:row.t1000,t1500:row.t1500,t2000:row.t2000};});
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('remeroSelector').style.display='flex';
     renderRemeroSelector();
     renderBoteTabs();
     renderGold();
-    renderErgoRemeroSelector();
-    renderMisErgosSelector();
-    mostrarCargando(false);
-  } catch(e) {
-    mostrarCargando(false);
-    document.getElementById('errorCarga').style.display = 'block';
-    console.error('Error cargando datos:', e);
+    renderErgoSelector();
+    renderMeSelector();
+  }catch(e){
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('errorCarga').style.display='block';
   }
 }
 
-function mostrarCargando(show) {
-  document.getElementById('loadingState').style.display = show ? 'block' : 'none';
-  document.getElementById('remeroSelector').style.display = show ? 'none' : 'flex';
+// ── REMEROS ─────────────────────────────────────────────
+function renderRemeroSelector(){
+  document.getElementById('remeroSelector').innerHTML=REMEROS.map((r,i)=>`<button class="remero-btn" onclick="selectRemero(${i},this)">${r.nombre}</button>`).join('');
 }
 
-// ─── INIT ────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  const fecha = new Date().toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long' });
-  document.getElementById('fechaHoy').textContent = fecha;
+function selectRemero(idx,el){
+  remeroActivo=REMEROS[idx]; scores={};
+  document.querySelectorAll('#remeroSelector .remero-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('perfilRemero').style.display='block';
+  document.getElementById('perfilNombre').textContent=remeroActivo.nombre+' · '+remeroActivo.categoria;
+  renderFocos(); renderVideos(); renderEscalas();
+  document.getElementById('notaRegistro').value='';
+  const hoy=new Date();
+  if(hoy.getDay()===5){
+    const k=`barc_peso_${remeroActivo.id}_${hoy.getFullYear()}_${hoy.getMonth()}_${Math.ceil(hoy.getDate()/7)}`;
+    if(!localStorage.getItem(k))setTimeout(()=>document.getElementById('modalPeso').classList.add('open'),600);
+  }
+}
+
+function renderFocos(){
+  const c=document.getElementById('listaFocos');
+  if(!remeroActivo.focos.length){c.innerHTML='<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Sin focos asignados aún</div></div>';return;}
+  c.innerHTML=remeroActivo.focos.map((f,i)=>`<div class="foco-item"><div class="foco-num">0${i+1}</div><div class="foco-text">${f}</div></div>`).join('');
+}
+
+function renderVideos(){
+  const c=document.getElementById('listaVideos');
+  if(!remeroActivo.videos.length){c.innerHTML='<div class="empty"><div class="empty-icon">🎬</div><div class="empty-text">Sin videos cargados aún</div></div>';return;}
+  c.innerHTML=remeroActivo.videos.map(v=>`<a class="video-card" href="${v.url}" target="_blank"><div class="video-thumb">▶️</div><div class="video-info"><div class="video-title">${v.titulo}</div><div class="video-sub">${v.tipo}</div></div></a>`).join('');
+}
+
+function renderEscalas(){
+  const c=document.getElementById('escalasRegistro');
+  c.innerHTML=remeroActivo.focos.map((f,i)=>`<div class="escala-container"><div class="escala-title">Foco ${i+1}: <span style="color:var(--muted);font-weight:400">${f.substring(0,55)}${f.length>55?'...':''}</span></div><div class="escala-dots" id="escala-foco-${i}">${[1,2,3,4,5].map(n=>`<button class="escala-dot" onclick="setScore('foco${i}',${n})">${n}</button>`).join('')}</div><div class="escala-labels"><span class="escala-label-text">No lo logré</span><span class="escala-label-text">Lo dominé</span></div></div>`).join('');
+}
+
+function setScore(key,val){
+  scores[key]=val;
+  const c=document.getElementById('escala-'+key);
+  if(!c)return;
+  c.querySelectorAll('.escala-dot').forEach((d,i)=>d.classList.toggle('selected',i+1===val));
+}
+
+async function guardarRegistro(){
+  const focos=remeroActivo.focos.map((_,i)=>scores[`foco${i}`]||0);
+  const bote=scores['bote']||0, cansancio=scores['cansancio']||0;
+  const nota=document.getElementById('notaRegistro').value.trim();
+  const fecha=mkFecha(new Date());
+  const payload={fecha,remero_id:remeroActivo.id,remero_nombre:remeroActivo.nombre,cansancio,focos,bote,nota};
+  try{await fetch(SURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  scores={};
+  document.getElementById('notaRegistro').value='';
+  document.querySelectorAll('.escala-dot').forEach(d=>d.classList.remove('selected'));
+  toast('✓ Registro guardado');
+}
+
+async function guardarPeso(){
+  const peso=document.getElementById('inputPeso').value.trim();
+  if(!peso||isNaN(peso))return toast('⚠️ Ingresá un peso válido');
+  const hoy=new Date();
+  const k=`barc_peso_${remeroActivo.id}_${hoy.getFullYear()}_${hoy.getMonth()}_${Math.ceil(hoy.getDate()/7)}`;
+  const payload={tipo:'fisico',fecha:mkFecha(hoy),remero_id:remeroActivo.id,remero_nombre:remeroActivo.nombre,peso:parseFloat(peso)};
+  try{await fetch(SURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  localStorage.setItem(k,'1');
+  document.getElementById('inputPeso').value='';
+  cerrarModal('modalPeso');
+  toast('✓ Peso guardado');
+}
+
+// ── GOLD ────────────────────────────────────────────────
+function renderBoteTabs(){
+  const botes=Object.keys(GOLD);
+  document.getElementById('boteTabs').innerHTML=botes.map(b=>`<button class="bote-tab" onclick="selectBote('${b}',this)">${b}</button>`).join('');
+  if(botes.length)document.querySelector('.bote-tab').classList.add('active');
+}
+
+function selectBote(b,el){
+  document.querySelectorAll('.bote-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  window._boteActivo=b;
+  renderGold();
+}
+
+function renderGold(){
+  const botes=Object.keys(GOLD);
+  if(!botes.length){document.getElementById('goldZonasContainer').innerHTML='';return;}
+  if(!window._boteActivo)window._boteActivo=botes[0];
+  const data=GOLD[window._boteActivo];
+  if(!data){return;}
+  const zonas=Object.keys(data.zonas);
+  document.getElementById('goldZonasContainer').innerHTML=`<div class="card" style="padding:12px 14px;margin-bottom:10px"><div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;margin-bottom:6px"><div></div>${['500m','1000m','1500m','2000m'].map(d=>`<div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-align:center;text-transform:uppercase">${d}</div>`).join('')}</div>${zonas.map(z=>{const zd=data.zonas[z];return`<div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;padding:6px 0;border-top:1px solid var(--border)"><div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:flex;align-items:center">${z}</div>${[zd.t500,zd.t1000,zd.t1500,zd.t2000].map(t=>`<div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:600;color:var(--white);text-align:center;display:flex;align-items:center;justify-content:center">${t}</div>`).join('')}</div>`;}).join('')}</div>`;
+}
+
+function calcPace(){
+  const min=parseFloat(document.getElementById('calcMin').value)||0;
+  const seg=parseFloat(document.getElementById('calcSeg').value)||0;
+  const dec=parseFloat(document.getElementById('calcDec').value)||0;
+  const tot=min*60+seg+dec/10; if(!tot||!window._boteActivo||!GOLD[window._boteActivo])return;
+  const data=GOLD[window._boteActivo];
+  const maxZ=data.zonas['MAX']||data.zonas[Object.keys(data.zonas)[0]];
+  const p=maxZ.t500.replace('"','').split("'");
+  const base=parseFloat(p[0])*60+parseFloat(p[1]);
+  const pct=Math.round((base/tot)*100);
+  let closest=''; let minD=Infinity;
+  Object.entries(data.zonas).forEach(([z,zd])=>{const d=Math.abs(zd.pct-pct);if(d<minD){minD=d;closest=z;}});
+  document.getElementById('calcResult').style.display='block';
+  document.getElementById('calcPct').textContent=pct+'%';
+  document.getElementById('calcZona').textContent=closest?'Cerca de '+closest:'';
+}
+
+// ── ERGO ────────────────────────────────────────────────
+function renderErgoSelector(){
+  document.getElementById('ergoRemeroSelector').innerHTML=REMEROS.map((r,i)=>`<button class="remero-btn" onclick="selectErgo(${i},this)">${r.nombre}</button>`).join('');
+}
+
+function selectErgo(idx,el){
+  ergoActivo=REMEROS[idx];
+  document.querySelectorAll('#ergoRemeroSelector .remero-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ergoTabs').style.display='block';
+  document.getElementById('ergoNombre').textContent=ergoActivo.nombre;
+  document.getElementById('ergoTestNombre').textContent=ergoActivo.nombre;
+  switchErgoTab('ent');
+}
+
+function switchErgoTab(tab){
+  document.getElementById('tabEnt').classList.toggle('active',tab==='ent');
+  document.getElementById('tabTest').classList.toggle('active',tab==='test');
+  document.getElementById('ergoEntForm').style.display=tab==='ent'?'block':'none';
+  document.getElementById('ergoTestForm').style.display=tab==='test'?'block':'none';
+}
+
+function mkTiempo(min,seg,mil){return`${min}'${fmt(seg)}.${mil}"`;}
+
+async function guardarErgo(){
+  if(!ergoActivo)return toast('⚠️ Seleccioná un remero');
+  const zona=document.getElementById('ergoZona').value;
+  if(!zona)return toast('⚠️ Seleccioná una zona');
+  const tMin=document.getElementById('ergoTMin').value||'0';
+  const tSeg=document.getElementById('ergoTSeg').value||'0';
+  const tMil=document.getElementById('ergoTMil').value||'0';
+  const pMin=document.getElementById('ergoPMin').value||'0';
+  const pSeg=document.getElementById('ergoPSeg').value||'0';
+  const pMil=document.getElementById('ergoPMil').value||'0';
+  const payload={fecha:mkFecha(new Date()),remero_id:ergoActivo.id,remero_nombre:ergoActivo.nombre,zona,tipo:document.getElementById('ergoTipo').value.trim(),tiempo:mkTiempo(tMin,tSeg,tMil),parcial:mkTiempo(pMin,pSeg,pMil),metros:document.getElementById('ergoMetros').value.trim(),rpm:document.getElementById('ergoRpm').value.trim()};
+  try{await fetch(ESURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  ['ergoZona','ergoTipo','ergoTMin','ergoTSeg','ergoTMil','ergoPMin','ergoPSeg','ergoPMil','ergoMetros','ergoRpm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  toast('✓ Trabajo guardado');
+}
+
+async function guardarTest(){
+  if(!ergoActivo)return toast('⚠️ Seleccioná un remero');
+  const tMin=document.getElementById('testTMin').value||'0';
+  const tSeg=document.getElementById('testTSeg').value||'0';
+  const tMil=document.getElementById('testTMil').value||'0';
+  const pMin=document.getElementById('testPMin').value||'0';
+  const pSeg=document.getElementById('testPSeg').value||'0';
+  const pMil=document.getElementById('testPMil').value||'0';
+  const payload={fecha:mkFecha(new Date()),remero_id:ergoActivo.id,remero_nombre:ergoActivo.nombre,zona:'MAX',tipo:document.getElementById('ergoTestTipo').value,tiempo:mkTiempo(tMin,tSeg,tMil),parcial:mkTiempo(pMin,pSeg,pMil),metros:'',rpm:document.getElementById('testPaladas').value.trim()};
+  try{await fetch(ESURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  ['testTMin','testTSeg','testTMil','testPMin','testPSeg','testPMil','testPaladas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  toast('✓ Test guardado');
+}
+
+// ── MIS ERGOS ───────────────────────────────────────────
+function renderMeSelector(){
+  document.getElementById('misErgosSelector').innerHTML=REMEROS.map((r,i)=>`<button class="remero-btn" onclick="selectMe(${i},this)">${r.nombre}</button>`).join('');
+}
+
+async function selectMe(idx,el){
+  meActivo=REMEROS[idx];
+  document.querySelectorAll('#misErgosSelector .remero-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('misErgosContent').style.display='block';
+  try{const r=await fetch(csv(ESID)+'Ergo');const t=await r.text();const all=parseCSV(t);meData=all.filter(r=>r.remero_nombre===meActivo.nombre||r.remero_id===meActivo.id);}catch(e){meData=[];}
+  meFiltro='todos';
+  document.querySelectorAll('#view-misergos .zona-tab').forEach(t=>t.classList.toggle('active',t.textContent==='Todas'));
+  renderMeHistorial();renderMeTests();
+}
+
+function switchMeTab(tab){
+  document.getElementById('meTabEnt').classList.toggle('active',tab==='ent');
+  document.getElementById('meTabTest').classList.toggle('active',tab==='test');
+  document.getElementById('meEntPanel').style.display=tab==='ent'?'block':'none';
+  document.getElementById('meTestPanel').style.display=tab==='test'?'block':'none';
+}
+
+function filtrarMe(zona,el){
+  meFiltro=zona;
+  document.querySelectorAll('#view-misergos .zona-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderMeHistorial();
+}
+
+function ergoRow(r){return`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span><div style="display:flex;gap:8px;align-items:center"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);font-weight:700">${r.zona}</span><span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo||'—'}</span></div></div><div style="display:flex;gap:10px;flex-wrap:wrap">${r.tiempo?`<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>`:''} ${r.parcial?`<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>`:''} ${r.metros?`<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>`:''} ${r.rpm?`<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>`:''}</div></div>`;}
+
+function renderMeHistorial(){
+  const c=document.getElementById('meHistorial');
+  let h=meData.filter(r=>r.zona!=='MAX');
+  if(meFiltro!=='todos')h=h.filter(r=>r.zona===meFiltro);
+  if(!h.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚣</div><div class="empty-text">Sin trabajos en esta zona</div></div>';return;}
+  c.innerHTML=[...h].reverse().map(ergoRow).join('');
+}
+
+function renderMeTests(){
+  const c=document.getElementById('meTests');
+  const h=meData.filter(r=>r.zona==='MAX');
+  if(!h.length){c.innerHTML='<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';return;}
+  c.innerHTML=[...h].reverse().map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span><span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span></div><div style="display:flex;gap:12px;flex-wrap:wrap">${r.tiempo?`<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>`:''} ${r.parcial?`<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>`:''} ${r.rpm?`<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>`:''}</div></div>`).join('');
+}
+
+// ── LARA ────────────────────────────────────────────────
+function checkLara(){
+  const p=document.getElementById('laraPass').value;
+  if(p==='Andy'){laraUnlocked=true;document.getElementById('laraLogin').style.display='none';document.getElementById('laraPanel').style.display='block';cargarLara();}
+  else{document.getElementById('laraError').style.display='block';document.getElementById('laraPass').value='';}
+}
+
+async function cargarLara(){
+  try{const r=await fetch(csv(LSID)+'Ergo');const t=await r.text();laraData=parseCSV(t);}catch(e){laraData=[];}
+  renderLaraHistorial();renderLaraTests();
+}
+
+function switchLaraTab(tab){
+  document.getElementById('laraTabEnt').classList.toggle('active',tab==='ent');
+  document.getElementById('laraTabTest').classList.toggle('active',tab==='test');
+  document.getElementById('laraEntForm').style.display=tab==='ent'?'block':'none';
+  document.getElementById('laraTestForm').style.display=tab==='test'?'block':'none';
+}
+
+async function guardarLaraErgo(){
+  const zona=document.getElementById('laraZona').value;
+  if(!zona)return toast('⚠️ Seleccioná una zona');
+  const tMin=document.getElementById('laraTMin').value||'0';
+  const tSeg=document.getElementById('laraTSeg').value||'0';
+  const tMil=document.getElementById('laraTMil').value||'0';
+  const pMin=document.getElementById('laraPMin').value||'0';
+  const pSeg=document.getElementById('laraPSeg').value||'0';
+  const pMil=document.getElementById('laraPMil').value||'0';
+  const payload={fecha:mkFecha(new Date()),remero_id:'lara',remero_nombre:'Lara',zona,tipo:document.getElementById('laraTipo').value.trim(),tiempo:mkTiempo(tMin,tSeg,tMil),parcial:mkTiempo(pMin,pSeg,pMil),metros:document.getElementById('laraMetros').value.trim(),rpm:document.getElementById('laraRpm').value.trim()};
+  try{await fetch(LSURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  laraData.push(payload);
+  ['laraZona','laraTipo','laraTMin','laraTSeg','laraTMil','laraPMin','laraPSeg','laraPMil','laraMetros','laraRpm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderLaraHistorial();toast('✓ Trabajo guardado');
+}
+
+async function guardarLaraTest(){
+  const tMin=document.getElementById('laraTestTMin').value||'0';
+  const tSeg=document.getElementById('laraTestTSeg').value||'0';
+  const tMil=document.getElementById('laraTestTMil').value||'0';
+  const pMin=document.getElementById('laraTestPMin').value||'0';
+  const pSeg=document.getElementById('laraTestPSeg').value||'0';
+  const pMil=document.getElementById('laraTestPMil').value||'0';
+  const payload={fecha:mkFecha(new Date()),remero_id:'lara',remero_nombre:'Lara',zona:'MAX',tipo:document.getElementById('laraTestTipo').value,tiempo:mkTiempo(tMin,tSeg,tMil),parcial:mkTiempo(pMin,pSeg,pMil),metros:'',rpm:document.getElementById('laraTestPaladas').value.trim()};
+  try{await fetch(LSURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){}
+  laraData.push(payload);
+  ['laraTestTMin','laraTestTSeg','laraTestTMil','laraTestPMin','laraTestPSeg','laraTestPMil','laraTestPaladas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderLaraTests();toast('✓ Test guardado');
+}
+
+function filtrarLara(zona,el){
+  laraFiltro=zona;
+  document.querySelectorAll('#view-lara .zona-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderLaraHistorial();
+}
+
+function renderLaraHistorial(){
+  const c=document.getElementById('laraHistorial');
+  let h=laraData.filter(r=>r.zona!=='MAX');
+  if(laraFiltro!=='todos')h=h.filter(r=>r.zona===laraFiltro);
+  if(!h.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚣‍♀️</div><div class="empty-text">Sin trabajos registrados aún</div></div>';return;}
+  c.innerHTML=[...h].reverse().map(ergoRow).join('');
+}
+
+function renderLaraTests(){
+  const c=document.getElementById('laraTestHistorial');
+  const h=laraData.filter(r=>r.zona==='MAX');
+  if(!h.length){c.innerHTML='<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';return;}
+  c.innerHTML=[...h].reverse().map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span><span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span></div><div style="display:flex;gap:12px;flex-wrap:wrap">${r.tiempo?`<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>`:''} ${r.parcial?`<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>`:''} ${r.rpm?`<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>`:''}</div></div>`).join('');
+}
+
+// ── COACH ───────────────────────────────────────────────
+function checkCoach(){
+  const p=document.getElementById('coachPass').value;
+  if(p==='creer'){coachUnlocked=true;document.getElementById('coachLogin').style.display='none';document.getElementById('coachPanel').style.display='block';cargarCoach();}
+  else{document.getElementById('coachError').style.display='block';document.getElementById('coachPass').value='';}
+}
+
+async function cargarCoach(){
+  try{
+    const [r1,r2,r3,r4]=await Promise.all([fetch(csv(SID)+'Registros'),fetch(csv(ESID)+'Ergo'),fetch(csv(SID)+'Asistencia'),fetch(csv(SID)+'PlanDia')]);
+    const [t1,t2,t3,t4]=await Promise.all([r1,r2,r3,r4].map(r=>r.text()));
+    allReg=parseCSV(t1); allErgo=parseCSV(t2); allAsist=parseCSV(t3); allPlan=parseCSV(t4);
+  }catch(e){allReg=[];allErgo=[];allAsist=[];allPlan=[];}
+  const now=new Date(); calYear=now.getFullYear(); calMonth=now.getMonth();
+  document.getElementById('coachFechaHoy').textContent=now.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  renderCalendar();renderAsistencia();renderErgoAtletas();renderErgoCoach();
+}
+
+function dayOf(r){return parseFecha(r.fecha);}
+function sameDay(r,d,m,y){const dt=dayOf(r);return dt&&dt.getDate()===d&&dt.getMonth()===m&&dt.getFullYear()===y;}
+
+function renderCalendar(){
+  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('calMonth').textContent=`${months[calMonth]} ${calYear}`;
+  const daysData=new Set();
+  allReg.forEach(r=>{const dt=dayOf(r);if(dt&&dt.getMonth()===calMonth&&dt.getFullYear()===calYear)daysData.add(dt.getDate());});
+  const first=new Date(calYear,calMonth,1).getDay();
+  const offset=first===0?6:first-1;
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  let html=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  for(let i=0;i<offset;i++)html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const isToday=today.getDate()===d&&today.getMonth()===calMonth&&today.getFullYear()===calYear;
+    const hasData=daysData.has(d);
+    const isSel=calDay===d;
+    let cls='cal-day';
+    if(isToday)cls+=' today';
+    if(hasData)cls+=' has-data';
+    if(isSel)cls+=' selected';
+    const dot=hasData&&!isSel?'<div class="cal-dot"></div>':'';
+    html+=`<div class="${cls}" onclick="selectDay(${d})">${d}${dot}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML=html;
+}
+
+function calNav(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();closeDayDetail();}
+
+function selectDay(d){
+  calDay=d; renderCalendar();
+  const regDay=allReg.filter(r=>sameDay(r,d,calMonth,calYear));
+  const ergoDay=allErgo.filter(r=>sameDay(r,d,calMonth,calYear));
+  const asistDay=allAsist.filter(r=>sameDay(r,d,calMonth,calYear));
+  const planDay=allPlan.find(r=>sameDay(r,d,calMonth,calYear));
+  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('dayDetailTitle').textContent=`${d} de ${months[calMonth]}`;
+  let html='';
+  if(planDay){html+=`<div style="background:var(--water);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-bottom:8px">PLAN DEL DÍA</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">${planDay.zona?`<span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)">${planDay.zona}</span>`:''} ${planDay.tipo_trabajo?`<span style="font-size:13px;font-weight:600;color:var(--white)">${planDay.tipo_trabajo}</span>`:''}</div>${planDay.notas?`<div style="font-size:12px;color:var(--muted);font-style:italic">"${planDay.notas}"</div>`:''}</div>`;}
+  if(asistDay.length){const pres=asistDay.filter(a=>a.presente==='si');const aus=asistDay.filter(a=>a.presente==='no');html+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-bottom:10px">ASISTENCIA (${pres.length}/${asistDay.length})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${pres.map(a=>`<span style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--success);font-weight:500">${a.remero_nombre} <span style="font-size:10px;opacity:.7">${a.bote}</span></span>`).join('')}</div>${aus.length?`<div style="display:flex;flex-wrap:wrap;gap:6px">${aus.map(a=>`<span style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--danger);font-weight:500">${a.remero_nombre}</span>`).join('')}</div>`:''}</div>`;}
+  if(regDay.length){html+=`<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-bottom:8px">ENTRENAMIENTO</div>`;html+=regDay.map(r=>{let focos=[];try{focos=JSON.parse(r.focos||'[]');}catch(e){}return`<div class="day-remero-card"><div class="day-remero-name">${r.remero_nombre||r.remero_id}</div><div class="day-scores-row">${r.cansancio?`<span class="score-chip ${cClass(+r.cansancio)}">⚡ ${r.cansancio}</span>`:''} ${focos.map((s,i)=>`<span class="score-chip ${scoreClass(+s)}">F${i+1}: ${s}</span>`).join('')} ${r.bote?`<span class="score-chip ${scoreClass(+r.bote)}">Bote: ${r.bote}</span>`:''}</div>${r.nota?`<div class="day-nota">"${r.nota}"</div>`:''}</div>`;}).join('');}
+  if(ergoDay.length){html+=`<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;margin:16px 0 8px">ERGO</div>`;html+=ergoDay.map(r=>`<div class="day-remero-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="day-remero-name">${r.remero_nombre||r.remero_id}</div><span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold)">${r.zona}</span></div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">${r.tipo||'—'}</div><div style="display:flex;gap:10px;flex-wrap:wrap">${r.tiempo?`<span style="font-size:12px;color:var(--white)">⏱ ${r.tiempo}</span>`:''} ${r.parcial?`<span style="font-size:12px;color:var(--accent)">📍 ${r.parcial}/500m</span>`:''} ${r.rpm?`<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm}rpm</span>`:''}</div></div>`).join('');}
+  if(!html)html='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros este día</div></div>';
+  document.getElementById('dayDetailContent').innerHTML=html;
+  document.getElementById('dayDetail').style.display='block';
+}
+
+function closeDayDetail(){calDay=null;document.getElementById('dayDetail').style.display='none';renderCalendar();}
+
+function renderAsistencia(){
+  document.getElementById('asistenciaList').innerHTML=REMEROS.map((r,i)=>`<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:600;color:var(--white)">${r.nombre}</div><select id="asist_${i}" style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:12px;outline:none;cursor:pointer;min-width:110px"><option value="">— bote —</option>${['4x','2x','2-','1x','Gimnasio','Ausente'].map(b=>`<option value="${b}">${b}</option>`).join('')}</select></div>`).join('');
+}
+
+async function guardarDia(){
+  const fecha=mkFecha(new Date());
+  const zona=document.getElementById('planZona').value;
+  const tipo_trabajo=document.getElementById('planTipo').value.trim();
+  const notas=document.getElementById('planNotas').value.trim();
+  if(zona||tipo_trabajo||notas){try{await fetch(SURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'plandia',fecha,zona,tipo_trabajo,notas})});}catch(e){}}
+  const registros=REMEROS.map((r,i)=>{const bote=document.getElementById(`asist_${i}`)?.value||'';return{fecha,remero_id:r.id,remero_nombre:r.nombre,presente:bote&&bote!=='Ausente'?'si':'no',bote};}).filter(r=>r.bote);
+  if(registros.length){try{await fetch(SURL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'asistencia',registros})});}catch(e){}}
+  document.getElementById('planZona').value='';
+  document.getElementById('planTipo').value='';
+  document.getElementById('planNotas').value='';
+  REMEROS.forEach((_,i)=>{const el=document.getElementById(`asist_${i}`);if(el)el.value='';});
+  toast('✓ Registro del día guardado');
+}
+
+function renderErgoAtletas(){
+  const nombres=[...new Set(allErgo.map(r=>r.remero_nombre||r.remero_id))].filter(Boolean);
+  document.getElementById('ergoAtletaFiltros').innerHTML=`<button class="bote-tab active" onclick="filtrarErgoC('atleta','todos',this)">Todos</button>`+nombres.map(n=>`<button class="bote-tab" onclick="filtrarErgoC('atleta','${n}',this)">${n}</button>`).join('');
+}
+
+function filtrarErgoC(tipo,valor,el){
+  if(tipo==='zona'){ecFiltroZona=valor;document.querySelectorAll('#view-coach .zona-tab').forEach(t=>t.classList.remove('active'));}
+  else{ecFiltroAtleta=valor;document.querySelectorAll('#ergoAtletaFiltros .bote-tab').forEach(t=>t.classList.remove('active'));}
+  if(el)el.classList.add('active');
+  renderErgoCoach();
+}
+
+function renderErgoCoach(){
+  const c=document.getElementById('ergoCoachContent');
+  let data=allErgo;
+  if(ecFiltroZona!=='todos')data=data.filter(r=>r.zona===ecFiltroZona);
+  if(ecFiltroAtleta!=='todos')data=data.filter(r=>(r.remero_nombre||r.remero_id)===ecFiltroAtleta);
+  if(!data.length){c.innerHTML='<div class="empty"><div class="empty-text">Sin registros</div></div>';return;}
+  const byR={};data.forEach(r=>{const n=r.remero_nombre||r.remero_id;if(!byR[n])byR[n]=[];byR[n].push(r);});
+  c.innerHTML=Object.entries(byR).map(([n,items])=>`<div style="margin-bottom:16px"><div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px">${n}</div>${items.slice(-5).reverse().map(r=>`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha} · <span style="color:var(--gold)">${r.zona}</span></span><span style="font-size:11px;font-weight:600;color:var(--white)">${r.tipo||'—'}</span></div><div style="display:flex;gap:10px;flex-wrap:wrap">${r.tiempo?`<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>`:''} ${r.parcial?`<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>`:''} ${r.rpm?`<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>`:''}</div></div>`).join('')}</div>`).join('');
+}
+
+// ── INIT ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('fechaHoy').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
   cargarDatos();
 });
-
-// ─── VISTAS ──────────────────────────────────────────────
-function showView(id) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('view-' + id).classList.add('active');
-  event.target.classList.add('active');
-  if (id === 'gold') renderGold();
-  if (id === 'ergo') renderErgoRemeroSelector();
-  if (id === 'misergos') renderMisErgosSelector();
-  if (id === 'lara' && laraUnlocked) { renderLaraHistorial(); renderLaraTestHistorial(); }
-  if (id === 'coach' && coachUnlocked) cargarRegistrosCoach();
-}
-
-// ─── REMEROS ─────────────────────────────────────────────
-function renderRemeroSelector() {
-  const cont = document.getElementById('remeroSelector');
-  cont.innerHTML = REMEROS.map((r, i) => `
-    <button class="remero-btn" onclick="selectRemero(${i})">${r.nombre}</button>
-  `).join('');
-}
-
-function selectRemero(idx) {
-  remeroActivo = REMEROS[idx];
-  scores = {};
-  document.querySelectorAll('.remero-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('perfilRemero').style.display = 'block';
-  document.getElementById('perfilNombre').textContent = remeroActivo.nombre + ' · ' + remeroActivo.categoria;
-  renderFocos();
-  renderVideos();
-  renderEscalas();
-  document.getElementById('notaRegistro').value = '';
-
-  // Show peso reminder on Tuesdays
-  const hoy = new Date();
-  const esMarte = hoy.getDay() === 2;
-  const pesoKey = `barc_peso_${remeroActivo.id}_${hoy.getFullYear()}_${hoy.getMonth()}_semana${Math.ceil(hoy.getDate()/7)}`;
-  if (esMarte && !localStorage.getItem(pesoKey)) {
-    setTimeout(() => document.getElementById('modalPeso').classList.add('open'), 600);
-  }
-}
-
-async function guardarPeso() {
-  const peso = document.getElementById('inputPeso').value.trim();
-  if (!peso || isNaN(peso)) return showToast('⚠️ Ingresá un peso válido');
-
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  const pesoKey = `barc_peso_${remeroActivo.id}_${now.getFullYear()}_${now.getMonth()}_semana${Math.ceil(now.getDate()/7)}`;
-
-  const payload = {
-    tipo: 'fisico',
-    fecha,
-    remero_id: remeroActivo.id,
-    remero_nombre: remeroActivo.nombre,
-    peso: parseFloat(peso)
-  };
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { console.error('Error guardando peso:', e); }
-
-  localStorage.setItem(pesoKey, '1');
-  document.getElementById('inputPeso').value = '';
-  cerrarModal('modalPeso');
-  showToast('✓ Peso guardado');
-}
-
-function renderFocos() {
-  const cont = document.getElementById('listaFocos');
-  if (!remeroActivo.focos.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Sin focos asignados aún</div></div>';
-    return;
-  }
-  cont.innerHTML = remeroActivo.focos.map((f, i) => `
-    <div class="foco-item">
-      <div class="foco-num">0${i+1}</div>
-      <div class="foco-text">${f}</div>
-    </div>
-  `).join('');
-}
-
-function renderVideos() {
-  const cont = document.getElementById('listaVideos');
-  if (!remeroActivo.videos.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🎬</div><div class="empty-text">Sin videos cargados aún</div></div>';
-    return;
-  }
-  cont.innerHTML = remeroActivo.videos.map(v => `
-    <a class="video-card" href="${v.url}" target="_blank">
-      <div class="video-thumb">▶️</div>
-      <div class="video-info">
-        <div class="video-title">${v.titulo}</div>
-        <div class="video-sub">${v.tipo}</div>
-      </div>
-    </a>
-  `).join('');
-}
-
-function renderEscalas() {
-  const cont = document.getElementById('escalasRegistro');
-  if (!remeroActivo.focos.length) {
-    cont.innerHTML = '';
-    return;
-  }
-  cont.innerHTML = remeroActivo.focos.map((f, i) => `
-    <div class="escala-container">
-      <div class="escala-title">Foco ${i+1}: <span style="color:var(--muted);font-weight:400">${f.substring(0,55)}${f.length>55?'...':''}</span></div>
-      <div class="escala-dots" id="escala-foco-${i}">
-        ${[1,2,3,4,5].map(n => `<button class="escala-dot" onclick="setScore('foco${i}',${n})">${n}</button>`).join('')}
-      </div>
-      <div class="escala-labels">
-        <span class="escala-label-text">No lo logré</span>
-        <span class="escala-label-text">Lo dominé</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderHistorial() {
-  const cont = document.getElementById('historialRegistros');
-  const key = remeroActivo.id;
-  const hist = registros[key] || [];
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros aún</div></div>';
-    return;
-  }
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div class="historial-item">
-      <div class="historial-date">${r.fecha}</div>
-      <div>
-        <div class="historial-scores">
-          ${r.cansancio ? `<span class="score-chip ${cansancioClass(r.cansancio)}" title="Cansancio">⚡ ${r.cansancio}</span>` : ''}
-          ${r.focos.map((s,i) => `<span class="score-chip ${scoreClass(s)}">F${i+1}: ${s}</span>`).join('')}
-          ${r.bote ? `<span class="score-chip ${scoreClass(r.bote)}">Bote: ${r.bote}</span>` : ''}
-        </div>
-        ${r.nota ? `<div class="historial-nota">"${r.nota}"</div>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function scoreClass(s) {
-  if (s >= 4) return 'score-high';
-  if (s >= 3) return 'score-mid';
-  return 'score-low';
-}
-
-function cansancioClass(s) {
-  // For cansancio: low number = fresh (good), high = exhausted (warning)
-  if (s <= 2) return 'score-high';
-  if (s === 3) return 'score-mid';
-  return 'score-low';
-}
-
-// ─── SCORES ──────────────────────────────────────────────
-function setScore(key, val) {
-  scores[key] = val;
-  const cont = document.getElementById('escala-' + key);
-  if (!cont) return;
-  cont.querySelectorAll('.escala-dot').forEach((d, i) => {
-    d.classList.toggle('selected', i + 1 === val);
-  });
-}
-
-// ─── GUARDAR REGISTRO ────────────────────────────────────
-async function guardarRegistro() {
-  const focos = remeroActivo.focos.map((_, i) => scores[`foco${i}`] || 0);
-  const bote = scores['bote'] || 0;
-  const cansancio = scores['cansancio'] || 0;
-  const nota = document.getElementById('notaRegistro').value.trim();
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const payload = {
-    fecha,
-    remero_id: remeroActivo.id,
-    remero_nombre: remeroActivo.nombre,
-    cansancio,
-    focos,
-    bote,
-    nota
-  };
-
-  // Save to Google Sheets via Apps Script
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.error('Error guardando en Sheets:', e);
-  }
-
-  // Also save locally for immediate historial display
-  if (!registros[remeroActivo.id]) registros[remeroActivo.id] = [];
-  registros[remeroActivo.id].push({ fecha, focos, bote, cansancio, nota });
-  localStorage.setItem('barc_registros', JSON.stringify(registros));
-
-  scores = {};
-  document.getElementById('notaRegistro').value = '';
-  document.querySelectorAll('.escala-dot').forEach(d => d.classList.remove('selected'));
-
-  showToast('✓ Registro guardado');
-}
-
-// ─── FOCOS ───────────────────────────────────────────────
-function abrirModalFoco() { document.getElementById('modalFoco').classList.add('open'); document.getElementById('inputFoco').focus(); }
-function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
-
-function guardarFoco() {
-  const val = document.getElementById('inputFoco').value.trim();
-  if (!val) return;
-  remeroActivo.focos.push(val);
-  document.getElementById('inputFoco').value = '';
-  cerrarModal('modalFoco');
-  renderFocos();
-  renderEscalas();
-}
-
-function eliminarFoco(i) {
-  remeroActivo.focos.splice(i, 1);
-  renderFocos();
-  renderEscalas();
-}
-
-// ─── VIDEOS ──────────────────────────────────────────────
-function abrirModalVideo() { document.getElementById('modalVideo').classList.add('open'); }
-
-function guardarVideo() {
-  const titulo = document.getElementById('inputVideoTitulo').value.trim();
-  const url = document.getElementById('inputVideoUrl').value.trim();
-  const tipo = document.getElementById('inputVideoTipo').value.trim() || 'Referencia';
-  if (!titulo || !url) return;
-  remeroActivo.videos.push({ titulo, url, tipo });
-  document.getElementById('inputVideoTitulo').value = '';
-  document.getElementById('inputVideoUrl').value = '';
-  document.getElementById('inputVideoTipo').value = '';
-  cerrarModal('modalVideo');
-  renderVideos();
-}
-
-// ─── GOLD STANDARD ───────────────────────────────────────
-function renderBoteTabs() {
-  const botes = Object.keys(GOLD);
-  if (!boteActivo || !GOLD[boteActivo]) boteActivo = botes[0];
-  const cont = document.getElementById('boteTabs');
-  cont.innerHTML = botes.map(b => `
-    <button class="bote-tab ${b===boteActivo?'active':''}" onclick="selectBote('${b}',this)">${b}</button>
-  `).join('');
-}
-
-function selectBote(bote, el) {
-  boteActivo = bote;
-  document.querySelectorAll('.bote-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  zonaActiva = Object.keys(GOLD[bote].zonas)[0];
-  renderGold();
-}
-
-function renderGold() {
-  if (!boteActivo || !GOLD[boteActivo]) {
-    document.getElementById('goldZonasContainer').innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Gold Standard no configurado aún para este bote.</div>';
-    return;
-  }
-  const data = GOLD[boteActivo];
-  const zonas = Object.keys(data.zonas);
-
-  document.getElementById('goldZonasContainer').innerHTML = `
-    <div class="card" style="padding:12px 14px;margin-bottom:10px">
-      <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;margin-bottom:6px">
-        <div></div>
-        ${['500m','1000m','1500m','2000m'].map(d => `<div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;text-align:center;text-transform:uppercase;letter-spacing:0.04em">${d}</div>`).join('')}
-      </div>
-      ${zonas.map(z => {
-        const zona = data.zonas[z];
-        return `<div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:4px;padding:6px 0;border-top:1px solid var(--border)">
-          <div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:flex;align-items:center">${z}</div>
-          ${[zona.t500,zona.t1000,zona.t1500,zona.t2000].map(t => `<div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:600;color:var(--white);text-align:center;display:flex;align-items:center;justify-content:center">${t}</div>`).join('')}
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-}
-
-function selectZona(zona, el) {
-  zonaActiva = zona;
-  document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderGold();
-}
-
-function calcPace() {
-  const min = parseFloat(document.getElementById('calcMin').value) || 0;
-  const seg = parseFloat(document.getElementById('calcSeg').value) || 0;
-  const dec = parseFloat(document.getElementById('calcDec').value) || 0;
-  const totalSeg = min * 60 + seg + dec / 10;
-  if (totalSeg === 0 || !boteActivo || !GOLD[boteActivo]) return;
-
-  // velocity at this pace: 500m / totalSeg
-  const vPace = 500 / totalSeg;
-
-  // Find base velocity from MAX zone (100%)
-  const data = GOLD[boteActivo];
-  const maxZona = data.zonas['MAX'] || data.zonas[Object.keys(data.zonas)[0]];
-  // parse t500 of MAX zone to get base velocity
-  const t500str = maxZona.t500; // e.g. "1'27.0"
-  const parts = t500str.replace('"','').split("'");
-  const baseT500 = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
-  const vBase = 500 / baseT500;
-
-  const pct = Math.round(vPace / vBase * 100);
-
-  // Find closest zona
-  const zonas = Object.entries(data.zonas);
-  let closestZona = '';
-  let minDiff = Infinity;
-  zonas.forEach(([z, zdata]) => {
-    const diff = Math.abs(zdata.pct - pct);
-    if (diff < minDiff) { minDiff = diff; closestZona = z; }
-  });
-
-  document.getElementById('calcResult').style.display = 'block';
-  document.getElementById('calcPct').textContent = pct + '%';
-  document.getElementById('calcZona').textContent = closestZona ? 'Cerca de ' + closestZona : '';
-}
-
-// ─── PANEL ───────────────────────────────────────────────
-function renderPanel() {
-  const cont = document.getElementById('panelRemeros');
-  cont.innerHTML = REMEROS.map(r => {
-    const hist = registros[r.id] || [];
-    const ultimo = hist[hist.length - 1];
-    return `
-      <div class="remero-row">
-        <div class="remero-name">${r.nombre}</div>
-        ${ultimo ? `
-          <div class="mini-scores">
-            ${ultimo.cansancio ? `<div class="mini-score ${cansancioClass(ultimo.cansancio)}" title="Cansancio">⚡${ultimo.cansancio}</div>` : ''}
-            ${ultimo.focos.map((s,i) => `<div class="mini-score ${scoreClass(s)}">${s}</div>`).join('')}
-            ${ultimo.bote ? `<div class="mini-score ${scoreClass(ultimo.bote)}">${ultimo.bote}</div>` : ''}
-          </div>
-        ` : '<div style="font-size:12px;color:var(--muted)">Sin registro hoy</div>'}
-      </div>
-    `;
-  }).join('');
-}
-
-// ─── ERGO ────────────────────────────────────────────────
-let ergoRemeroActivo = null;
-let ergoZonaActiva = null;
-let ergoRegistros = JSON.parse(localStorage.getItem('barc_ergo') || '{}');
-
-function renderErgoRemeroSelector() {
-  const cont = document.getElementById('ergoRemeroSelector');
-  cont.innerHTML = REMEROS.map((r, i) => `
-    <button class="remero-btn" onclick="selectErgoRemero(${i},this)">${r.nombre}</button>
-  `).join('');
-}
-
-function selectErgoRemero(idx, el) {
-  ergoRemeroActivo = REMEROS[idx];
-  document.querySelectorAll('#ergoRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('ergoTabs').style.display = 'block';
-  document.getElementById('ergoForm').style.display = 'block';
-  document.getElementById('testForm').style.display = 'none';
-  document.getElementById('tabEntrenamiento').classList.add('active');
-  document.getElementById('tabTest').classList.remove('active');
-  const nombreEl = document.getElementById('ergoRemeroNombre');
-  nombreEl.textContent = ergoRemeroActivo.nombre;
-  document.getElementById('testRemeroNombre').textContent = ergoRemeroActivo.nombre;
-  ergoZonaActiva = null;
-  document.getElementById('ergoZonaSelect').value = '';
-  ['ergoTipo','ergoTiempoMin','ergoTiempoSeg','ergoTiempoMil','ergoParcialMin','ergoParcialSeg','ergoParcialMil','ergoMetros','ergoRpm'].forEach(fid => {
-    const field = document.getElementById(fid);
-    if (field) field.value = '';
-  });
-  renderErgoHistorial();
-  renderTestHistorial();
-}
-
-function selectErgoZona(zona, el) {
-  ergoZonaActiva = zona;
-  document.querySelectorAll('#ergoZonaSelector .zona-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-}
-
-async function guardarErgo() {
-  if (!ergoRemeroActivo) return showToast('⚠️ Seleccioná un remero');
-  ergoZonaActiva = document.getElementById('ergoZonaSelect').value;
-  if (!ergoZonaActiva) return showToast('⚠️ Seleccioná una zona');
-
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const tMin = document.getElementById('ergoTiempoMin').value || '0';
-  const tSeg = document.getElementById('ergoTiempoSeg').value || '0';
-  const tMil = document.getElementById('ergoTiempoMil').value || '0';
-  const tiempo = `${tMin}'${tSeg.padStart(2,'0')}.${tMil}"`;
-
-  const pMin = document.getElementById('ergoParcialMin').value || '0';
-  const pSeg = document.getElementById('ergoParcialSeg').value || '0';
-  const pMil = document.getElementById('ergoParcialMil').value || '0';
-  const parcial = `${pMin}'${pSeg.padStart(2,'0')}.${pMil}"`;
-
-  const payload = {
-    fecha,
-    remero_id: ergoRemeroActivo.id,
-    remero_nombre: ergoRemeroActivo.nombre,
-    zona: ergoZonaActiva,
-    tipo: document.getElementById('ergoTipo').value.trim(),
-    tiempo,
-    parcial,
-    metros: document.getElementById('ergoMetros').value.trim(),
-    rpm: document.getElementById('ergoRpm').value.trim(),
-  };
-
-  try {
-    await fetch(ERGO_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { console.error('Error guardando ergo:', e); }
-
-  if (!ergoRegistros[ergoRemeroActivo.id]) ergoRegistros[ergoRemeroActivo.id] = [];
-  ergoRegistros[ergoRemeroActivo.id].push(payload);
-  localStorage.setItem('barc_ergo', JSON.stringify(ergoRegistros));
-
-  ['ergoTipo','ergoTiempoMin','ergoTiempoSeg','ergoTiempoMil','ergoParcialMin','ergoParcialSeg','ergoParcialMil','ergoMetros','ergoRpm'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('ergoZonaSelect').value = '';
-  ergoZonaActiva = null;
-
-  renderErgoHistorial();
-  showToast('✓ Trabajo guardado');
-}
-
-function switchErgoTab(tab) {
-  document.getElementById('tabEntrenamiento').classList.toggle('active', tab === 'entrenamiento');
-  document.getElementById('tabTest').classList.toggle('active', tab === 'test');
-  document.getElementById('ergoForm').style.display = tab === 'entrenamiento' ? 'block' : 'none';
-  document.getElementById('testForm').style.display = tab === 'test' ? 'block' : 'none';
-}
-
-async function guardarTest() {
-  if (!ergoRemeroActivo) return showToast('⚠️ Seleccioná un remero');
-
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const tMin = document.getElementById('testTiempoMin').value || '0';
-  const tSeg = document.getElementById('testTiempoSeg').value || '0';
-  const tMil = document.getElementById('testTiempoMil').value || '0';
-  const tiempo = `${tMin}'${String(tSeg).padStart(2,'0')}.${tMil}"`;
-
-  const pMin = document.getElementById('testParcialMin').value || '0';
-  const pSeg = document.getElementById('testParcialSeg').value || '0';
-  const pMil = document.getElementById('testParcialMil').value || '0';
-  const parcial = `${pMin}'${String(pSeg).padStart(2,'0')}.${pMil}"`;
-
-  const tipo = document.getElementById('testTipo').value;
-  const paladas = document.getElementById('testPaladas').value.trim();
-
-  const payload = {
-    fecha,
-    remero_id: ergoRemeroActivo.id,
-    remero_nombre: ergoRemeroActivo.nombre,
-    zona: 'MAX',
-    tipo,
-    tiempo,
-    parcial,
-    metros: '',
-    rpm: paladas,
-  };
-
-  try {
-    await fetch(ERGO_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { console.error('Error guardando test:', e); }
-
-  if (!ergoRegistros[ergoRemeroActivo.id]) ergoRegistros[ergoRemeroActivo.id] = [];
-  ergoRegistros[ergoRemeroActivo.id].push(payload);
-  localStorage.setItem('barc_ergo', JSON.stringify(ergoRegistros));
-
-  ['testTiempoMin','testTiempoSeg','testTiempoMil','testParcialMin','testParcialSeg','testParcialMil','testPaladas'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  renderTestHistorial();
-  showToast('✓ Test guardado');
-}
-
-function renderTestHistorial() {
-  const cont = document.getElementById('testHistorial');
-  const hist = (ergoRegistros[ergoRemeroActivo?.id] || []).filter(r => r.zona === 'MAX');
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';
-    return;
-  }
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        ${r.tiempo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
-        ${r.parcial ? `<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-        ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderErgoHistorial() {
-  const cont = document.getElementById('ergoHistorial');
-  const hist = ergoRegistros[ergoRemeroActivo?.id] || [];
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣</div><div class="empty-text">Sin trabajos registrados aún</div></div>';
-    return;
-  }
-  // Group by zona
-  const byZona = {};
-  [...hist].reverse().forEach(r => {
-    if (!byZona[r.zona]) byZona[r.zona] = [];
-    byZona[r.zona].push(r);
-  });
-  cont.innerHTML = Object.entries(byZona).map(([zona, items]) => `
-    <div style="margin-bottom:16px">
-      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:8px">${zona}</div>
-      ${items.map(r => `
-        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-            <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-            <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
-            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
-}
-
-// ─── MIS ERGOS ───────────────────────────────────────────
-let misErgosRemeroActivo = null;
-let misErgosFiltroZona = 'todos';
-let misErgosData = [];
-
-async function renderMisErgosSelector() {
-  const cont = document.getElementById('misErgosRemeroSelector');
-  cont.innerHTML = REMEROS.map((r, i) => `
-    <button class="remero-btn" onclick="selectMisErgosRemero(${i},this)">${r.nombre}</button>
-  `).join('');
-}
-
-async function selectMisErgosRemero(idx, el) {
-  misErgosRemeroActivo = REMEROS[idx];
-  document.querySelectorAll('#misErgosRemeroSelector .remero-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('misErgosContent').style.display = 'block';
-
-  // Load from Sheets
-  try {
-    const res = await fetch(`https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`);
-    const text = await res.text();
-    const all = parseCSV(text);
-    misErgosData = all.filter(r => r.remero_nombre === misErgosRemeroActivo.nombre || r.remero_id === misErgosRemeroActivo.id);
-  } catch(e) {
-    misErgosData = [];
-  }
-
-  misErgosFiltroZona = 'todos';
-  document.querySelectorAll('#view-misergos .zona-tab').forEach(t => {
-    t.classList.toggle('active', t.textContent === 'Todas');
-  });
-  renderMisErgosHistorial();
-  renderMisErgosTests();
-}
-
-function switchMisErgosTab(tab) {
-  document.getElementById('misErgoTabEnt').classList.toggle('active', tab === 'entrenamiento');
-  document.getElementById('misErgoTabTest').classList.toggle('active', tab === 'test');
-  document.getElementById('misErgosEntPanel').style.display = tab === 'entrenamiento' ? 'block' : 'none';
-  document.getElementById('misErgosTestPanel').style.display = tab === 'test' ? 'block' : 'none';
-}
-
-function filtrarMisErgos(zona, el) {
-  misErgosFiltroZona = zona;
-  document.querySelectorAll('#view-misergos .zona-tab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderMisErgosHistorial();
-}
-
-function renderMisErgosHistorial() {
-  const cont = document.getElementById('misErgosHistorial');
-  let hist = misErgosData.filter(r => r.zona !== 'MAX');
-  if (misErgosFiltroZona !== 'todos') hist = hist.filter(r => r.zona === misErgosFiltroZona);
-
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣</div><div class="empty-text">Sin trabajos en esta zona</div></div>';
-    return;
-  }
-
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);font-weight:700">${r.zona}</span>
-          <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
-        ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-        ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-        ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderMisErgosTests() {
-  const cont = document.getElementById('misErgosTests');
-  const hist = misErgosData.filter(r => r.zona === 'MAX');
-
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';
-    return;
-  }
-
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        ${r.tiempo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
-        ${r.parcial ? `<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-        ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-// ─── LARA ────────────────────────────────────────────────
-const LARA_PIN = 'Andy';
-let laraUnlocked = false;
-let laraRegistros = JSON.parse(localStorage.getItem('barc_lara') || '[]');
-
-function checkLaraPin() {
-  const pin = document.getElementById('laraPasswordInput').value;
-  if (pin === LARA_PIN) {
-    laraUnlocked = true;
-    document.getElementById('laraLogin').style.display = 'none';
-    document.getElementById('laraPanel').style.display = 'block';
-    cargarDatosLara();
-  } else {
-    document.getElementById('laraError').style.display = 'block';
-    document.getElementById('laraPasswordInput').value = '';
-  }
-}
-
-async function cargarDatosLara() {
-  try {
-    const res = await fetch(LARA_SHEET_URL);
-    const text = await res.text();
-    const fromSheet = parseCSV(text);
-    // Merge with localStorage (localStorage takes priority for today)
-    const local = JSON.parse(localStorage.getItem('barc_lara') || '[]');
-    const localFechas = new Set(local.map(r => r.fecha + r.zona + r.tipo));
-    const sheetOnly = fromSheet.filter(r => !localFechas.has(r.fecha + r.zona + r.tipo));
-    laraRegistros = [...sheetOnly, ...local];
-  } catch(e) {
-    console.error('Error cargando datos Lara:', e);
-  }
-  renderLaraHistorial();
-  renderLaraTestHistorial();
-}
-
-function switchLaraTab(tab) {
-  document.getElementById('laraTabEntrenamiento').classList.toggle('active', tab === 'entrenamiento');
-  document.getElementById('laraTabTest').classList.toggle('active', tab === 'test');
-  document.getElementById('laraErgoForm').style.display = tab === 'entrenamiento' ? 'block' : 'none';
-  document.getElementById('laraTestForm').style.display = tab === 'test' ? 'block' : 'none';
-}
-
-async function guardarLaraErgo() {
-  const zona = document.getElementById('laraZonaSelect').value;
-  if (!zona) return showToast('⚠️ Seleccioná una zona');
-
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const tMin = document.getElementById('laraTiempoMin').value || '0';
-  const tSeg = document.getElementById('laraTiempoSeg').value || '0';
-  const tMil = document.getElementById('laraTiempoMil').value || '0';
-  const tiempo = `${tMin}'${String(tSeg).padStart(2,'0')}.${tMil}"`;
-
-  const pMin = document.getElementById('laraParcialMin').value || '0';
-  const pSeg = document.getElementById('laraParcialSeg').value || '0';
-  const pMil = document.getElementById('laraParcialMil').value || '0';
-  const parcial = `${pMin}'${String(pSeg).padStart(2,'0')}.${pMil}"`;
-
-  const payload = {
-    fecha,
-    remero_id: 'lara',
-    remero_nombre: 'Lara',
-    zona,
-    tipo: document.getElementById('laraTipo').value.trim(),
-    tiempo,
-    parcial,
-    metros: document.getElementById('laraMetros').value.trim(),
-    rpm: document.getElementById('laraRpm').value.trim(),
-  };
-
-  try {
-    await fetch(LARA_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { console.error('Error guardando ergo Lara:', e); }
-
-  laraRegistros.push(payload);
-  localStorage.setItem('barc_lara', JSON.stringify(laraRegistros));
-
-  ['laraTipo','laraTiempoMin','laraTiempoSeg','laraTiempoMil','laraParcialMin','laraParcialSeg','laraParcialMil','laraMetros','laraRpm'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('laraZonaSelect').value = '';
-
-  renderLaraHistorial();
-  showToast('✓ Trabajo guardado');
-}
-
-async function guardarLaraTest() {
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const tMin = document.getElementById('laraTestMin').value || '0';
-  const tSeg = document.getElementById('laraTestSeg').value || '0';
-  const tMil = document.getElementById('laraTestMil').value || '0';
-  const tiempo = `${tMin}'${String(tSeg).padStart(2,'0')}.${tMil}"`;
-
-  const pMin = document.getElementById('laraTestPMin').value || '0';
-  const pSeg = document.getElementById('laraTestPSeg').value || '0';
-  const pMil = document.getElementById('laraTestPMil').value || '0';
-  const parcial = `${pMin}'${String(pSeg).padStart(2,'0')}.${pMil}"`;
-
-  const payload = {
-    fecha,
-    remero_id: 'lara',
-    remero_nombre: 'Lara',
-    zona: 'MAX',
-    tipo: document.getElementById('laraTestTipo').value,
-    tiempo,
-    parcial,
-    metros: '',
-    rpm: document.getElementById('laraTestPaladas').value.trim(),
-  };
-
-  try {
-    await fetch(LARA_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { console.error('Error guardando test Lara:', e); }
-
-  laraRegistros.push(payload);
-  localStorage.setItem('barc_lara', JSON.stringify(laraRegistros));
-
-  ['laraTestMin','laraTestSeg','laraTestMil','laraTestPMin','laraTestPSeg','laraTestPMil','laraTestPaladas'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  renderLaraTestHistorial();
-  showToast('✓ Test guardado');
-}
-
-let laraFiltroZona = 'todos';
-
-function filtrarLaraHistorial(zona, el) {
-  laraFiltroZona = zona;
-  document.querySelectorAll('#view-lara .zona-tab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderLaraHistorial();
-}
-
-function renderLaraHistorial() {
-  const cont = document.getElementById('laraHistorial');
-  let hist = laraRegistros.filter(r => r.zona !== 'MAX');
-  if (laraFiltroZona !== 'todos') hist = hist.filter(r => r.zona === laraFiltroZona);
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🚣‍♀️</div><div class="empty-text">Sin trabajos registrados aún</div></div>';
-    return;
-  }
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);font-weight:700">${r.zona}</span>
-          <span style="font-size:12px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
-        ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-        ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-        ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderLaraTestHistorial() {
-  const cont = document.getElementById('laraTestHistorial');
-  const hist = laraRegistros.filter(r => r.zona === 'MAX');
-  if (!hist.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-icon">🏁</div><div class="empty-text">Sin tests registrados aún</div></div>';
-    return;
-  }
-  cont.innerHTML = [...hist].reverse().map(r => `
-    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--gold)">${r.tipo}</span>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        ${r.tiempo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
-        ${r.parcial ? `<span style="font-size:13px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-        ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm} pal/min</span>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-// ─── COACH ───────────────────────────────────────────────
-const COACH_PIN = 'creer';
-let coachUnlocked = false;
-let calYear, calMonth, allRegistros = [];
-let calSelectedDay = null;
-
-function pinNext(el, nextId) {}
-function checkPinAuto() {}
-
-function checkPin() {
-  const pin = document.getElementById('pinInput').value;
-  if (pin === COACH_PIN) {
-    coachUnlocked = true;
-    document.getElementById('coachLogin').style.display = 'none';
-    document.getElementById('coachCalendar').style.display = 'block';
-    cargarRegistrosCoach();
-  } else if (pin.length >= COACH_PIN.length) {
-    document.getElementById('pinError').style.display = 'block';
-    document.getElementById('pinInput').value = '';
-  }
-}
-
-async function cargarRegistrosCoach() {
-  try {
-    const [regRes, ergoRes, asistRes, planRes] = await Promise.all([
-      fetch(SHEET_URL('Registros')),
-      fetch(`https://docs.google.com/spreadsheets/d/${ERGO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ergo`),
-      fetch(SHEET_URL('Asistencia')),
-      fetch(SHEET_URL('PlanDia')),
-    ]);
-    const [regText, ergoText, asistText, planText] = await Promise.all([regRes.text(), ergoRes.text(), asistRes.text(), planRes.text()]);
-
-    allRegistros = parseCSV(regText).map(r => ({ ...r, fecha: r.fecha ? String(r.fecha).trim() : '' }));
-    allErgoRegistros = parseCSV(ergoText);
-    allAsistencia = parseCSV(asistText);
-    allPlanDia = parseCSV(planText);
-  } catch(e) {
-    console.error('Error cargando registros:', e);
-    allRegistros = [];
-    allErgoRegistros = [];
-    allAsistencia = [];
-    allPlanDia = [];
-  }
-  const now = new Date();
-  calYear = now.getFullYear();
-  calMonth = now.getMonth();
-  renderCalendar();
-  renderErgoAtletaFiltros();
-  renderErgoCoach();
-  renderAsistenciaList();
-}
-
-// ─── REGISTRO DEL DIA ────────────────────────────────────
-function renderAsistenciaList() {
-  const now = new Date();
-  document.getElementById('coachFechaHoy').textContent = now.toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long'});
-
-  const botes = ['4x', '2x', '2-', '1x', 'Gimnasio', 'Ausente'];
-
-  document.getElementById('asistenciaList').innerHTML = REMEROS.map((r, i) => `
-    <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div style="font-size:13px;font-weight:600;color:var(--white)">${r.nombre}</div>
-      <select id="asistencia_${i}" style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:12px;outline:none;cursor:pointer;min-width:110px">
-        <option value="">— bote —</option>
-        ${botes.map(b => `<option value="${b}">${b}</option>`).join('')}
-      </select>
-    </div>
-  `).join('');
-}
-
-async function guardarRegistroDia() {
-  const now = new Date();
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-
-  const zona = document.getElementById('planZona').value;
-  const tipo_trabajo = document.getElementById('planTipo').value.trim();
-  const notas = document.getElementById('planNotas').value.trim();
-
-  if (zona || tipo_trabajo || notas) {
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'plandia', fecha, zona, tipo_trabajo, notas })
-      });
-    } catch(e) { console.error('Error guardando plan:', e); }
-  }
-
-  const registros = REMEROS.map((r, i) => {
-    const bote = document.getElementById(`asistencia_${i}`)?.value || '';
-    return {
-      fecha,
-      remero_id: r.id,
-      remero_nombre: r.nombre,
-      presente: bote && bote !== 'Ausente' ? 'si' : 'no',
-      bote
-    };
-  }).filter(r => r.bote);
-
-  if (registros.length) {
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'asistencia', registros })
-      });
-    } catch(e) { console.error('Error guardando asistencia:', e); }
-  }
-
-  document.getElementById('planZona').value = '';
-  document.getElementById('planTipo').value = '';
-  document.getElementById('planNotas').value = '';
-  REMEROS.forEach((r, i) => {
-    const el = document.getElementById(`asistencia_${i}`);
-    if (el) el.value = '';
-  });
-
-  showToast('✓ Registro del día guardado');
-}
-
-let allErgoRegistros = [];
-let allAsistencia = [];
-let allPlanDia = [];
-let ergoFiltroZona = 'todos';
-let ergoFiltroAtleta = 'todos';
-
-function renderErgoAtletaFiltros() {
-  const nombres = [...new Set(allErgoRegistros.map(r => r.remero_nombre || r.remero_id))].filter(Boolean);
-  const cont = document.getElementById('ergoAtletaFiltros');
-  cont.innerHTML = `<button class="bote-tab ${ergoFiltroAtleta==='todos'?'active':''}" onclick="filtrarErgoCoach('atleta','todos',this)">Todos</button>` +
-    nombres.map(n => `<button class="bote-tab ${ergoFiltroAtleta===n?'active':''}" onclick="filtrarErgoCoach('atleta','${n}',this)">${n}</button>`).join('');
-}
-
-function filtrarErgoCoach(tipo, valor, el) {
-  if (tipo === 'zona') {
-    ergoFiltroZona = valor;
-    document.querySelectorAll('.zona-tab').forEach(t => t.classList.remove('active'));
-  } else {
-    ergoFiltroAtleta = valor;
-    document.querySelectorAll('#ergoAtletaFiltros .bote-tab').forEach(t => t.classList.remove('active'));
-  }
-  if (el) el.classList.add('active');
-  renderErgoCoach();
-}
-
-function renderErgoCoach() {
-  const cont = document.getElementById('ergoCoachContent');
-  let data = allErgoRegistros;
-  if (ergoFiltroZona !== 'todos') data = data.filter(r => r.zona === ergoFiltroZona);
-  if (ergoFiltroAtleta !== 'todos') data = data.filter(r => (r.remero_nombre || r.remero_id) === ergoFiltroAtleta);
-
-  if (!data.length) {
-    cont.innerHTML = '<div class="empty"><div class="empty-text">Sin registros</div></div>';
-    return;
-  }
-
-  const byRemero = {};
-  data.forEach(r => {
-    const nombre = r.remero_nombre || r.remero_id;
-    if (!byRemero[nombre]) byRemero[nombre] = [];
-    byRemero[nombre].push(r);
-  });
-
-  cont.innerHTML = Object.entries(byRemero).map(([nombre, items]) => `
-    <div style="margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px">${nombre}</div>
-      ${items.slice(-5).reverse().map(r => `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border)">
-          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-            <span style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace">${r.fecha} · <span style="color:var(--gold)">${r.zona}</span></span>
-            <span style="font-size:11px;font-weight:600;color:var(--white)">${r.tipo || '—'}</span>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            ${r.tiempo ? `<span style="font-size:11px;color:var(--muted)">⏱ ${r.tiempo}</span>` : ''}
-            ${r.parcial ? `<span style="font-size:11px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-            ${r.metros ? `<span style="font-size:11px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-            ${r.rpm ? `<span style="font-size:11px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
-}
-
-function calNav(dir) {
-  calMonth += dir;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-  closeDayDetail();
-}
-
-function renderCalendar() {
-  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  document.getElementById('calMonth').textContent = `${months[calMonth]} ${calYear}`;
-
-  const grid = document.getElementById('calGrid');
-  const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  
-  const daysWithData = new Set();
-  allRegistros.forEach(r => {
-    if (!r.fecha) return;
-    const parts = String(r.fecha).trim().split('-');
-    if (parts.length === 3) {
-      const y = parseInt(parts[0]);
-      const m = parseInt(parts[1]) - 1;
-      const d = parseInt(parts[2]);
-      if (m === calMonth && y === calYear) daysWithData.add(d);
-    }
-  });
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const offset = firstDay === 0 ? 6 : firstDay - 1;
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const today = new Date();
-
-  let html = dayNames.map(d => `<div class="cal-day-name">${d}</div>`).join('');
-  
-  for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
-  
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isToday = today.getDate() === d && today.getMonth() === calMonth && today.getFullYear() === calYear;
-    const hasData = daysWithData.has(d);
-    const isSelected = calSelectedDay === d;
-    let cls = 'cal-day';
-    if (isToday) cls += ' today';
-    if (hasData) cls += ' has-data';
-    if (isSelected) cls += ' selected';
-    const dot = hasData && !isSelected ? '<div class="cal-dot"></div>' : '';
-    html += `<div class="${cls}" onclick="selectDay(${d})">${d}${dot}</div>`;
-  }
-
-  grid.innerHTML = html;
-}
-
-function selectDay(day) {
-  calSelectedDay = day;
-  renderCalendar();
-
-  const dayRegistros = allRegistros.filter(r => {
-    if (!r.fecha) return false;
-    const parts = String(r.fecha).trim().split('-');
-    if (parts.length === 3) {
-      const y = parseInt(parts[0]);
-      const m = parseInt(parts[1]) - 1;
-      const d = parseInt(parts[2]);
-      return d === day && m === calMonth && y === calYear;
-    }
-    return false;
-  });
-
-  // Filter ergo data for this day
-  const dayErgos = allErgoRegistros.filter(r => {
-    if (!r.fecha) return false;
-    const parts = String(r.fecha).trim().split('-');
-    if (parts.length === 3) {
-      const y = parseInt(parts[0]);
-      const m = parseInt(parts[1]) - 1;
-      const d = parseInt(parts[2]);
-      return d === day && m === calMonth && y === calYear;
-    }
-    return false;
-  });
-
-  document.getElementById('dayDetailTitle').textContent = `${day} de ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][calMonth]}`;
-
-  let html = '';
-
-  // Plan del día
-  const planDia = allPlanDia.find(p => {
-    if (!p.fecha) return false;
-    const parts = String(p.fecha).trim().split('-');
-    if (parts.length === 3) {
-      return parseInt(parts[2]) === day && parseInt(parts[1])-1 === calMonth && parseInt(parts[0]) === calYear;
-    }
-    return false;
-  });
-
-  if (planDia) {
-    html += `<div style="background:var(--water);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
-      <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:8px">PLAN DEL DÍA</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-        ${planDia.zona ? `<span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)">${planDia.zona}</span>` : ''}
-        ${planDia.tipo_trabajo ? `<span style="font-size:13px;font-weight:600;color:var(--white)">${planDia.tipo_trabajo}</span>` : ''}
-      </div>
-      ${planDia.notas ? `<div style="font-size:12px;color:var(--muted);font-style:italic">"${planDia.notas}"</div>` : ''}
-    </div>`;
-  }
-
-  // Asistencia del día
-  const asistDia = allAsistencia.filter(a => {
-    if (!a.fecha) return false;
-    const parts = String(a.fecha).trim().split('-');
-    if (parts.length === 3) {
-      return parseInt(parts[2]) === day && parseInt(parts[1])-1 === calMonth && parseInt(parts[0]) === calYear;
-    }
-    return false;
-  });
-
-  if (asistDia.length) {
-    const presentes = asistDia.filter(a => a.presente === 'si');
-    const ausentes = asistDia.filter(a => a.presente === 'no');
-    html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
-      <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:10px">ASISTENCIA (${presentes.length}/${asistDia.length})</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
-        ${presentes.map(a => `<span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--success);font-weight:500">${a.remero_nombre} <span style="font-size:10px;opacity:0.7">${a.bote}</span></span>`).join('')}
-      </div>
-      ${ausentes.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px">
-        ${ausentes.map(a => `<span style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--danger);font-weight:500">${a.remero_nombre}</span>`).join('')}
-      </div>` : ''}
-    </div>`;
-  }
-
-  // Registros de entrenamiento
-  if (dayRegistros.length) {
-    html += `<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:8px">ENTRENAMIENTO</div>`;
-    html += dayRegistros.map(r => {
-      let focos = [];
-      try { focos = JSON.parse(r.focos || '[]'); } catch(e) {}
-      return `
-        <div class="day-remero-card">
-          <div class="day-remero-name">${r.remero_nombre || r.remero_id}</div>
-          <div class="day-scores-row">
-            ${r.cansancio ? `<span class="score-chip ${cansancioClass(parseInt(r.cansancio))}">⚡ ${r.cansancio}</span>` : ''}
-            ${focos.map((s,i) => `<span class="score-chip ${scoreClass(parseInt(s))}">F${i+1}: ${s}</span>`).join('')}
-            ${r.bote ? `<span class="score-chip ${scoreClass(parseInt(r.bote))}">Bote: ${r.bote}</span>` : ''}
-          </div>
-          ${r.nota ? `<div class="day-nota">"${r.nota}"</div>` : ''}
-        </div>
-      `;
-    }).join('');
-  }
-
-  // Ergos del día
-  if (dayErgos.length) {
-    html += `<div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.08em;margin:16px 0 8px">ERGO</div>`;
-    html += dayErgos.map(r => `
-      <div class="day-remero-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div class="day-remero-name">${r.remero_nombre || r.remero_id}</div>
-          <span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold)">${r.zona}</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">${r.tipo || '—'}</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          ${r.tiempo ? `<span style="font-size:12px;color:var(--white)">⏱ ${r.tiempo}</span>` : ''}
-          ${r.parcial ? `<span style="font-size:12px;color:var(--accent)">📍 ${r.parcial}/500m</span>` : ''}
-          ${r.metros ? `<span style="font-size:12px;color:var(--muted)">📏 ${r.metros}m</span>` : ''}
-          ${r.rpm ? `<span style="font-size:12px;color:var(--muted)">🔄 ${r.rpm}rpm</span>` : ''}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  if (!html) {
-    html = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin registros este día</div></div>';
-  }
-
-  document.getElementById('dayDetailContent').innerHTML = html;
-  document.getElementById('dayDetail').style.display = 'block';
-}
-
-function closeDayDetail() {
-  calSelectedDay = null;
-  document.getElementById('dayDetail').style.display = 'none';
-  renderCalendar();
-}
-
-// ─── TOAST ───────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// Cerrar modales tocando afuera
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
-});
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 </script>
 </body>
 </html>
